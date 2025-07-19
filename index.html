@@ -3,145 +3,612 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Star Citizen Cargo Haul Form</title>
+  <title>Brute Haul Cargo Manifest Form</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       margin: 20px;
       max-width: 800px;
+      background: #e2e2e2;
+      color: #230e09;
+    }
+    form {
+      background: #781d15;
+      border-radius: 12px;
+      padding: 20px;
     }
     textarea {
       width: 100%;
       height: 400px;
+      background: #e2e2e2;
+      color: #230e09;
+      border: 1px solid #9d7523;
+    }
+    #notes {
+      height: 80px;
+      width: 100%;
+      resize: vertical;
+      background: #e2e2e2;
+      color: #230e09;
+      border: 1px solid #9d7523;
     }
     label {
       font-weight: bold;
+      display: block;
+      margin-top: 10px;
+      color: #9d7523;
     }
     input, select, textarea {
       margin-bottom: 10px;
       width: 100%;
+      background: #e2e2e2;
+      color: #230e09;
+      border: 1px solid #781d15;
     }
     .section {
       margin-top: 20px;
       padding: 10px;
-      border: 1px solid #ccc;
+      border: 1px solid #9d7523;
+      background: #fff;
+      border-radius: 8px;
+    }
+    .logo {
+      display: block;
+      margin: 0 auto 20px auto;
+      max-width: 250px;
+      background: #e2e2e2;
+      border-radius: 8px;
+    }
+    input[type="number"] {
+      width: 120px;
+      padding: 5px;
+      font-size: 1.1em;
+      display: block;
+      margin-bottom: 10px;
+      background: #e2e2e2;
+      color: #230e09;
+      border: 1px solid #781d15;
+    }
+    #crewAmount {
+      width: 60px;
+      font-size: 1em;
+      padding: 3px;
+      display: inline-block;
+      margin-bottom: 10px;
+      background: #e2e2e2;
+      color: #230e09;
+      border: 1px solid #781d15;
+    }
+    .other-div {
+      display: none;
+      margin-left: 30px;
+    }
+    .other-div label {
+      font-weight: bold;
+      color: #9d7523;
+      margin-top: 10px;
+      display: block;
+    }
+    .other-div input {
+      font-size: 0.95em;
+      width: 60%;
+      color: #230e09;
+      background: #e2e2e2;
+      border: 1px solid #781d15;
+      margin-bottom: 10px;
+    }
+    .crew-label {
+      display: block;
+      margin-left: 30px;
+      font-size: 0.95em;
+      margin-top: 5px;
+      color: #9d7523;
+      font-weight: bold;
+    }
+    .crew-input {
+      display: block;
+      width: 60%;
+      font-size: 0.95em;
+      margin-left: 30px;
+      margin-bottom: 10px;
+      background: #e2e2e2;
+      color: #230e09;
+      border: 1px solid #781d15;
+    }
+    .deductible-input {
+      display: block;
+      margin-bottom: 10px;
+      background: #e2e2e2;
+      color: #230e09;
+      border: 1px solid #781d15;
+    }
+    .error {
+      border: 2px solid #9d7523 !important;
+      background: #ffeaea !important;
+    }
+    .route-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .route-arrow {
+      font-weight: bold;
+      color: #230e09;
+      font-size: 1.2em;
+      padding: 0 8px;
+    }
+    button {
+      background: #5865F2;
+      color: #fff;
+      border: none;
+      padding: 10px 24px 10px 16px;
+      font-size: 1.1em;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    button:hover {
+      background: #404EED;
+      color: #fff;
+      border: 1px solid #9d7523;
+    }
+    .discord-btn-logo {
+      height: 1.6em;
+      width: auto;
+      vertical-align: middle;
+      filter: invert(1);
+    }
+    h1, h2 {
+      color: #9d7523;
     }
   </style>
 </head>
 <body>
-  <h1>Star Citizen Cargo Haul Submission</h1>
+  <img class="logo" src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/BRHS-Logo.png" alt="BruteHaul Logo">
+  <h1>Brute Haul Cargo Manifest Form</h1>
 
   <form id="haulForm">
     <div class="section">
-      <label>Order Category (Transport or Security):</label>
-      <input type="text" id="orderCategory" required>
+      <label>Order Category:</label>
+      <select id="orderCategory" required>
+        <option value="" selected disabled>Select category</option>
+        <option value="Transport">Transport</option>
+        <option value="Security">Security</option>
+        <option value="Other">Other</option>
+      </select>
+      <div id="orderCategoryOtherDiv" class="other-div">
+        <label>Specify Other:</label>
+        <input type="text" id="orderCategoryOther" required />
+      </div>
 
       <label>Company Name:</label>
-      <input type="text" id="companyName" required>
+      <select id="companyName" required onchange="toggleCompanyNameOther()">
+        <option value="" selected disabled>Select company</option>
+        <option value="BruteHaul">BruteHaul</option>
+        <option value="Wildcard Inc.">Wildcard Inc.</option>
+        <option value="Space Rats">Space Rats</option>
+        <option value="The Benjineering Project">The Benjineering Project</option>
+        <option value="Other">Other</option>
+      </select>
+      <div id="companyNameOtherDiv" class="other-div">
+        <label>Specify Other:</label>
+        <input type="text" id="companyNameOther" required />
+      </div>
 
-      <label>Order Type (Supplies, Trade, Resources, Salvage, etc.):</label>
-      <input type="text" id="orderType" required>
+      <label>Order Type:</label>
+      <select id="orderType" required onchange="toggleOrderTypeOther()">
+        <option value="" selected disabled>Select order type</option>
+        <option value="Supplies">Supplies</option>
+        <option value="Trade">Trade</option>
+        <option value="Resources">Resources</option>
+        <option value="Salvage">Salvage</option>
+        <option value="Contract">Contract</option>
+        <option value="Relocation">Relocation</option>
+        <option value="Other">Other</option>
+      </select>
+      <div id="orderTypeOtherDiv" class="other-div">
+        <label>Specify Other:</label>
+        <input type="text" id="orderTypeOther" required />
+      </div>
 
       <label>Transport Ship Name:</label>
-      <input type="text" id="shipName" required>
-
-      <label>Ship Link (URL):</label>
-      <input type="url" id="shipLink" required>
+      <select id="shipName" required onchange="toggleShipNameOther()">
+        <option value="" selected disabled>Select ship</option>
+        <option value="BRHS Lednik">BRHS Lednik</option>
+        <option value="BRHS Trireme">BRHS Trireme</option>
+        <option value="BRHS Seastorm">BRHS Seastorm</option>
+        <option value="WINC Caterpillar">WINC Caterpillar</option>
+        <option value="AACS Landsknecht">AACS Landsknecht</option>
+        <option value="AACS Feder">AACS Feder</option>
+        <option value="Other">Other</option>
+      </select>
+      <div id="shipNameOtherDiv" class="other-div">
+        <label>Specify Other:</label>
+        <input type="text" id="shipNameOther" required />
+      </div>
 
       <label>Captain Name:</label>
-      <input type="text" id="captainName" required>
+      <select id="captainName" required onchange="toggleCaptainNameOther()">
+        <option value="" selected disabled>Select captain</option>
+        <option value="DyslexicNerd">DyslexicNerd</option>
+        <option value="Spartan">Spartan</option>
+        <option value="jjetstreamm">jjetstreamm</option>
+        <option value="Roflnomish">Roflnomish</option>
+        <option value="BenjiNotorious">BenjiNotorious</option>
+        <option value="Other">Other</option>
+      </select>
+      <div id="captainNameOtherDiv" class="other-div">
+        <label>Specify Other:</label>
+        <input type="text" id="captainNameOther" required />
+      </div>
 
       <label>Crew Amount:</label>
-      <input type="number" id="crewAmount" required>
+      <input type="number" id="crewAmount" min="1" max="20" step="1" required oninput="generateCrewInputs()" />
+
+      <div id="crewNamesDiv"></div>
 
       <label>Start Location:</label>
-      <input type="text" id="startLocation" required>
+      <select id="startLocation" required></select>
 
       <label>Departure Timestamp:</label>
       <input type="datetime-local" id="departureTime" required>
 
-      <label>Route (use --> to separate stops):</label>
-      <input type="text" id="route" placeholder="e.g., Area18 --> Bajini Point --> ArcCorp">
+      <label>Route:</label>
+      <div class="route-row">
+  <select id="routeStart" required></select>
+  <span class="route-arrow" style="font-size:1.5em;">➡️</span>
+  <select id="routeEnd" required></select>
     </div>
 
     <div class="section">
       <label>Cargo Manifest (repeat blocks as needed):</label>
-      <textarea id="manifest" placeholder="(SCU) SCU (Commodity) - (Destination) - (UEC Price) UEC\n..."> </textarea>
+      <textarea id="manifest" required placeholder="(SCU) SCU (Commodity) - (Destination) - (UEC Price) UEC
+..."> </textarea>
 
       <label>Total SCU:</label>
-      <input type="text" id="totalSCU">
+      <input type="number" id="totalSCU" min="0" step="1" required value="0">
 
       <label>Total UEC:</label>
-      <input type="text" id="totalUEC">
+      <input type="number" id="totalUEC" min="0" step="1" required value="0">
     </div>
 
     <div class="section">
       <label>Order Completion Time (timestamp):</label>
-      <input type="datetime-local" id="completionTime">
+      <input type="datetime-local" id="completionTime" required>
 
       <label>Repairs (UEC):</label>
-      <input type="text" id="repairs">
+      <input type="number" id="repairs" min="0" step="1" class="deductible-input" required value="0">
 
       <label>Restock (UEC):</label>
-      <input type="text" id="restock">
+      <input type="number" id="restock" min="0" step="1" class="deductible-input" required value="0">
 
       <label>Quantum Fuel (UEC):</label>
-      <input type="text" id="quantumFuel">
+      <input type="number" id="quantumFuel" min="0" step="1" class="deductible-input" required value="0">
 
       <label>Hydrogen Fuel (UEC):</label>
-      <input type="text" id="hydrogenFuel">
+      <input type="number" id="hydrogenFuel" min="0" step="1" class="deductible-input" required value="0">
 
       <label>Crew/Ship Costs (UEC):</label>
-      <input type="text" id="crewCosts">
+      <input type="number" id="crewCosts" min="0" step="1" class="deductible-input" required value="0">
 
       <label>Notes:</label>
       <textarea id="notes"></textarea>
     </div>
 
-    <button type="button" onclick="generateOutput()">Generate Discord Post</button>
+    <button type="button" onclick="generateOutput()">
+  <img src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/DiscordLogo.png" alt="Discord Logo" class="discord-btn-logo" style="filter: brightness(0) invert(1);" />
+  Generate Discord Post
+    </button>
   </form>
 
-  <div class="section">
+    <div class="section" id="discordSection" style="display:none;">
     <h2>Copy & Paste for Discord</h2>
     <textarea id="discordOutput" readonly></textarea>
+    <button type="button" onclick="copyDiscordOutput()" style="background:#5865F2;color:#fff;border:none;padding:8px 16px;border-radius:5px;font-weight:bold;display:inline-flex;align-items:center;gap:8px;">
+  <img src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/DiscordLogo.png" alt="Discord Logo" style="height:1.6em;width:auto;filter:brightness(0) invert(1);" />
+  Copy
+</button>
   </div>
 
   <script>
+    const locations = [
+      "Area18","Bajini Point","ArcCorp Mining Area 061","ArcCorp Mining Area 045","ArcCorp Mining Area 157",
+      "ArcCorp Mining Area 141","ArcCorp Mining Area 056","ArcCorp Mining Area 073","ArcCorp Mining Area 022",
+      "ArcCorp Mining Area 048","Everus Harbor","Lorville","HDMS Oparei","HDMS Shubin","HDMS Edmond",
+      "HDMS Hadley","HDMS Pinewood","HDMS Stanhope","HDMS Lathan","HDMS Ryder","HDMS Anderson","HDMS Beck",
+      "HDMS Perlman","HDMS Humboldt","HDMS MacEwan","HDMS Stokes","HDMS Woodruff","HDMS Foster","HDMS Deakin",
+      "HDMS Dobbs","HDMS Eri","HDMS Laskowski","HDMS McGrath","HDMS O'Neill","HDMS Reilly","HDMS Sutter",
+      "HDMS Tompkins","HDMS Wightman","HDMS Young","HDMS Ziegler","Port Olisar","Levski","Grim HEX",
+      "Port Tressler","New Babbage","CRU-L1","CRU-L4","CRU-L5","HUR-L1","HUR-L2","HUR-L3","HUR-L4","HUR-L5",
+      "MIC-L1","MIC-L2","MIC-L3","MIC-L4","MIC-L5","ARC-L1","ARC-L2","ARC-L3","ARC-L4","ARC-L5","Orison",
+      "Seraphim Station","Ambitious Dream Station","Brio's Breaker Yard","Covalex Hub Gundo","Covalex Hub Gallete",
+      "Covalex Hub Lagrange","Covalex Hub Laskowski","Covalex Hub O'Neill","Covalex Hub Reilly","Covalex Hub Sutter",
+      "Covalex Hub Tompkins","Covalex Hub Wightman","Covalex Hub Young","Covalex Hub Ziegler"
+    ];
+
+    function populateLocationDropdown(id) {
+      const select = document.getElementById(id);
+      if (!select) return;
+      select.innerHTML = `<option value="" selected disabled>Select location</option>` +
+        locations.map(loc => `<option value="${loc}">${loc}</option>`).join("");
+    }
+
+    window.addEventListener("DOMContentLoaded", function() {
+      populateLocationDropdown("startLocation");
+      populateLocationDropdown("routeStart");
+      populateLocationDropdown("routeEnd");
+      document.getElementById("discordSection").style.display = "none";
+    });
+
+    function toDiscordTimestamp(dtString) {
+      if (!dtString) return "";
+      const date = new Date(dtString);
+      if (isNaN(date.getTime())) return "";
+      const unix = Math.floor(date.getTime() / 1000);
+      return `<t:${unix}:f>`;
+    }
+
+    const shipLinks = {
+      "BRHS Lednik": "https://discord.com/channels/900478857436606535/1391878505905524817/1392397123907223643",
+      "AACS Feder": "https://discord.com/channels/900478857436606535/1391878505905524817/1393365523407835196",
+      "AACS Landsknecht": "https://discord.com/channels/900478857436606535/1391878505905524817/1392713534005186730",
+      "BRHS Seastorm": "https://discord.com/channels/900478857436606535/1391878505905524817/1392395299275800576",
+      "BRHS Trireme": "https://discord.com/channels/900478857436606535/1391878505905524817/1391904991710806069",
+      "WINC Caterpillar": "https://discord.com/channels/900478857436606535/1391878505905524817/1391904347117322322"
+    };
+
+    function toggleOrderCategoryOther() {
+      const val = document.getElementById("orderCategory").value;
+      const otherDiv = document.getElementById("orderCategoryOtherDiv");
+      if (val === "Other") {
+        otherDiv.style.display = "block";
+        document.getElementById("orderCategoryOther").required = true;
+      } else {
+        otherDiv.style.display = "none";
+        document.getElementById("orderCategoryOther").required = false;
+      }
+    }
+    document.getElementById("orderCategory").addEventListener("change", toggleOrderCategoryOther);
+
+    function toggleCompanyNameOther() {
+      const companyName = document.getElementById("companyName").value;
+      const otherDiv = document.getElementById("companyNameOtherDiv");
+      if (companyName === "Other") {
+        otherDiv.style.display = "block";
+        document.getElementById("companyNameOther").required = true;
+      } else {
+        otherDiv.style.display = "none";
+        document.getElementById("companyNameOther").required = false;
+      }
+    }
+
+    function toggleOrderTypeOther() {
+      const orderType = document.getElementById("orderType").value;
+      const otherDiv = document.getElementById("orderTypeOtherDiv");
+      if (orderType === "Other") {
+        otherDiv.style.display = "block";
+        document.getElementById("orderTypeOther").required = true;
+      } else {
+        otherDiv.style.display = "none";
+        document.getElementById("orderTypeOther").required = false;
+      }
+    }
+
+    function toggleShipNameOther() {
+      const shipName = document.getElementById("shipName").value;
+      const otherDiv = document.getElementById("shipNameOtherDiv");
+      if (shipName === "Other") {
+        otherDiv.style.display = "block";
+        document.getElementById("shipNameOther").required = true;
+      } else {
+        otherDiv.style.display = "none";
+        document.getElementById("shipNameOther").required = false;
+      }
+    }
+
+    function toggleCaptainNameOther() {
+      const captainName = document.getElementById("captainName").value;
+      const otherDiv = document.getElementById("captainNameOtherDiv");
+      if (captainName === "Other") {
+        otherDiv.style.display = "block";
+        document.getElementById("captainNameOther").required = true;
+      } else {
+        otherDiv.style.display = "none";
+        document.getElementById("captainNameOther").required = false;
+      }
+    }
+
+    function generateCrewInputs() {
+      const crewAmount = parseInt(document.getElementById("crewAmount").value, 10);
+      const crewNamesDiv = document.getElementById("crewNamesDiv");
+      crewNamesDiv.innerHTML = "";
+      if (!isNaN(crewAmount) && crewAmount > 0) {
+        for (let i = 1; i <= crewAmount; i++) {
+          const label = document.createElement("label");
+          label.textContent = `Crew ${i} Name:`;
+          label.htmlFor = `crewName${i}`;
+          label.className = "crew-label";
+          const input = document.createElement("input");
+          input.type = "text";
+          input.id = `crewName${i}`;
+          input.name = `crewName${i}`;
+          input.required = true;
+          input.className = "crew-input";
+          crewNamesDiv.appendChild(label);
+          crewNamesDiv.appendChild(input);
+        }
+      }
+    }
+
+    function validateRequiredFields() {
+      document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+
+      const requiredFields = [
+        "orderCategory",
+        "companyName",
+        "orderType",
+        "shipName",
+        "captainName",
+        "crewAmount",
+        "startLocation",
+        "departureTime",
+        "routeStart",
+        "routeEnd",
+        "manifest",
+        "totalSCU",
+        "totalUEC",
+        "completionTime",
+        "repairs",
+        "restock",
+        "quantumFuel",
+        "hydrogenFuel",
+        "crewCosts"
+      ];
+
+      let firstError = null;
+      for (const id of requiredFields) {
+        const el = document.getElementById(id);
+        if (!el || el.value === "" || el.value === null) {
+          if (el) el.classList.add('error');
+          if (!firstError && el) firstError = el;
+        }
+      }
+
+      const otherFields = [
+        {select: "orderCategory", other: "orderCategoryOtherDiv", input: "orderCategoryOther"},
+        {select: "companyName", other: "companyNameOtherDiv", input: "companyNameOther"},
+        {select: "orderType", other: "orderTypeOtherDiv", input: "orderTypeOther"},
+        {select: "shipName", other: "shipNameOtherDiv", input: "shipNameOther"},
+        {select: "captainName", other: "captainNameOtherDiv", input: "captainNameOther"}
+      ];
+      for (const field of otherFields) {
+        const selectEl = document.getElementById(field.select);
+        const otherDiv = document.getElementById(field.other);
+        const otherInput = document.getElementById(field.input);
+        if (selectEl && selectEl.value === "Other" && otherDiv.style.display === "block") {
+          if (!otherInput.value.trim()) {
+            otherInput.classList.add('error');
+            if (!firstError) firstError = otherInput;
+          }
+        }
+      }
+
+      const crewAmount = parseInt(document.getElementById("crewAmount").value, 10);
+      for (let i = 1; i <= crewAmount; i++) {
+        const crewInput = document.getElementById(`crewName${i}`);
+        if (!crewInput || !crewInput.value.trim()) {
+          if (crewInput) crewInput.classList.add('error');
+          if (!firstError && crewInput) firstError = crewInput;
+        }
+      }
+
+      if (firstError) {
+        firstError.scrollIntoView({behavior: "smooth", block: "center"});
+        alert("Please fill out all required fields before generating the Discord post. Unanswered questions are highlighted in red.");
+        return false;
+      }
+      return true;
+    }
+
+    function copyDiscordOutput() {
+      const discordOutput = document.getElementById("discordOutput");
+      discordOutput.select();
+      discordOutput.setSelectionRange(0, 99999);
+      document.execCommand("copy");
+    }
+
     function generateOutput() {
-      const get = id => document.getElementById(id).value.trim();
-      const output = `**${get("orderCategory")}**\n` +
-        `${get("companyName")} ${get("orderType")}\n\n` +
-        `Transport Ship - [**${get("shipName")}**](${get("shipLink")})\n` +
-        `Captain: ${get("captainName")}\n` +
-        `Crew: ${get("crewAmount")}\n-\n\n` +
-        `Departure - ${get("startLocation")}\n` +
-        `Departure time - ${get("departureTime")}\n\n` +
-        `Route - ${get("route")}\n\n` +
-        `Manifest\nRear to front\n${get("manifest")}\n\n` +
-        `Total - ${get("totalSCU")} SCU - ${get("totalUEC")} UEC\n\n` +
-        `Sign off\nOrder completion time - ${get("completionTime")}\n\n` +
-        `Deductibles:\n` +
-        `Repairs - ${get("repairs")} UEC\n` +
-        `Restock - ${get("restock")} UEC\n` +
-        `Quantum fuel - ${get("quantumFuel")} UEC\n` +
-        `Hydrogen fuel - ${get("hydrogenFuel")} UEC\n` +
-        `Crew/ ship costs - ${get("crewCosts")} UEC\n\n` +
-        `${get("notes")}`;
+  if (!validateRequiredFields()) return;
+
+  const get = id => document.getElementById(id)?.value?.trim() || "";
+  const departureDiscord = toDiscordTimestamp(get("departureTime"));
+  const completionDiscord = toDiscordTimestamp(get("completionTime"));
+
+      let orderCategoryText = get("orderCategory");
+      if (orderCategoryText === "Other") orderCategoryText = get("orderCategoryOther");
+
+      let companyNameText = get("companyName");
+      if (companyNameText === "Other") companyNameText = get("companyNameOther");
+
+      let orderTypeText = get("orderType");
+      if (orderTypeText === "Other") orderTypeText = get("orderTypeOther");
+
+      let shipNameText = get("shipName");
+      if (shipNameText === "Other") shipNameText = get("shipNameOther");
+
+      let captainNameText = get("captainName");
+      if (captainNameText === "Other") captainNameText = get("captainNameOther");
+
+      const shipLink = shipLinks[shipNameText] || "#";
+
+      const crewAmount = parseInt(get("crewAmount"), 10);
+      let crewNamesList = [];
+      for (let i = 1; i <= crewAmount; i++) {
+        const crewInput = document.getElementById(`crewName${i}`);
+        if (crewInput && crewInput.value.trim()) {
+          crewNamesList.push(crewInput.value.trim());
+        }
+      }
+      const crewNamesText = crewNamesList.length > 0 ? crewNamesList.join(", ") : "";
+
+      const routeStart = get("routeStart");
+      const routeEnd = get("routeEnd");
+      const routeText = routeStart && routeEnd ? `${routeStart} ➡️ ${routeEnd}` : "";
+
+      const output = `**${orderCategoryText}**
+${companyNameText} ${orderTypeText}
+
+Transport Ship - [**${shipNameText}**](${shipLink})
+Captain: ${captainNameText}
+Crew: ${get("crewAmount")}${crewNamesText ? " (" + crewNamesText + ")" : ""}
+-
+
+Departure - ${get("startLocation")}
+Departure time - ${departureDiscord}
+
+Route - ${routeText}
+
+Manifest
+Rear to front
+${get("manifest")}
+
+Total - ${get("totalSCU")} SCU - ${get("totalUEC")} UEC
+
+Sign off
+Order completion time - ${completionDiscord}
+
+Deductibles:
+Repairs - ${get("repairs")} UEC
+Restock - ${get("restock")} UEC
+Quantum fuel - ${get("quantumFuel")} UEC
+Hydrogen fuel - ${get("hydrogenFuel")} UEC
+Crew/ ship costs - ${get("crewCosts")} UEC
+
+${get("notes")}`;
+
+      let finalOutput = output.replace(/\n+$/, '');
 
       document.getElementById("discordOutput").value = output;
+      document.getElementById("discordSection").style.display = "block";
 
       // Data logging stub (add logic here to send to server/db if needed)
       console.log("Submitted Data:", {
-        orderCategory: get("orderCategory"),
-        companyName: get("companyName"),
-        orderType: get("orderType"),
-        shipName: get("shipName"),
-        shipLink: get("shipLink"),
-        captainName: get("captainName"),
+        orderCategory: orderCategoryText,
+        companyName: companyNameText,
+        orderType: orderTypeText,
+        shipName: shipNameText,
+        shipLink: shipLink,
+        captainName: captainNameText,
         crewAmount: get("crewAmount"),
+        crewNames: crewNamesList,
         startLocation: get("startLocation"),
         departureTime: get("departureTime"),
-        route: get("route"),
+        route: routeText,
         manifest: get("manifest"),
         totalSCU: get("totalSCU"),
         totalUEC: get("totalUEC"),
