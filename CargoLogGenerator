@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Star Citizen Cargo Haul Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      max-width: 800px;
+    }
+    textarea {
+      width: 100%;
+      height: 400px;
+    }
+    label {
+      font-weight: bold;
+    }
+    input, select, textarea {
+      margin-bottom: 10px;
+      width: 100%;
+    }
+    .section {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+  <h1>Star Citizen Cargo Haul Submission</h1>
+
+  <form id="haulForm">
+    <div class="section">
+      <label>Order Category (Transport or Security):</label>
+      <input type="text" id="orderCategory" required>
+
+      <label>Company Name:</label>
+      <input type="text" id="companyName" required>
+
+      <label>Order Type (Supplies, Trade, Resources, Salvage, etc.):</label>
+      <input type="text" id="orderType" required>
+
+      <label>Transport Ship Name:</label>
+      <input type="text" id="shipName" required>
+
+      <label>Ship Link (URL):</label>
+      <input type="url" id="shipLink" required>
+
+      <label>Captain Name:</label>
+      <input type="text" id="captainName" required>
+
+      <label>Crew Amount:</label>
+      <input type="number" id="crewAmount" required>
+
+      <label>Start Location:</label>
+      <input type="text" id="startLocation" required>
+
+      <label>Departure Timestamp:</label>
+      <input type="datetime-local" id="departureTime" required>
+
+      <label>Route (use --> to separate stops):</label>
+      <input type="text" id="route" placeholder="e.g., Area18 --> Bajini Point --> ArcCorp">
+    </div>
+
+    <div class="section">
+      <label>Cargo Manifest (repeat blocks as needed):</label>
+      <textarea id="manifest" placeholder="(SCU) SCU (Commodity) - (Destination) - (UEC Price) UEC\n..."> </textarea>
+
+      <label>Total SCU:</label>
+      <input type="text" id="totalSCU">
+
+      <label>Total UEC:</label>
+      <input type="text" id="totalUEC">
+    </div>
+
+    <div class="section">
+      <label>Order Completion Time (timestamp):</label>
+      <input type="datetime-local" id="completionTime">
+
+      <label>Repairs (UEC):</label>
+      <input type="text" id="repairs">
+
+      <label>Restock (UEC):</label>
+      <input type="text" id="restock">
+
+      <label>Quantum Fuel (UEC):</label>
+      <input type="text" id="quantumFuel">
+
+      <label>Hydrogen Fuel (UEC):</label>
+      <input type="text" id="hydrogenFuel">
+
+      <label>Crew/Ship Costs (UEC):</label>
+      <input type="text" id="crewCosts">
+
+      <label>Notes:</label>
+      <textarea id="notes"></textarea>
+    </div>
+
+    <button type="button" onclick="generateOutput()">Generate Discord Post</button>
+  </form>
+
+  <div class="section">
+    <h2>Copy & Paste for Discord</h2>
+    <textarea id="discordOutput" readonly></textarea>
+  </div>
+
+  <script>
+    function generateOutput() {
+      const get = id => document.getElementById(id).value.trim();
+      const output = `**${get("orderCategory")}**\n` +
+        `${get("companyName")} ${get("orderType")}\n\n` +
+        `Transport Ship - [**${get("shipName")}**](${get("shipLink")})\n` +
+        `Captain: ${get("captainName")}\n` +
+        `Crew: ${get("crewAmount")}\n-\n\n` +
+        `Departure - ${get("startLocation")}\n` +
+        `Departure time - ${get("departureTime")}\n\n` +
+        `Route - ${get("route")}\n\n` +
+        `Manifest\nRear to front\n${get("manifest")}\n\n` +
+        `Total - ${get("totalSCU")} SCU - ${get("totalUEC")} UEC\n\n` +
+        `Sign off\nOrder completion time - ${get("completionTime")}\n\n` +
+        `Deductibles:\n` +
+        `Repairs - ${get("repairs")} UEC\n` +
+        `Restock - ${get("restock")} UEC\n` +
+        `Quantum fuel - ${get("quantumFuel")} UEC\n` +
+        `Hydrogen fuel - ${get("hydrogenFuel")} UEC\n` +
+        `Crew/ ship costs - ${get("crewCosts")} UEC\n\n` +
+        `${get("notes")}`;
+
+      document.getElementById("discordOutput").value = output;
+
+      // Data logging stub (add logic here to send to server/db if needed)
+      console.log("Submitted Data:", {
+        orderCategory: get("orderCategory"),
+        companyName: get("companyName"),
+        orderType: get("orderType"),
+        shipName: get("shipName"),
+        shipLink: get("shipLink"),
+        captainName: get("captainName"),
+        crewAmount: get("crewAmount"),
+        startLocation: get("startLocation"),
+        departureTime: get("departureTime"),
+        route: get("route"),
+        manifest: get("manifest"),
+        totalSCU: get("totalSCU"),
+        totalUEC: get("totalUEC"),
+        completionTime: get("completionTime"),
+        repairs: get("repairs"),
+        restock: get("restock"),
+        quantumFuel: get("quantumFuel"),
+        hydrogenFuel: get("hydrogenFuel"),
+        crewCosts: get("crewCosts"),
+        notes: get("notes")
+      });
+    }
+  </script>
+</body>
+</html>
