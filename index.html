@@ -55,7 +55,8 @@
     .logo {
       display: block;
       margin: 0 auto 20px auto;
-      max-width: 250px;
+      max-width: 250px;    /* Orignal Size: 250px */
+      width: 100%;
       background: #e2e2e2;
       border-radius: 8px;
     }
@@ -124,7 +125,19 @@
     }
     .error {
       border: 2px solid #9d7523 !important;
-      background: #ffeaea !important;
+      background: #b32428 !important;
+    }
+    select.error option[value=""] {
+      background: #b32428 !important;
+      color: #fff !important;
+    }
+    select.error {
+      background: #b32428 !important;
+      color: #fff !important;
+    }
+    select.error:focus {
+      background: #e2e2e2 !important;
+      color: #230e09 !important;
     }
     .route-row {
       display: flex;
@@ -163,8 +176,82 @@
       vertical-align: middle;
       filter: invert(1);
     }
-    h1, h2 {
+    h1 {
       color: #9d7523;
+      text-align: center;
+      font-size: 2.4em;
+      font-weight: bold; 
+    }
+    h2 {
+      color: #9d7523;
+    }
+    .manifest-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 10px;
+      padding: 12px;
+      border: 2px solid #9d7523;
+      border-radius: 8px;
+      background: #f8f6f2;
+      box-shadow: 0 2px 6px rgba(157,117,35,0.07);
+      position: relative;
+    }
+    .manifest-row label {
+      margin: 0;
+      font-weight: normal;
+      color: #230e09;
+      min-width: 60px;
+    }
+    .manifest-row input,
+    .manifest-row select {
+      width: auto;
+      margin-bottom: 0;
+    }
+    .manifest-btn {
+      font-size: 1em;
+      font-weight: bold;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: 6px;
+      margin-right: 0;
+      transition: background 0.2s;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      padding: 0;
+    }
+    .manifest-btn.add {
+      background: #43b581;
+      color: #fff;
+    }
+    .manifest-btn.add:hover {
+      background: #2ea964;
+    }
+    .manifest-btn.remove {
+      background: #ed4245;
+      color: #fff;
+    }
+    .manifest-btn.remove:hover {
+      background: #b32428;
+    }
+    .manifest-total-box {
+      display: flex;
+      gap: 24px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      font-size: 1.1em;
+      font-weight: bold;
+      color: #230e09;
+      background: #f8f6f2;
+      border: 2px solid #9d7523;
+      border-radius: 8px;
+      padding: 12px;
+      align-items: center;
+      justify-content: flex-start;
     }
   </style>
 </head>
@@ -189,7 +276,7 @@
       <label>Company Name:</label>
       <select id="companyName" required onchange="toggleCompanyNameOther()">
         <option value="" selected disabled>Select company</option>
-        <option value="BruteHaul">BruteHaul</option>
+        <option value="Brute Haul">Brute Haul</option>
         <option value="Wildcard Inc.">Wildcard Inc.</option>
         <option value="Space Rats">Space Rats</option>
         <option value="The Benjineering Project">The Benjineering Project</option>
@@ -208,6 +295,7 @@
         <option value="Resources">Resources</option>
         <option value="Salvage">Salvage</option>
         <option value="Contract">Contract</option>
+        <option value="Resource Drive">Resource Drive</option>
         <option value="Relocation">Relocation</option>
         <option value="Other">Other</option>
       </select>
@@ -215,17 +303,20 @@
         <label>Specify Other:</label>
         <input type="text" id="orderTypeOther" required />
       </div>
+      <div id="resourceDriveCompanyDiv" class="other-div" style="display:none;">
+        <label>Resource Drive Company:</label>
+        <select id="resourceDriveCompany">
+          <option value="" selected disabled>Select company</option>
+          <option value="Hurston Dynamics">Hurston Dynamics</option>
+          <option value="Arccorp">Arccorp</option>
+          <option value="Crusader Industries">Crusader Industries</option>
+          <option value="Microtech">Microtech</option>
+        </select>
+      </div>
 
-      <label>Transport Ship Name:</label>
+      <label>Ship Name:</label>
       <select id="shipName" required onchange="toggleShipNameOther()">
-        <option value="" selected disabled>Select ship</option>
-        <option value="BRHS Lednik">BRHS Lednik</option>
-        <option value="BRHS Trireme">BRHS Trireme</option>
-        <option value="BRHS Seastorm">BRHS Seastorm</option>
-        <option value="WINC Caterpillar">WINC Caterpillar</option>
-        <option value="AACS Landsknecht">AACS Landsknecht</option>
-        <option value="AACS Feder">AACS Feder</option>
-        <option value="Other">Other</option>
+        <!-- Options will be populated by JS -->
       </select>
       <div id="shipNameOtherDiv" class="other-div">
         <label>Specify Other:</label>
@@ -248,7 +339,7 @@
       </div>
 
       <label>Crew Amount:</label>
-      <input type="number" id="crewAmount" min="1" max="20" step="1" required oninput="generateCrewInputs()" />
+      <input type="number" id="crewAmount" min="0" max="20" step="1" required oninput="generateCrewInputs()" />
 
       <div id="crewNamesDiv"></div>
 
@@ -260,21 +351,19 @@
 
       <label>Route:</label>
       <div class="route-row">
-  <select id="routeStart" required></select>
-  <span class="route-arrow" style="font-size:1.5em;">➡️</span>
-  <select id="routeEnd" required></select>
+        <select id="routeStart" required></select>
+        <span class="route-arrow" style="font-size:1.5em;">➡️</span>
+        <select id="routeEnd" required></select>
+      </div>
     </div>
 
     <div class="section">
-      <label>Cargo Manifest (repeat blocks as needed):</label>
-      <textarea id="manifest" required placeholder="(SCU) SCU (Commodity) - (Destination) - (UEC Price) UEC
-..."> </textarea>
-
-      <label>Total SCU:</label>
-      <input type="number" id="totalSCU" min="0" step="1" required value="0">
-
-      <label>Total UEC:</label>
-      <input type="number" id="totalUEC" min="0" step="1" required value="0">
+      <label>Cargo Manifest (add/remove lines as needed):</label>
+      <div id="manifestLines"></div>
+      <div class="manifest-total-box">
+        <span id="totalSCUBox">Total SCU: 0</span>
+        <span id="totalUECBox">Total UEC: 0</span>
+      </div>
     </div>
 
     <div class="section">
@@ -301,18 +390,18 @@
     </div>
 
     <button type="button" onclick="generateOutput()">
-  <img src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/DiscordLogo.png" alt="Discord Logo" class="discord-btn-logo" style="filter: brightness(0) invert(1);" />
-  Generate Discord Post
+      <img src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/DiscordLogo.png" alt="Discord Logo" class="discord-btn-logo" style="filter: brightness(0) invert(1);" />
+      Generate Discord Post
     </button>
   </form>
 
-    <div class="section" id="discordSection" style="display:none;">
+  <div class="section" id="discordSection" style="display:none;">
     <h2>Copy & Paste for Discord</h2>
     <textarea id="discordOutput" readonly></textarea>
     <button type="button" onclick="copyDiscordOutput()" style="background:#5865F2;color:#fff;border:none;padding:8px 16px;border-radius:5px;font-weight:bold;display:inline-flex;align-items:center;gap:8px;">
-  <img src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/DiscordLogo.png" alt="Discord Logo" style="height:1.6em;width:auto;filter:brightness(0) invert(1);" />
-  Copy
-</button>
+      <img src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/DiscordLogo.png" alt="Discord Logo" style="height:1.6em;width:auto;filter:brightness(0) invert(1);" />
+      Copy
+    </button>
   </div>
 
   <script>
@@ -331,6 +420,24 @@
       "Covalex Hub Tompkins","Covalex Hub Wightman","Covalex Hub Young","Covalex Hub Ziegler"
     ];
 
+    // Ship lists for each category
+    const transportShips = [
+      "SPRT Icarus", "BRHS Lednik", "BRHS Trireme", "WINC Caterpillar"
+    ];
+    const securityShips = [
+      "AACS Landsknecht", "AACS Feder"
+    ];
+    const allShips = [
+      ...transportShips,
+      ...securityShips,
+      "BRHS Seastorm"
+    ];
+
+    // Manifest material list (customize as needed)
+    const materialList = [
+      "Select Material", "Agricium", "Aluminium", "Aphorite", "Beryl", "Bexalite", "Borase", "Copper", "Corundum", "Diamond", "Dolivine", "Dyslexium", "Gold", "Hadanite", "Hephaestanite", "Inert materials", "Laranite", "Placeholder", "Quantanium", "Quartz", "Taranite", "Tungsten", "Titanium"
+    ];
+
     function populateLocationDropdown(id) {
       const select = document.getElementById(id);
       if (!select) return;
@@ -338,17 +445,119 @@
         locations.map(loc => `<option value="${loc}">${loc}</option>`).join("");
     }
 
+    function populateShipDropdown(category) {
+      const select = document.getElementById("shipName");
+      let ships = [];
+      if (category === "Transport") {
+        ships = transportShips;
+      } else if (category === "Security") {
+        ships = securityShips;
+      } else {
+        ships = allShips;
+      }
+      select.innerHTML = `<option value="" selected disabled>Select ship</option>` +
+        ships.map(ship => `<option value="${ship}">${ship}</option>`).join("") +
+        `<option value="Other">Other</option>`;
+      toggleShipNameOther();
+    }
+
+    // Manifest dynamic rows
+    let manifestLineCount = 0;
+    function createManifestLine(index) {
+      const isLast = index === manifestLineCount;
+      return `
+        <div class="manifest-row" id="manifestRow${index}">
+          <label>SCU:</label>
+          <input type="number" min="0" step="1" class="manifest-scu" id="manifestSCU${index}" style="width:70px;" oninput="updateManifestTotals()">
+          <label>Material:</label>
+          <select class="manifest-material" id="manifestMaterial${index}" style="width:120px;">
+            ${materialList.map(m => `<option value="${m}">${m}</option>`).join("")}
+          </select>
+          <label>UEC:</label>
+          <input type="number" min="0" step="1" class="manifest-uec" id="manifestUEC${index}" style="width:90px;" oninput="updateManifestTotals()">
+          <button type="button" onclick="removeManifestLine(${index})" class="manifest-btn remove" title="Remove line">－</button>
+          ${isLast ? `<button type="button" onclick="addManifestLine()" class="manifest-btn add" title="Add line">＋</button>` : ""}
+        </div>
+      `;
+    }
+    function renderManifestLines() {
+      const manifestLines = document.getElementById("manifestLines");
+      // Save current manifest line values
+      const manifestData = [];
+      document.querySelectorAll('.manifest-row').forEach((row, idx) => {
+        manifestData.push({
+          scu: row.querySelector('.manifest-scu')?.value || "",
+          material: row.querySelector('.manifest-material')?.value || "",
+          uec: row.querySelector('.manifest-uec')?.value || ""
+        });
+      });
+
+      manifestLines.innerHTML = "";
+      for (let i = 1; i <= manifestLineCount; i++) {
+        const isLast = i === manifestLineCount;
+        manifestLines.insertAdjacentHTML('beforeend', createManifestLine(i));
+      }
+
+      // Restore previous values
+      document.querySelectorAll('.manifest-row').forEach((row, idx) => {
+        if (manifestData[idx]) {
+          row.querySelector('.manifest-scu').value = manifestData[idx].scu;
+          row.querySelector('.manifest-material').value = manifestData[idx].material;
+          row.querySelector('.manifest-uec').value = manifestData[idx].uec;
+        }
+      });
+
+      updateManifestTotals();
+    }
+    function addManifestLine() {
+      manifestLineCount++;
+      renderManifestLines();
+    }
+    function removeManifestLine(index) {
+      const row = document.getElementById(`manifestRow${index}`);
+      if (row) row.remove();
+      manifestLineCount = document.querySelectorAll('.manifest-row').length;
+      // Always keep at least one manifest line
+      if (manifestLineCount === 0) {
+        manifestLineCount = 1;
+      }
+      renderManifestLines();
+    }
+    function updateManifestTotals() {
+      let totalSCU = 0;
+      let totalUEC = 0;
+      document.querySelectorAll('.manifest-row').forEach(row => {
+        const scu = parseInt(row.querySelector('.manifest-scu').value, 10);
+        const uec = parseInt(row.querySelector('.manifest-uec').value, 10);
+        if (!isNaN(scu)) totalSCU += scu;
+        if (!isNaN(uec)) totalUEC += uec;
+      });
+      document.getElementById("totalSCUBox").textContent = `Total SCU: ${totalSCU}`;
+      document.getElementById("totalUECBox").textContent = `Total UEC: ${totalUEC}`;
+    }
+
     window.addEventListener("DOMContentLoaded", function() {
       populateLocationDropdown("startLocation");
       populateLocationDropdown("routeStart");
       populateLocationDropdown("routeEnd");
+      populateShipDropdown(""); // Show all ships initially
       document.getElementById("discordSection").style.display = "none";
+      manifestLineCount = 1;
+      renderManifestLines();
+    });
+
+    document.getElementById("orderCategory").addEventListener("change", function() {
+      toggleOrderCategoryOther();
+      populateShipDropdown(this.value);
     });
 
     function toDiscordTimestamp(dtString) {
       if (!dtString) return "";
       const date = new Date(dtString);
       if (isNaN(date.getTime())) return "";
+      // Add 930 years
+      const yearsToAdd = 930;
+      date.setFullYear(date.getFullYear() + yearsToAdd);
       const unix = Math.floor(date.getTime() / 1000);
       return `<t:${unix}:f>`;
     }
@@ -359,7 +568,8 @@
       "AACS Landsknecht": "https://discord.com/channels/900478857436606535/1391878505905524817/1392713534005186730",
       "BRHS Seastorm": "https://discord.com/channels/900478857436606535/1391878505905524817/1392395299275800576",
       "BRHS Trireme": "https://discord.com/channels/900478857436606535/1391878505905524817/1391904991710806069",
-      "WINC Caterpillar": "https://discord.com/channels/900478857436606535/1391878505905524817/1391904347117322322"
+      "WINC Caterpillar": "https://discord.com/channels/900478857436606535/1391878505905524817/1391904347117322322",
+      "SPRT Icarus": "https://discord.com/channels/900478857436606535/1391878505905524817/1396265862268190830"
     };
 
     function toggleOrderCategoryOther() {
@@ -373,7 +583,6 @@
         document.getElementById("orderCategoryOther").required = false;
       }
     }
-    document.getElementById("orderCategory").addEventListener("change", toggleOrderCategoryOther);
 
     function toggleCompanyNameOther() {
       const companyName = document.getElementById("companyName").value;
@@ -390,12 +599,22 @@
     function toggleOrderTypeOther() {
       const orderType = document.getElementById("orderType").value;
       const otherDiv = document.getElementById("orderTypeOtherDiv");
+      const resourceDriveDiv = document.getElementById("resourceDriveCompanyDiv");
       if (orderType === "Other") {
         otherDiv.style.display = "block";
         document.getElementById("orderTypeOther").required = true;
-      } else {
+        resourceDriveDiv.style.display = "none";
+        document.getElementById("resourceDriveCompany").required = false;
+      } else if (orderType === "Resource Drive") {
+        resourceDriveDiv.style.display = "block";
+        document.getElementById("resourceDriveCompany").required = true;
         otherDiv.style.display = "none";
         document.getElementById("orderTypeOther").required = false;
+      } else {
+        otherDiv.style.display = "none";
+        resourceDriveDiv.style.display = "none";
+        document.getElementById("orderTypeOther").required = false;
+        document.getElementById("resourceDriveCompany").required = false;
       }
     }
 
@@ -448,6 +667,7 @@
     function validateRequiredFields() {
       document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
 
+      // Add event listeners to required fields to remove error class on input/change
       const requiredFields = [
         "orderCategory",
         "companyName",
@@ -459,9 +679,6 @@
         "departureTime",
         "routeStart",
         "routeEnd",
-        "manifest",
-        "totalSCU",
-        "totalUEC",
         "completionTime",
         "repairs",
         "restock",
@@ -469,6 +686,19 @@
         "hydrogenFuel",
         "crewCosts"
       ];
+      requiredFields.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.addEventListener('input', () => el.classList.remove('error'));
+          el.addEventListener('change', () => el.classList.remove('error'));
+        }
+      });
+
+      // Also handle manifest and crew fields
+      document.querySelectorAll('.manifest-scu, .manifest-material, .crew-input').forEach(el => {
+        el.addEventListener('input', () => el.classList.remove('error'));
+        el.addEventListener('change', () => el.classList.remove('error'));
+      });
 
       let firstError = null;
       for (const id of requiredFields) {
@@ -507,6 +737,23 @@
         }
       }
 
+      // Validate manifest lines (UEC is now optional)
+      const manifestRows = document.querySelectorAll('.manifest-row');
+      if (manifestRows.length === 0) {
+        alert("Please add at least one manifest line.");
+        return false;
+      }
+      for (const row of manifestRows) {
+        const scu = row.querySelector('.manifest-scu');
+        const mat = row.querySelector('.manifest-material');
+        // const uec = row.querySelector('.manifest-uec'); // UEC is optional
+        if (!scu.value || !mat.value) {
+          scu.classList.add('error');
+          mat.classList.add('error');
+          if (!firstError) firstError = scu;
+        }
+      }
+
       if (firstError) {
         firstError.scrollIntoView({behavior: "smooth", block: "center"});
         alert("Please fill out all required fields before generating the Discord post. Unanswered questions are highlighted in red.");
@@ -523,11 +770,11 @@
     }
 
     function generateOutput() {
-  if (!validateRequiredFields()) return;
+      if (!validateRequiredFields()) return;
 
-  const get = id => document.getElementById(id)?.value?.trim() || "";
-  const departureDiscord = toDiscordTimestamp(get("departureTime"));
-  const completionDiscord = toDiscordTimestamp(get("completionTime"));
+      const get = id => document.getElementById(id)?.value?.trim() || "";
+      const departureDiscord = toDiscordTimestamp(get("departureTime"));
+      const completionDiscord = toDiscordTimestamp(get("completionTime"));
 
       let orderCategoryText = get("orderCategory");
       if (orderCategoryText === "Other") orderCategoryText = get("orderCategoryOther");
@@ -537,6 +784,11 @@
 
       let orderTypeText = get("orderType");
       if (orderTypeText === "Other") orderTypeText = get("orderTypeOther");
+
+      let resourceDriveCompanyText = "";
+      if (orderTypeText === "Resource Drive") {
+        resourceDriveCompanyText = document.getElementById("resourceDriveCompany").value || "";
+      }
 
       let shipNameText = get("shipName");
       if (shipNameText === "Other") shipNameText = get("shipNameOther");
@@ -560,10 +812,31 @@
       const routeEnd = get("routeEnd");
       const routeText = routeStart && routeEnd ? `${routeStart} ➡️ ${routeEnd}` : "";
 
-      const output = `**${orderCategoryText}**
-${companyNameText} ${orderTypeText}
+      // Gather manifest lines and totals
+      let manifestLines = [];
+      let totalSCU = 0;
+      let totalUEC = 0;
+      document.querySelectorAll('.manifest-row').forEach(row => {
+        const scu = parseInt(row.querySelector('.manifest-scu').value, 10);
+        const mat = row.querySelector('.manifest-material').value;
+        const uecValue = row.querySelector('.manifest-uec').value;
+        const uec = parseInt(uecValue, 10);
 
-Transport Ship - [**${shipNameText}**](${shipLink})
+        if (!isNaN(scu)) totalSCU += scu;
+        // Only count UEC if not blank and not zero
+        if (uecValue !== "" && !isNaN(uec) && uec !== 0) totalUEC += uec;
+
+        // Only include UEC in output if not blank and not zero
+        const uecText = (uecValue !== "" && uec !== 0) ? ` - ${uec} UEC` : "";
+        manifestLines.push(`${scu} SCU ${mat}${uecText}`);
+      });
+
+      const totalUECText = totalUEC > 0 ? ` - ${totalUEC} UEC` : "";
+
+      const output = `**${orderCategoryText}**
+${companyNameText} ${orderTypeText}${resourceDriveCompanyText ? `\nResource Drive Company: ${resourceDriveCompanyText}` : ""}
+
+Ship - [**${shipNameText}**](${shipLink})
 Captain: ${captainNameText}
 Crew: ${get("crewAmount")}${crewNamesText ? " (" + crewNamesText + ")" : ""}
 -
@@ -574,10 +847,9 @@ Departure time - ${departureDiscord}
 Route - ${routeText}
 
 Manifest
-Rear to front
-${get("manifest")}
+${manifestLines.join('\n')}
 
-Total - ${get("totalSCU")} SCU - ${get("totalUEC")} UEC
+Total - ${totalSCU} SCU${totalUECText}
 
 Sign off
 Order completion time - ${completionDiscord}
@@ -589,9 +861,7 @@ Quantum fuel - ${get("quantumFuel")} UEC
 Hydrogen fuel - ${get("hydrogenFuel")} UEC
 Crew/ ship costs - ${get("crewCosts")} UEC
 
-${get("notes")}`;
-
-      let finalOutput = output.replace(/\n+$/, '');
+${get("notes")}`.trim();
 
       document.getElementById("discordOutput").value = output;
       document.getElementById("discordSection").style.display = "block";
@@ -609,9 +879,9 @@ ${get("notes")}`;
         startLocation: get("startLocation"),
         departureTime: get("departureTime"),
         route: routeText,
-        manifest: get("manifest"),
-        totalSCU: get("totalSCU"),
-        totalUEC: get("totalUEC"),
+        manifest: manifestLines,
+        totalSCU: totalSCU,
+        totalUEC: totalUEC,
         completionTime: get("completionTime"),
         repairs: get("repairs"),
         restock: get("restock"),
