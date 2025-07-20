@@ -309,7 +309,7 @@
           <option value="" selected disabled>Select company</option>
           <option value="Hurston Dynamics">Hurston Dynamics</option>
           <option value="Arccorp">Arccorp</option>
-          <option value="Crusader Industries">Crusader Industries</option>
+          <option value="🏆 Crusader Industries 🏆">🏆 Crusader Industries 🏆</option>
           <option value="Microtech">Microtech</option>
         </select>
       </div>
@@ -710,7 +710,7 @@
   "World's End",
   "Yang's Place",
   "Zephyr (settlement)"
-];
+   ];
 
     // Ship lists for each category
     const transportShips = [
@@ -773,95 +773,92 @@
       `;
     }
 
-   function renderManifestLines() {
-  // Save current manifest line values
-  const manifestData = [];
-  document.querySelectorAll('.manifest-row').forEach((row, idx) => {
-    manifestData.push({
-      scu: row.querySelector('.manifest-scu')?.value || "",
-      material: row.querySelector('.manifest-material')?.value || "",
-      uec: row.querySelector('.manifest-uec')?.value || ""
-    });
-  });
+    function renderManifestLines() {
+      // Save current manifest line values
+      const manifestData = [];
+      document.querySelectorAll('.manifest-row').forEach((row, idx) => {
+        manifestData.push({
+          scu: row.querySelector('.manifest-scu')?.value || "",
+          material: row.querySelector('.manifest-material')?.value || "",
+          uec: row.querySelector('.manifest-uec')?.value || ""
+        });
+      });
 
-  const manifestLines = document.getElementById("manifestLines");
-  manifestLines.innerHTML = "";
-  for (let i = 1; i <= manifestLineCount; i++) {
-    manifestLines.insertAdjacentHTML('beforeend', createManifestLine(i));
-  }
+      const manifestLines = document.getElementById("manifestLines");
+      manifestLines.innerHTML = "";
+      for (let i = 1; i <= manifestLineCount; i++) {
+        manifestLines.insertAdjacentHTML('beforeend', createManifestLine(i));
+      }
 
-  // Restore previous values
-  document.querySelectorAll('.manifest-row').forEach((row, idx) => {
-    if (manifestData[idx]) {
-      row.querySelector('.manifest-scu').value = manifestData[idx].scu;
-      row.querySelector('.manifest-material').value = manifestData[idx].material;
-      row.querySelector('.manifest-uec').value = manifestData[idx].uec;
+      // Restore previous values
+      document.querySelectorAll('.manifest-row').forEach((row, idx) => {
+        if (manifestData[idx]) {
+          row.querySelector('.manifest-scu').value = manifestData[idx].scu;
+          row.querySelector('.manifest-material').value = manifestData[idx].material;
+          row.querySelector('.manifest-uec').value = manifestData[idx].uec;
+        }
+      });
+
+      updateManifestTotals();
     }
-  });
 
-  updateManifestTotals();
-}
-
-function addManifestLine() {
-  manifestLineCount++;
-  renderManifestLines();
-}
-
-function removeManifestLine(index) {
-  // Remove the data for the deleted line
-  const manifestData = [];
-  document.querySelectorAll('.manifest-row').forEach((row, idx) => {
-    manifestData.push({
-      scu: row.querySelector('.manifest-scu')?.value || "",
-      material: row.querySelector('.manifest-material')?.value || "",
-      uec: row.querySelector('.manifest-uec')?.value || ""
-    });
-  });
-  manifestData.splice(index - 1, 1); // Remove the deleted line
-
-  manifestLineCount--;
-  if (manifestLineCount < 1) manifestLineCount = 1;
-
-  const manifestLines = document.getElementById("manifestLines");
-  manifestLines.innerHTML = "";
-  for (let i = 1; i <= manifestLineCount; i++) {
-    manifestLines.insertAdjacentHTML('beforeend', createManifestLine(i));
-  }
-  // Restore previous values except the deleted one
-  document.querySelectorAll('.manifest-row').forEach((row, idx) => {
-    if (manifestData[idx]) {
-      row.querySelector('.manifest-scu').value = manifestData[idx].scu;
-      row.querySelector('.manifest-material').value = manifestData[idx].material;
-      row.querySelector('.manifest-uec').value = manifestData[idx].uec;
+    function addManifestLine() {
+      manifestLineCount++;
+      renderManifestLines();
     }
-  });
 
-  updateManifestTotals();
-}
+    function removeManifestLine(index) {
+      const manifestData = [];
+      document.querySelectorAll('.manifest-row').forEach((row, idx) => {
+        manifestData.push({
+          scu: row.querySelector('.manifest-scu')?.value || "",
+          material: row.querySelector('.manifest-material')?.value || "",
+          uec: row.querySelector('.manifest-uec')?.value || ""
+        });
+      });
+      manifestData.splice(index - 1, 1);
+
+      manifestLineCount--;
+      if (manifestLineCount < 1) manifestLineCount = 1;
+
+      const manifestLines = document.getElementById("manifestLines");
+      manifestLines.innerHTML = "";
+      for (let i = 1; i <= manifestLineCount; i++) {
+        manifestLines.insertAdjacentHTML('beforeend', createManifestLine(i));
+      }
+      // Restore previous values except the deleted one
+      document.querySelectorAll('.manifest-row').forEach((row, idx) => {
+        if (manifestData[idx]) {
+          row.querySelector('.manifest-scu').value = manifestData[idx].scu;
+          row.querySelector('.manifest-material').value = manifestData[idx].material;
+          row.querySelector('.manifest-uec').value = manifestData[idx].uec;
+        }
+      });
+
+      updateManifestTotals();
+    }
 
     function updateManifestTotals() {
-  let totalSCU = 0;
-  let totalUEC = 0;
-  document.querySelectorAll('.manifest-row').forEach(row => {
-    const scu = parseInt(row.querySelector('.manifest-scu').value, 10);
-    const uec = parseInt(row.querySelector('.manifest-uec').value, 10);
-    if (!isNaN(scu)) totalSCU += scu;
-    if (!isNaN(uec)) totalUEC += uec;
-  });
+      let totalSCU = 0;
+      let totalUEC = 0;
+      document.querySelectorAll('.manifest-row').forEach(row => {
+        const scu = parseInt(row.querySelector('.manifest-scu').value, 10);
+        const uec = parseInt(row.querySelector('.manifest-uec').value, 10);
+        if (!isNaN(scu)) totalSCU += scu;
+        if (!isNaN(uec)) totalUEC += uec;
+      });
 
-  document.getElementById("totalSCUBox").textContent = `Total SCU: ${totalSCU}`;
+      document.getElementById("totalSCUBox").textContent = `Total SCU: ${totalSCU.toLocaleString()}`;
 
-  // If user has manually edited the box, keep their value
-  const totalUECInput = document.getElementById("totalUECBox");
-  const manualUEC = parseInt(totalUECInput.value, 10);
-  if (document.activeElement === totalUECInput && !isNaN(manualUEC)) {
-    // User is editing, keep their value
-    totalUECInput.value = manualUEC;
-  } else {
-    // Otherwise, update with calculated total
-    totalUECInput.value = totalUEC;
-  }
-}
+      // If user has manually edited the box, keep their value
+      const totalUECInput = document.getElementById("totalUECBox");
+      const manualUEC = parseInt(totalUECInput.value, 10);
+      if (document.activeElement === totalUECInput && !isNaN(manualUEC)) {
+        totalUECInput.value = manualUEC;
+      } else {
+        totalUECInput.value = totalUEC;
+      }
+    }
 
     window.toggleOrderTypeOther = toggleOrderTypeOther;
     window.toggleCompanyNameOther = toggleCompanyNameOther;
@@ -1194,30 +1191,36 @@ function removeManifestLine(index) {
       // Gather manifest lines and totals
       let manifestLines = [];
       let totalSCU = 0;
-      let totalUEC = 0;
       document.querySelectorAll('.manifest-row').forEach(row => {
-        const scu = parseInt(row.querySelector('.manifest-scu').value, 10);
+        const scuValue = row.querySelector('.manifest-scu').value;
+        const scu = parseInt(scuValue, 10);
         const mat = row.querySelector('.manifest-material').value;
         const uecValue = row.querySelector('.manifest-uec').value;
         const uec = parseInt(uecValue, 10);
 
         if (!isNaN(scu)) totalSCU += scu;
-        // Only count UEC if not blank and not zero
-        if (uecValue !== "" && !isNaN(uec) && uec !== 0) totalUEC += uec;
 
-        // Only include UEC in output if not blank and not zero
-        const uecText = (uecValue !== "" && uec !== 0) ? ` - ${uec} UEC` : "";
-        manifestLines.push(`${scu} SCU ${mat}${uecText}`);
+        // Format numbers with commas and $ for UEC
+        const scuText = !isNaN(scu) ? scu.toLocaleString() : scuValue;
+        const uecText = (uecValue !== "" && uec !== 0) ? ` - $${uec.toLocaleString()} UEC` : "";
+        manifestLines.push(`${scuText} SCU ${mat}${uecText}`);
       });
 
-      const totalUECText = totalUEC > 0 ? ` - ${totalUEC} UEC` : "";
+      // Format total SCU and UEC
+      const totalSCUText = totalSCU.toLocaleString();
+      const totalUECInput = document.getElementById("totalUECBox");
+      const totalUECValue = parseInt(totalUECInput.value, 10);
+      const totalUECText = (totalUECValue > 0) ? ` - $${totalUECValue.toLocaleString()} UEC` : "";
+
+      // Format deductibles with $
+      const repairs = parseInt(get("repairs") || "0", 10);
+      const restock = parseInt(get("restock") || "0", 10);
+      const quantumFuel = parseInt(get("quantumFuel") || "0", 10);
+      const hydrogenFuel = parseInt(get("hydrogenFuel") || "0", 10);
+      const crewCosts = parseInt(get("crewCosts") || "0", 10);
 
       const totalDeductibles =
-        parseInt(get("repairs") || "0", 10) +
-        parseInt(get("restock") || "0", 10) +
-        parseInt(get("quantumFuel") || "0", 10) +
-        parseInt(get("hydrogenFuel") || "0", 10) +
-        parseInt(get("crewCosts") || "0", 10);
+        repairs + restock + quantumFuel + hydrogenFuel + crewCosts;
 
       // Get duration text for Discord output only
       const durationText = getOrderDurationText();
@@ -1226,7 +1229,7 @@ function removeManifestLine(index) {
             
 
 **${orderCategoryText}**
-${companyNameText} ${orderTypeText}${resourceDriveCompanyText ? `\n🏆 Resource Drive Company: ${resourceDriveCompanyText} 🏆` : ""}
+${companyNameText} ${orderTypeText}${resourceDriveCompanyText ? `\nResource Drive Company: ${resourceDriveCompanyText}` : ""}
 
 **Ship:** [${shipNameText}](${shipLink})
 **Captain:** ${captainNameText}
@@ -1242,20 +1245,20 @@ ${companyNameText} ${orderTypeText}${resourceDriveCompanyText ? `\n🏆 Resource
 
 **Manifest**
 \`\`\`
-SCU   Material         UEC
+SCU     Material         UEC
 ${manifestLines.map(line => {
-  // Try to format as columns: "10 SCU Quantanium - 5000 UEC"
-  const match = line.match(/^(\d+)\sSCU\s([^\-]+)(?:\s-\s(\d+)\sUEC)?$/);
+  // Try to format as columns: "10 SCU - Quantanium - $5,000 UEC"
+  const match = line.match(/^([\d,]+)\sSCU\s([^\-]+)(?:\s-\s\$?([\d,]+)\sUEC)?$/);
   if (match) {
-    const scu = match[1].padEnd(5, ' ');
+    const scu = match[1].padEnd(7, ' ');
     const mat = match[2].padEnd(15, ' ');
-    const uec = match[3] ? match[3] : '';
+    const uec = match[3] ? `$${match[3]}` : '';
     return `${scu} ${mat} ${uec}`;
   }
   return line;
 }).join('\n')}
 \`\`\`
-**Total: ${totalSCU} SCU${totalUECText}**
+**Total: ${totalSCUText} SCU${totalUECText}**
 
 ———
 
@@ -1263,12 +1266,12 @@ ${manifestLines.map(line => {
 Order completion time: ${completionDiscord}${durationText ? `\n${durationText}` : ""}
 
 **Deductibles**
-- **Repairs:** ${get("repairs")} UEC
-- **Restock:** ${get("restock")} UEC
-- **Quantum fuel:** ${get("quantumFuel")} UEC
-- **Hydrogen fuel:** ${get("hydrogenFuel")} UEC
-- **Crew/ship costs:** ${get("crewCosts")} UEC
-**Total Deductibles: ${totalDeductibles} UEC**
+- **Repairs:** $${repairs.toLocaleString()} UEC
+- **Restock:** $${restock.toLocaleString()} UEC
+- **Quantum fuel:** $${quantumFuel.toLocaleString()} UEC
+- **Hydrogen fuel:** $${hydrogenFuel.toLocaleString()} UEC
+- **Crew/ship costs:** $${crewCosts.toLocaleString()} UEC
+**Total Deductibles: $${totalDeductibles.toLocaleString()} UEC**
 
 ———
 
@@ -1296,7 +1299,7 @@ ${get("notes")}
         route: routeText,
         manifest: manifestLines,
         totalSCU: totalSCU,
-        totalUEC: totalUEC,
+        totalUEC: totalUECValue,
         completionTime: get("completionTime"),
         repairs: get("repairs"),
         restock: get("restock"),
@@ -1307,5 +1310,3 @@ ${get("notes")}
       });
     }
   </script>
-</body>
-</html>
