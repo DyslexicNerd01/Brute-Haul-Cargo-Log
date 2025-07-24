@@ -5,6 +5,20 @@ export default async function handler(req, res) {
     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
     return res.status(200).end();
   }
+  export default async function handler(req, res) {
+  // Log the type and value of req.body
+  console.log('typeof req.body:', typeof req.body);
+  console.log('req.body:', req.body);
+
+  // If it's a string, parse it
+  const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+
+  // Now send to your backend
+  const botRes = await fetch("http://astro.wisp.uno:10478/send-discord", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
 
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
