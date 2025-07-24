@@ -1484,7 +1484,7 @@ async function sendToDiscord() {
   if (sendBtn) sendBtn.disabled = true;
 
   try {
-    const response = await fetch("http://astro.wisp.uno:10478/send-discord", {
+    const response = await fetch("brute-haul-cargo-log.vercel.app", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
