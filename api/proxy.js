@@ -11,7 +11,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const botRes = await fetch("astro.wisp.uno:10478/send-discord", {
+    const botRes = await fetch("http://astro.wisp.uno:10478/send-discord", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(req.body),
