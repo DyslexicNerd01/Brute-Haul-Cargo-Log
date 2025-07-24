@@ -1484,6 +1484,7 @@ async function sendToDiscord() {
   if (sendBtn) sendBtn.disabled = true;
 
   try {
+    const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
     const response = await fetch("https://brute-haul-cargo-log.vercel.app/api/proxy", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
