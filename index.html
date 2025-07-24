@@ -265,7 +265,7 @@
   <button type="button" onclick="showTab('announcementsTab')" id="announcementsTabBtn" style="border: 3px solid transparent;">Announcements</button>
   <a href="https://robertsspaceindustries.com/en/orgs/BRHS" target="_blank" title="Join BRHS"
      style="margin-left:auto; display:inline-flex; align-items:center; justify-content:center; width:60px; height:60px; background:#222; border-radius:8px; text-decoration:none; border:0px solid #9d7523;">
-    <img src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/blob/main/starcitizen_white.webp" alt="Star Citizen" style="width:52px; height:52px; object-fit:contain;">
+    <img src="https://static.wikia.nocookie.net/starcitizen/images/8/8f/Star-citizen-logo.png/revision/latest?cb=20121018064642" alt="Star Citizen" style="width:52px; height:52px; object-fit:contain;">
   </a>
 </div>
 <hr style="border: none; border-bottom: 5px solid #9d7523; margin: 0 0 20px 0;">
@@ -420,13 +420,13 @@
     <button type="button" onclick="clearFormFields()" style="background:#b32428;color:#fff;border:none;padding:10px 16px;border-radius:5px;font-weight:bold;display:flex;align-items:center;gap:8px;margin-left:8px;">
   Clear Form
 </button>
-  </button>
+  </form>
+  <div class="section" id="discordSection" style="display:none;">
+    </button>
     <button type="button" onclick="sendToDiscord()" style="background:#43b581;color:#fff;border:none;padding:8px 16px;border-radius:5px;font-weight:bold;display:inline-flex;align-items:center;gap:8px;margin-left:8px;">
     <img src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/DiscordLogo.png" alt="Discord Logo" style="height:1.6em;width:auto;filter:brightness(0) invert(1);" />
     Send to Discord
   </button>
-  </form>
-  <div class="section" id="discordSection" style="display:none;">
     <h2>Discord Output:</h2>
     <textarea id="discordOutput" readonly></textarea>
     <button type="button" onclick="copyDiscordOutput()" style="background:#5865F2;color:#fff;border:none;padding:8px 16px;border-radius:5px;font-weight:bold;display:inline-flex;align-items:center;gap:8px;">
@@ -1484,7 +1484,7 @@ async function sendToDiscord() {
   if (sendBtn) sendBtn.disabled = true;
 
   try {
-    const response = await fetch("https://brute-haul-cargo-log.vercel.app/api/proxy", {
+    const response = await fetch("brute-haul-cargo-log.vercel.app/api/proxy", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
