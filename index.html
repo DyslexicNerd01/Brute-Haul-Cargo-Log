@@ -1606,14 +1606,13 @@ async function sendToDiscord() {
   if (sendBtn) sendBtn.disabled = true;
 
   try {
-    // Try multiple ports and protocols
+    // Try HTTPS first (required for GitHub Pages), then HTTP fallback
     const endpoints = [
       "https://astro.wisp.uno:10478/send-discord",
-      "http://astro.wisp.uno:10478/send-discord",
       "https://astro.wisp.uno:8080/send-discord",
-      "http://astro.wisp.uno:8080/send-discord",
       "https://astro.wisp.uno:3000/send-discord",
-      "http://astro.wisp.uno:3000/send-discord"
+      "http://astro.wisp.uno:10478/send-discord",
+      "http://astro.wisp.uno:8080/send-discord"
     ];
     
     let response;
@@ -1642,13 +1641,13 @@ async function sendToDiscord() {
           break;
         }
       } catch (error) {
-        console.log(`Failed with ${endpoint}:`, error);
+        console.log(`Failed with ${endpoint}:`, error.message);
         continue;
       }
     }
     
     if (!response || !response.ok) {
-      throw new Error("All endpoints failed");
+      throw new Error("All endpoints failed - please check server status");
     }
 
     let data;
