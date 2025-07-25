@@ -974,11 +974,11 @@ window.addEventListener("DOMContentLoaded", function() {
         totalUEC = 58400;
       } else if (type === 'small') {
         preset = [
-          { scu: 1, material: 'Corundum' },
-          { scu: 1, material: 'Tungsten' },
-          { scu: 1, material: 'Copper' }
+          { scu: 2, material: 'Corundum' },
+          { scu: 4, material: 'Tungsten' },
+          { scu: 2, material: 'Copper' }
         ];
-        totalUEC = 24150;
+        totalUEC = 53250;
       }
       manifestLineCount = preset.length;
       renderManifestLines();
@@ -1571,8 +1571,6 @@ window.copyHistoryPost = copyHistoryPost;
 window.sendToDiscord = sendToDiscord;
 
 async function sendToDiscord() {
-  // --- Discord sending temporarily disabled ---
-  /*
   const message = document.getElementById("discordOutput").value;
   const orderType = document.getElementById("orderType").value;
   const resourceDriveCompany = document.getElementById("resourceDriveCompany").value;
@@ -1608,18 +1606,19 @@ async function sendToDiscord() {
   if (sendBtn) sendBtn.disabled = true;
 
   try {
-    const response = await fetch("brute-haul-cargo-log.vercel.app/api/proxy", {
+    // Try HTTPS first, fallback to HTTP if needed
+    const response = await fetch("http://astro.wisp.uno:10478/send-discord", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-  message,
-  orderType,
-  resourceDriveCompany,
-  totalSCU,
-  captainName,
-  shipName,
-  shipNames: typeof allShips !== "undefined" ? allShips : []
-})
+        message,
+        orderType,
+        resourceDriveCompany,
+        totalSCU,
+        captainName,
+        shipName,
+        shipNames: typeof allShips !== "undefined" ? allShips : []
+      })
     });
 
     let data;
@@ -1645,9 +1644,6 @@ async function sendToDiscord() {
   } finally {
     if (sendBtn) sendBtn.disabled = false;
   }
-  */
-  // --- End Discord sending temporarily disabled ---
-  alert("This feature is experiencing technical difficulties. Please copy and paste the output below in #cargo-manifests until a fix is released.");
 }
 function generateAnnouncement() {
   const title = document.getElementById("announcementTitle").value.trim();

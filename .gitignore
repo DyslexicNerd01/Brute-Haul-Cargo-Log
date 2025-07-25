@@ -1,0 +1,26 @@
+# Environment variables
+.env
+
+# Google Sheets credentials
+brute-haul-bot.json
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environment
+venv/
+env/
+
+# Local data files
+leaderboard.json
+leaderboard_msg_id.json
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
