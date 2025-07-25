@@ -253,6 +253,28 @@
       align-items: center;
       justify-content: flex-start;
     }
+    .resource-preset-btn {
+      background: #9d7523;
+      color: #fff;
+      border: none;
+      padding: 6px 14px;
+      font-size: 11px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      min-width: 80px;
+      white-space: nowrap;
+      transition: background 0.2s;
+      display: inline-block;
+    }
+    .resource-preset-btn.selected {
+      background: #43b581 !important;
+      color: #fff !important;
+    }
+    .resource-preset-btn:hover {
+      background: #bfa14d;
+      color: #fff;
+    }
   </style>
 </head>
 <body>
@@ -265,7 +287,7 @@
   <button type="button" onclick="showTab('announcementsTab')" id="announcementsTabBtn" style="border: 3px solid transparent;">Announcements</button>
   <a href="https://robertsspaceindustries.com/en/orgs/BRHS" target="_blank" title="Join BRHS"
      style="margin-left:auto; display:inline-flex; align-items:center; justify-content:center; width:60px; height:60px; background:#222; border-radius:8px; text-decoration:none; border:0px solid #9d7523;">
-    <img src="https://static.wikia.nocookie.net/starcitizen/images/8/8f/Star-citizen-logo.png/revision/latest?cb=20121018064642" alt="Star Citizen" style="width:52px; height:52px; object-fit:contain;">
+    <img src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/starcitizenwhite.png" alt="Star Citizen" style="width:82px; height:82px; object-fit:contain; filter:invert(1);">
   </a>
 </div>
 <hr style="border: none; border-bottom: 5px solid #9d7523; margin: 0 0 20px 0;">
@@ -381,6 +403,14 @@
 
     <div class="section">
       <label>Cargo Manifest (add/remove lines as needed):</label>
+      <div id="resourceDrivePresets" style="display:none; margin-bottom:10px;">
+        <span style="font-size:13px; font-weight:bold; vertical-align:middle; margin-right:8px;">Resource Drive Presets:</span>
+        <span style="display:inline-flex; gap:10px; vertical-align:middle;">
+          <button type="button" class="resource-preset-btn" id="presetLargeBtn" onclick="applyManifestPreset('large')">Large Haul</button>
+          <button type="button" class="resource-preset-btn" id="presetMediumBtn" onclick="applyManifestPreset('medium')">Medium Haul</button>
+          <button type="button" class="resource-preset-btn" id="presetSmallBtn" onclick="applyManifestPreset('small')">Small Haul</button>
+        </span>
+      </div>
       <div id="manifestLines"></div>
       <div class="manifest-total-box">
   <span id="totalSCUBox">Total SCU: 0</span>
@@ -440,10 +470,25 @@
   <div id="historyList" style="max-height:400px;overflow-y:auto;background:#fff;border-radius:8px;padding:12px;border:1px solid #9d7523;"></div>
 </div>
 <div id="announcementsTab" style="display:none;">
-  <div style="text-align:center; padding:40px 0;">
-    <img src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/BRHS-Logo.png" alt="BruteHaul Logo" style="max-width:200px;width:100%;margin-bottom:24px;border-radius:8px;">
-    <h2 style="color:#9d7523;">Feature in Progress!</h2>
-    <p style="font-size:1.2em;color:#230e09;">Check back for updates later!</p>
+  <div style="text-align:center; margin-bottom:30px;">
+    <h2 style="color:#9d7523;">Announcements</h2>
+  </div>
+  
+  <div id="announcementsList" style="max-height:600px;overflow-y:auto;">
+    <!-- Announcement Post -->
+    <div class="announcement-post" style="background:#fff;border-radius:8px;padding:20px;margin-bottom:20px;border:1px solid #9d7523;box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+      <div class="announcement-header" style="border-bottom:2px solid #9d7523;padding-bottom:10px;margin-bottom:15px;">
+        <h3 style="color:#781d15;margin:0;font-size:1.4em;">Send to Discord Disabled</h3>
+        <div style="color:#666;font-size:0.9em;margin-top:5px;">
+          <strong>By:</strong> DyslexicNerd01 | <strong>Date:</strong> July 24, 2025
+        </div>
+      </div>
+      <div class="announcement-body" style="color:#230e09;line-height:1.6;">
+        <p>Currently the Send to Discord feature is disabled. There has been an issue within the middle tier proxy server due to the way GitHub interacts with 3rd party services. A fix is currently being tested and will hopefully be released soon, most likely before CIG releases a fix to the freight elevators...</p>
+        <p>All other features are currently fully operational. Other bug fixes and updates will not be delayed due to the Send to Discord feature being down.</p>
+        <p>Apologies for the inconvenience! Please continue to post manifests in <i>#cargo-manifests</i> on discord!</p>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -909,6 +954,69 @@ window.addEventListener("DOMContentLoaded", function() {
 
       updateManifestTotals();
     }
+    // Resource Drive manifest presets
+    function applyManifestPreset(type) {
+      var preset = [];
+      var totalUEC = 0;
+      if (type === 'large') {
+        preset = [
+          { scu: 72, material: 'Corundum' },
+          { scu: 36, material: 'Tungsten' },
+          { scu: 72, material: 'Copper' }
+        ];
+        totalUEC = 101750;
+      } else if (type === 'medium') {
+        preset = [
+          { scu: 19, material: 'Corundum' },
+          { scu: 10, material: 'Tungsten' },
+          { scu: 19, material: 'Copper' }
+        ];
+        totalUEC = 58400;
+      } else if (type === 'small') {
+        preset = [
+          { scu: 1, material: 'Corundum' },
+          { scu: 1, material: 'Tungsten' },
+          { scu: 1, material: 'Copper' }
+        ];
+        totalUEC = 24150;
+      }
+      manifestLineCount = preset.length;
+      renderManifestLines();
+      // Calculate total SCU
+      var totalSCU = preset.reduce(function(sum, item) { return sum + item.scu; }, 0);
+      // Distribute UEC by SCU per material
+      var rows = document.querySelectorAll('.manifest-row');
+      var uecAssigned = 0;
+      for (var idx = 0; idx < preset.length; idx++) {
+        var row = rows[idx];
+        if (row) {
+          row.querySelector('.manifest-scu').value = preset[idx].scu;
+          row.querySelector('.manifest-material').value = preset[idx].material;
+          // Calculate UEC for this line
+          var uec = Math.floor((preset[idx].scu / totalSCU) * totalUEC);
+          // For last line, assign remainder
+          if (idx === preset.length - 1) {
+            uec = totalUEC - uecAssigned;
+          }
+          row.querySelector('.manifest-uec').value = uec;
+          uecAssigned += uec;
+        }
+      }
+      // Set total UEC box
+      var totalUECInput = document.getElementById('totalUECBox');
+      if (totalUECInput) totalUECInput.value = totalUEC;
+      updateManifestTotals();
+      // Highlight selected preset button
+      var largeBtn = document.getElementById('presetLargeBtn');
+      var mediumBtn = document.getElementById('presetMediumBtn');
+      var smallBtn = document.getElementById('presetSmallBtn');
+      if (largeBtn) largeBtn.classList.remove('selected');
+      if (mediumBtn) mediumBtn.classList.remove('selected');
+      if (smallBtn) smallBtn.classList.remove('selected');
+      if (type === 'large' && largeBtn) largeBtn.classList.add('selected');
+      if (type === 'medium' && mediumBtn) mediumBtn.classList.add('selected');
+      if (type === 'small' && smallBtn) smallBtn.classList.add('selected');
+    }
 
     function addManifestLine() {
       manifestLineCount++;
@@ -978,6 +1086,9 @@ window.addEventListener("DOMContentLoaded", function() {
     window.copyDiscordOutput = copyDiscordOutput;
     window.clearFormFields = clearFormFields;
 
+    // Make applyManifestPreset available globally
+window.applyManifestPreset = applyManifestPreset;
+
     window.addEventListener("DOMContentLoaded", function() {
       populateLocationDropdown("startLocation");
       populateLocationDropdown("routeStart");
@@ -992,6 +1103,17 @@ window.addEventListener("DOMContentLoaded", function() {
     document.getElementById("orderCategory").addEventListener("change", function() {
       toggleOrderCategoryOther();
       populateShipDropdown(this.value);
+    });
+    document.getElementById("orderType").addEventListener("change", function() {
+      toggleOrderTypeOther();
+      // Show/hide Resource Drive presets
+      const val = this.value;
+      const presetsDiv = document.getElementById("resourceDrivePresets");
+      if (val === "Resource Drive") {
+        presetsDiv.style.display = "block";
+      } else {
+        presetsDiv.style.display = "none";
+      }
     });
 
     function toDiscordTimestamp(dtString) {
@@ -1449,6 +1571,8 @@ window.copyHistoryPost = copyHistoryPost;
 window.sendToDiscord = sendToDiscord;
 
 async function sendToDiscord() {
+  // --- Discord sending temporarily disabled ---
+  /*
   const message = document.getElementById("discordOutput").value;
   const orderType = document.getElementById("orderType").value;
   const resourceDriveCompany = document.getElementById("resourceDriveCompany").value;
@@ -1484,7 +1608,7 @@ async function sendToDiscord() {
   if (sendBtn) sendBtn.disabled = true;
 
   try {
-    const response = await fetch("https://brute-haul-cargo-log.vercel.app/api/proxy", {
+    const response = await fetch("brute-haul-cargo-log.vercel.app/api/proxy", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -1521,6 +1645,9 @@ async function sendToDiscord() {
   } finally {
     if (sendBtn) sendBtn.disabled = false;
   }
+  */
+  // --- End Discord sending temporarily disabled ---
+  alert("This feature is experiencing technical difficulties. Please copy and paste the output below in #cargo-manifests until a fix is released.");
 }
 function generateAnnouncement() {
   const title = document.getElementById("announcementTitle").value.trim();
