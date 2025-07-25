@@ -1606,37 +1606,49 @@ async function sendToDiscord() {
   if (sendBtn) sendBtn.disabled = true;
 
   try {
-    // Try HTTPS first (self-signed SSL), fallback to HTTP if needed
+    // Try multiple ports and protocols
+    const endpoints = [
+      "https://astro.wisp.uno:10478/send-discord",
+      "http://astro.wisp.uno:10478/send-discord",
+      "https://astro.wisp.uno:8080/send-discord",
+      "http://astro.wisp.uno:8080/send-discord",
+      "https://astro.wisp.uno:3000/send-discord",
+      "http://astro.wisp.uno:3000/send-discord"
+    ];
+    
     let response;
-    try {
-      response = await fetch("https://astro.wisp.uno:10478/send-discord", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          message,
-          orderType,
-          resourceDriveCompany,
-          totalSCU,
-          captainName,
-          shipName,
-          shipNames: typeof allShips !== "undefined" ? allShips : []
-        })
-      });
-    } catch (httpsError) {
-      console.log("HTTPS failed, trying HTTP:", httpsError);
-      response = await fetch("http://astro.wisp.uno:10478/send-discord", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          message,
-          orderType,
-          resourceDriveCompany,
-          totalSCU,
-          captainName,
-          shipName,
-          shipNames: typeof allShips !== "undefined" ? allShips : []
-        })
-      });
+    let successfulEndpoint = null;
+    
+    for (const endpoint of endpoints) {
+      try {
+        console.log(`Trying endpoint: ${endpoint}`);
+        response = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            message,
+            orderType,
+            resourceDriveCompany,
+            totalSCU,
+            captainName,
+            shipName,
+            shipNames: typeof allShips !== "undefined" ? allShips : []
+          })
+        });
+        
+        if (response.ok) {
+          successfulEndpoint = endpoint;
+          console.log(`Success with endpoint: ${endpoint}`);
+          break;
+        }
+      } catch (error) {
+        console.log(`Failed with ${endpoint}:`, error);
+        continue;
+      }
+    }
+    
+    if (!response || !response.ok) {
+      throw new Error("All endpoints failed");
     }
 
     let data;
