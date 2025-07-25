@@ -1606,20 +1606,38 @@ async function sendToDiscord() {
   if (sendBtn) sendBtn.disabled = true;
 
   try {
-    // Try HTTPS first, fallback to HTTP if needed
-    const response = await fetch("http://astro.wisp.uno:10478/send-discord", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        message,
-        orderType,
-        resourceDriveCompany,
-        totalSCU,
-        captainName,
-        shipName,
-        shipNames: typeof allShips !== "undefined" ? allShips : []
-      })
-    });
+    // Try HTTPS first (self-signed SSL), fallback to HTTP if needed
+    let response;
+    try {
+      response = await fetch("https://astro.wisp.uno:10478/send-discord", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message,
+          orderType,
+          resourceDriveCompany,
+          totalSCU,
+          captainName,
+          shipName,
+          shipNames: typeof allShips !== "undefined" ? allShips : []
+        })
+      });
+    } catch (httpsError) {
+      console.log("HTTPS failed, trying HTTP:", httpsError);
+      response = await fetch("http://astro.wisp.uno:10478/send-discord", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message,
+          orderType,
+          resourceDriveCompany,
+          totalSCU,
+          captainName,
+          shipName,
+          shipNames: typeof allShips !== "undefined" ? allShips : []
+        })
+      });
+    }
 
     let data;
     try {
