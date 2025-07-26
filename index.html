@@ -478,15 +478,15 @@
     <!-- Announcement Post -->
     <div class="announcement-post" style="background:#fff;border-radius:8px;padding:20px;margin-bottom:20px;border:1px solid #9d7523;box-shadow:0 2px 4px rgba(0,0,0,0.1);">
       <div class="announcement-header" style="border-bottom:2px solid #9d7523;padding-bottom:10px;margin-bottom:15px;">
-        <h3 style="color:#781d15;margin:0;font-size:1.4em;">Send to Discord Disabled</h3>
+        <h3 style="color:#781d15;margin:0;font-size:1.4em;">Send to Discord Enabled!</h3>
         <div style="color:#666;font-size:0.9em;margin-top:5px;">
-          <strong>By:</strong> DyslexicNerd01 | <strong>Date:</strong> July 24, 2025
+          <strong>By:</strong> DyslexicNerd01 | <strong>Date:</strong> July 25, 2025
         </div>
       </div>
       <div class="announcement-body" style="color:#230e09;line-height:1.6;">
-        <p>Currently the Send to Discord feature is disabled. There has been an issue within the middle tier proxy server due to the way GitHub interacts with 3rd party services. A fix is currently being tested and will hopefully be released soon, most likely before CIG releases a fix to the freight elevators...</p>
-        <p>All other features are currently fully operational. Other bug fixes and updates will not be delayed due to the Send to Discord feature being down.</p>
-        <p>Apologies for the inconvenience! Please continue to post manifests in <i>#cargo-manifests</i> on discord!</p>
+        <p>The Send to Discord feature is now enabled! <b>Please only use the "Send to Discord" button to upload your cargo manifests.</b> </p>
+        <p>If you encounter any issues, please report them to the development team as soon as possible. Hotfixes will be regularly released to keep the form up-to-date with any changes to Star Citizen or Brute Haul policy changes</p>
+        <p>Thank you for your patience and support!</p>
       </div>
     </div>
   </div>
@@ -1581,6 +1581,40 @@ async function sendToDiscord() {
     shipName = document.getElementById("shipNameOther").value;
   }
 
+  // Collect all additional fields for Google Sheets
+  const get = id => document.getElementById(id)?.value?.trim() || "";
+  
+  let orderCategoryText = get("orderCategory");
+  if (orderCategoryText === "Other") orderCategoryText = get("orderCategoryOther");
+  
+  let companyNameText = get("companyName");
+  if (companyNameText === "Other") companyNameText = get("companyNameOther");
+  
+  let orderTypeText = get("orderType");
+  if (orderTypeText === "Other") orderTypeText = get("orderTypeOther");
+  
+  let captainNameText = get("captainName");
+  if (captainNameText === "Other") captainNameText = get("captainNameOther");
+  
+  const crewAmount = parseInt(get("crewAmount"), 10);
+  let crewNamesList = [];
+  for (let i = 1; i <= crewAmount; i++) {
+    const crewInput = document.getElementById(`crewName${i}`);
+    if (crewInput && crewInput.value.trim()) {
+      crewNamesList.push(crewInput.value.trim());
+    }
+  }
+  const crewAmountWithNames = crewAmount > 0 ? `${crewAmount} (${crewNamesList.join(", ")})` : "0";
+  
+  const totalUECInput = document.getElementById("totalUECBox");
+  const totalUEC = totalUECInput && totalUECInput.value ? parseInt(totalUECInput.value.replace(/\D/g, "")) || 0 : 0;
+  
+  const repairs = parseInt(get("repairs") || "0", 10);
+  const restock = parseInt(get("restock") || "0", 10);
+  const quantumFuel = parseInt(get("quantumFuel") || "0", 10);
+  const hydrogenFuel = parseInt(get("hydrogenFuel") || "0", 10);
+  const crewCosts = parseInt(get("crewCosts") || "0", 10);
+
   // Error: No message generated
   if (!message) {
     alert("No message to send. Please generate a Discord post first.");
@@ -1626,11 +1660,29 @@ async function sendToDiscord() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             message,
-            orderType,
+            date: new Date().toISOString().split('T')[0], // Current date in YYYY-MM-DD format
+            orderCategory: orderCategoryText,
+            companyName: companyNameText,
+            orderType: orderTypeText,
+            shipName: shipName,
+            captainName: captainNameText,
+            crewAmount: crewAmountWithNames,
+            startLocation: get("startLocation"),
+            departureTimestamp: get("departureTime"),
+            routeStart: get("routeStart"),
+            routeEnd: get("routeEnd"),
+            totalSCU: totalSCU,
+            totalUEC: totalUEC,
+            orderCompletionTimestamp: get("completionTime"),
+            orderTime: getOrderDurationText(),
+            repairs: repairs,
+            restock: restock,
+            quantumFuel: quantumFuel,
+            hydrogenFuel: hydrogenFuel,
+            crewShipCosts: crewCosts,
+            notes: get("notes"),
+            // Legacy fields for Discord functionality
             resourceDriveCompany,
-            totalSCU,
-            captainName,
-            shipName,
             shipNames: typeof allShips !== "undefined" ? allShips : []
           })
         });
