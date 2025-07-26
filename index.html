@@ -275,7 +275,116 @@
       background: #bfa14d;
       color: #fff;
     }
+    .notification-badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: #ed4245;
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      border: 2px solid white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      pointer-events: none;
+    }
+    .tab-button-container {
+      position: relative;
+      display: contents;
+    }
+
+    /* Searchable dropdown styles */
+    .searchable-dropdown {
+      position: relative;
+      width: 100%;
+    }
+    .searchable-dropdown input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #781d15;
+      background: #e2e2e2;
+      color: #230e09;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    .searchable-dropdown .dropdown-list {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: #e2e2e2;
+      border: 1px solid #781d15;
+      border-top: none;
+      max-height: 150px;
+      overflow-y: auto;
+      z-index: 1000;
+      display: none;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    .searchable-dropdown .dropdown-list.show {
+      display: block;
+    }
+    .searchable-dropdown .dropdown-item {
+      padding: 6px 12px;
+      cursor: pointer;
+      border-bottom: 1px solid #ccc;
+      background: #e2e2e2;
+      color: #230e09;
+      font-size: 14px;
+    }
+    .searchable-dropdown .dropdown-item:hover {
+      background: #d0d0d0;
+    }
+    .searchable-dropdown .dropdown-item.selected {
+      background: #781d15;
+      color: #e2e2e2;
+    }
+    .searchable-dropdown .dropdown-item:last-child {
+      border-bottom: none;
+    }
+    
+    /* Route row styling for searchable dropdowns */
+    .route-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .route-row .searchable-dropdown {
+      flex: 1;
+    }
+    .tab-button-container button {
+      position: relative;
+    }
+    #announcementsTabBtn::after {
+      content: "1";
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: #ed4245;
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      border: 2px solid white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    #announcementsTabBtn.badge-hidden::after {
+      display: none;
+    }
   </style>
+  <script src="locations.js"></script>
 </head>
 <body>
   <img class="logo" src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/BRHS-Logo.png" alt="BruteHaul Logo">
@@ -284,7 +393,9 @@
   <div style="display: flex; gap: 12px; margin-bottom: 0;">
   <button type="button" onclick="showTab('formTab')" id="formTabBtn" style="border: 3px solid transparent;">Form</button>
   <button type="button" onclick="showTab('historyTab')" id="historyTabBtn" style="border: 3px solid transparent;">History</button>
-  <button type="button" onclick="showTab('announcementsTab')" id="announcementsTabBtn" style="border: 3px solid transparent;">Announcements</button>
+  <div class="tab-button-container">
+    <button type="button" onclick="showTab('announcementsTab')" id="announcementsTabBtn" style="border: 3px solid transparent;">Announcements</button>
+  </div>
   <a href="https://robertsspaceindustries.com/en/orgs/BRHS" target="_blank" title="Join BRHS"
      style="margin-left:auto; display:inline-flex; align-items:center; justify-content:center; width:60px; height:60px; background:#222; border-radius:8px; text-decoration:none; border:0px solid #9d7523;">
     <img src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/starcitizenwhite.png" alt="Star Citizen" style="width:82px; height:82px; object-fit:contain; filter:invert(1);">
@@ -388,16 +499,25 @@
       <div id="crewNamesDiv"></div>
 
       <label>Start Location:</label>
-      <select id="startLocation" required></select>
+      <div class="searchable-dropdown" id="startLocationDropdown">
+        <input type="text" id="startLocation" placeholder="Search start location..." autocomplete="off" required>
+        <div class="dropdown-list" id="startLocationList"></div>
+      </div>
 
       <label>Departure Timestamp:</label>
       <input type="datetime-local" id="departureTime" required>
 
       <label>Route:</label>
       <div class="route-row">
-        <select id="routeStart" required></select>
+        <div class="searchable-dropdown" id="routeStartDropdown">
+          <input type="text" id="routeStart" placeholder="Search route start..." autocomplete="off" required>
+          <div class="dropdown-list" id="routeStartList"></div>
+        </div>
         <span class="route-arrow" style="font-size:1.5em;">➡️</span>
-        <select id="routeEnd" required></select>
+        <div class="searchable-dropdown" id="routeEndDropdown">
+          <input type="text" id="routeEnd" placeholder="Search route end..." autocomplete="off" required>
+          <div class="dropdown-list" id="routeEndList"></div>
+        </div>
       </div>
     </div>
 
@@ -484,8 +604,9 @@
         </div>
       </div>
       <div class="announcement-body" style="color:#230e09;line-height:1.6;">
-        <p>The Send to Discord feature is now enabled! <b>Please only use the "Send to Discord" button to upload your cargo manifests.</b> </p>
-        <p>If you encounter any issues, please report them to the development team as soon as possible. Hotfixes will be regularly released to keep the form up-to-date with any changes to Star Citizen or Brute Haul policy changes</p>
+        <p>The Send to Discord feature is now enabled! <b>Please only use the <i>"Send to Discord"</i> button to upload your cargo manifests.</b> </p>
+        <p>If you encounter any issues, please report them to the development team as soon as possible. Hotfixes will be regularly released to keep the form up-to-date with any changes to Star Citizen or Brute Haul policy.</p>
+        <p>The copy button will remain active in the event that there is an issue with the discord bot in the future. If you do not see the message appear in Discord after 5 minutes, please use the copy button to manually copy the message. Please alert the Brute Haul staff of the issue as soon as possible</p>
         <p>Thank you for your patience and support!</p>
       </div>
     </div>
@@ -493,310 +614,8 @@
 </div>
 
 <script type="module">
-   const locations = [
-    "Afterlife",
-  "Ako's Return",
-  "Ambitious Dream Station",
-  "ArcCorp Mining Area 022",
-  "ArcCorp Mining Area 045",
-  "ArcCorp Mining Area 048",
-  "ArcCorp Mining Area 056",
-  "ArcCorp Mining Area 061",
-  "ArcCorp Mining Area 073",
-  "ArcCorp Mining Area 141",
-  "ArcCorp Mining Area 157",
-  "Archibald Station",
-  "Arid Reach",
-  "Ashland",
-  "Astor's Clearing",
-  "Area18",
-  "Bajini Point",
-  "Balto's Blind",
-  "Benson Mining Outpost",
-  "Blackrock Exchange",
-  "Blighter's Run",
-  "Bloodshot Ridge",
-  "Boondoggle",
-  "Bountiful Harvest Hydroponics",
-  "Brio's Breaker Yard",
-  "Broken Patch",
-  "Bud's Growery",
-  "Bueno Ravine",
-  "Bullock's Reach",
-  "Burnout",
-  "Canard View",
-  "Carver's Ridge",
-  "Char",
-  "Chawla's Beach",
-  "Cloudrest Retreat",
-  "Consumption",
-  "Connor's",
-  "Coven",
-  "Covalex Distribution Centre S1DC06",
-  "Covalex Distribution Centre S4DC05",
-  "Covalex Hub Gallete",
-  "Covalex Hub Gundo",
-  "Covalex Hub Lagrange",
-  "Covalex Hub Laskowski",
-  "Covalex Hub O'Neill",
-  "Covalex Hub Reilly",
-  "Covalex Hub Sutter",
-  "Covalex Hub Tompkins",
-  "Covalex Hub Wightman",
-  "Covalex Hub Young",
-  "Covalex Hub Ziegler",
-  "CRU-L1",
-  "CRU-L4",
-  "CRU-L5",
-  "Cry-Astro Processing Plant 19-02",
-  "Cry-Astro Processing Plant 34-12",
-  "Cutter's Rig",
-  "Deakins Research Outpost",
-  "Dell Township",
-  "Devlin Scrap & Salvage",
-  "Dinger's Depot",
-  "Dobbs",
-  "Downlow",
-  "Drifters",
-  "Dupree Industrial Manufacturing Facility",
-  "Dunboro",
-  "Elsewhere",
-  "Empyrean Park",
-  "Everus Harbor",
-  "Fallow Field",
-  "Farro Data Center I",
-  "Farro Data Center II",
-  "Farro Data Center III",
-  "Farro Data Center IV",
-  "Farro Data Center IX",
-  "Farro Data Center V",
-  "Farro Data Center VI",
-  "Farro Data Center VII",
-  "Farro Data Center VIII",
-  "Farro Data Center X",
-  "Fetch",
-  "FEO Canyon Depot",
-  "Finn's Folly",
-  "Frigid Knot",
-  "Frostbite (settlement)",
-  "Gallete Family Farms",
-  "Ghost Hollow",
-  "GIO",
-  "Gonzo",
-  "Goner's Deal",
-  "Good Times Temple",
-  "Gray Gardens Depot",
-  "Greycat Stanton I Production Complex-B",
-  "Greycat Stanton IV Production Complex-A",
-  "Grim HEX",
-  "Half Stack",
-  "Hard Knocks",
-  "Harper's Point",
-  "Hasbin Hall",
-  "Haven",
-  "HDMS Anderson",
-  "HDMS Beck",
-  "HDMS-Deakin",
-  "HDMS-Edmond",
-  "HDMS-Eri",
-  "HDMS-Foster",
-  "HDMS-Hadley",
-  "HDMS-Hahn",
-  "HDMS-Humboldt",
-  "HDMS-Laskowski",
-  "HDMS-Lathan",
-  "HDMS-MacEwan",
-  "HDMS-McGrath",
-  "HDMS-Norgaard",
-  "HDMS-O'Neill",
-  "HDMS-Oparei",
-  "HDMS-Perlman",
-  "HDMS-Pinewood",
-  "HDMS-Reilly",
-  "HDMS-Ryder",
-  "HDMS-Shubin",
-  "HDMS-Stanhope",
-  "HDMS-Stokes",
-  "HDMS-Sutter",
-  "HDMS-Thedus",
-  "HDMS-Tompkins",
-  "HDMS-Wightman",
-  "HDMS-Woodruff",
-  "HDMS-Young",
-  "HDMS-Ziegler",
-  "HDPC-Cassillo",
-  "HDPC-Farnesway",
-  "HDSF-Palomar",
-  "Hela's Regret",
-  "Hickes Research Outpost",
-  "Hospice",
-  "Humboldt Mines",
-  "Jackson's Swap",
-  "Kabir's Post",
-  "Kant's Peak",
-  "Kelo Bottom",
-  "Kinder Plots",
-  "Kudre Ore",
-  "Last Day",
-  "Last Ditch",
-  "Last Landings",
-  "Lazarus Phoenix Research Lab",
-  "Lazarus Tithonus Research Lab",
-  "Lazarus Transport Hub Phoenix-I",
-  "Lazarus Transport Hub Phoenix-II",
-  "Lazarus Transport Hub Phoenix-III",
-  "Lazarus Transport Hub Tithonus-I",
-  "Lazarus Transport Hub Tithonus-II",
-  "Lazarus Transport Hub Tithonus-III",
-  "Levski",
-  "Lost and Found",
-  "Lowdown",
-  "Loveridge Mineral Reserve",
-  "Ludlow",
-  "Lorville",
-  "Mainline",
-  "Maker's Point",
-  "MIC-L1",
-  "MIC-L2",
-  "MIC-L3",
-  "MIC-L4",
-  "MIC-L5",
-  "MicroTech Logistics Depot S4LD01",
-  "MicroTech Logistics Depot S4LD13",
-  "Minlo Spire",
-  "Moreland Hills",
-  "MT DataCenter 2UB-RB9-5",
-  "MT DataCenter 4HJ-LVE-A",
-  "MT DataCenter 5WQ-R2V-C",
-  "MT DataCenter 8FK-Q2X-K",
-  "MT DataCenter D79-ECG-R",
-  "MT DataCenter E2Q-NSG-Y",
-  "MT DataCenter KH3-AAE-L",
-  "MT DataCenter L8P-JUC-8 (offline)",
-  "MT DataCenter QVX-J88-J",
-  "MT DataCenter TMG-XEV-2",
-  "MT OpCenter TLI-4",
-  "Narena's Rest",
-  "Nevermind",
-  "Ne’er",
-  "New Babbage",
-  "NT-999-XVI",
-  "NT-999-XX",
-  "NT-999-XXII",
-  "Nuen Waste Management",
-  "Operations Depot Lyria",
-  "Orison",
-  "Ostler's Claim",
-  "Outpost 54",
-  "Paradise Cove",
-  "Picker's Field",
-  "Port Olisar",
-  "Port Tressler",
-  "PRIVATE PROPERTY",
-  "Prophet's Peak",
-  "Prospect Depot",
-  "Prospect Point",
-  "Rayari Anvik Research Outpost",
-  "Rayari Cantwell Research Outpost",
-  "Rayari Deltana Research Outpost",
-  "Rayari Kaltag Research Outpost",
-  "Rayari Livengood Research Outpost",
-  "Rayari McGrath Research Outpost",
-  "Reclamation & Disposal Orinth",
-  "Regiment Downs",
-  "Rappel",
-  "Razor's Edge",
-  "Reis",
-  "Rico's Remains",
-  "Rock Bottom",
-  "Rolo's Crater",
-  "Rough Landing",
-  "Rustville",
-  "Sacren's Plot",
-  "Sakura Sun Goldenrod Workcenter",
-  "Sakura Sun Magnolia Workcenter",
-  "Samson & Son's Salvage Center",
-  "Scuttle",
-  "Scarper's Turn",
-  "Security Post Criska",
-  "Security Post Dipur",
-  "Security Post Lespin",
-  "Security Post Moluto",
-  "Security Post Opal",
-  "Security Post Prashad",
-  "Security Post Thaquray",
-  "Security Post Wan",
-  "Seer's Canyon",
-  "Seraphim Station",
-  "Shadowfall",
-  "Shady Glen Farms",
-  "Shanks",
-  "Shepherd's Rest",
-  "Shoel",
-  "Shubin Mining Facility SAL-2",
-  "Shubin Mining Facility SAL-5",
-  "Shubin Mining Facility SCD-1",
-  "Shubin Mining Facility SM0-10",
-  "Shubin Mining Facility SM0-13",
-  "Shubin Mining Facility SM0-18",
-  "Shubin Mining Facility SM0-22",
-  "Shubin Mining Facility SMCa-6",
-  "Shubin Mining Facility SMCa-8",
-  "Shubin Processing Facility SPAL-12",
-  "Shubin Processing Facility SPAL-16",
-  "Shubin Processing Facility SPAL-21",
-  "Shubin Processing Facility SPAL-3",
-  "Shubin Processing Facility SPAL-7",
-  "Shubin Processing Facility SPAL-9",
-  "Shubin Processing Facility SPMC-1",
-  "Shubin Processing Facility SPMC-10",
-  "Shubin Processing Facility SPMC-11",
-  "Shubin Processing Facility SPMC-14",
-  "Shubin Processing Facility SPMC-3",
-  "Shubin Processing Facility SPMC-5",
-  "Slowburn Depot",
-  "Smokestack",
-  "Stag's Rut",
-  "Stonetree",
-  "Stone's Throw",
-  "Sunset Mesa",
-  "Supply Gap",
-  "Talarine Divide Aid Shelter",
-  "Teddy's Playhouse",
-  "Terra Mills HydroFarm",
-  "Test Facility Octagon",
-  "The Barrens",
-  "The Dregs",
-  "The Garden",
-  "The Golden Riviera",
-  "The Grove",
-  "The Hollows",
-  "The Necropolis",
-  "The Orphanage",
-  "The Pit",
-  "The Shades",
-  "The Yard",
-  "Thimblerig",
-  "TPF",
-  "Tremonte",
-  "Tram & Myers Mining",
-  "Trilo",
-  "Unnamed abandoned outpost (Cellin)",
-  "Unnamed abandoned outpost (Daymar)",
-  "Unnamed abandoned outpost (Yela)",
-  "Utopia",
-  "Wailing Rock",
-  "Washout",
-  "Watcher's Depot",
-  "Weeping Cove",
-  "Wheeler's",
-  "Whistlers Crypt",
-  "Wiley Flats",
-  "Windfall",
-  "World's End",
-  "Yang's Place",
-  "Zephyr (settlement)"
-   ];
+   // Locations are now loaded from external locations.js file
+
 
     // Ship lists for each category
     const transportShips = [
@@ -844,11 +663,11 @@
   document.getElementById("totalUECBox").value = "";
 
   // Clear route
-  document.getElementById("routeStart").selectedIndex = 0;
-  document.getElementById("routeEnd").selectedIndex = 0;
+  document.getElementById("routeStart").value = "";
+  document.getElementById("routeEnd").value = "";
 
   // Clear start location
-  document.getElementById("startLocation").selectedIndex = 0;
+  document.getElementById("startLocation").value = "";
 
   // Clear notes
   document.getElementById("notes").value = "";
@@ -858,6 +677,14 @@ function showTab(tab) {
   document.getElementById('formTab').style.display = tab === 'formTab' ? 'block' : 'none';
   document.getElementById('historyTab').style.display = tab === 'historyTab' ? 'block' : 'none';
   document.getElementById('announcementsTab').style.display = tab === 'announcementsTab' ? 'block' : 'none';
+
+  // Hide notification badge when announcements tab is clicked
+  if (tab === 'announcementsTab') {
+    const announcementsBtn = document.getElementById('announcementsTabBtn');
+    if (announcementsBtn) {
+      announcementsBtn.classList.add('badge-hidden');
+    }
+  }
 
   // Tab highlighting
   document.getElementById('formTabBtn').style.background = tab === 'formTab' ? '#9d7523' : '#781d15';
@@ -884,11 +711,121 @@ window.addEventListener("DOMContentLoaded", function() {
 });
 
     function populateLocationDropdown(id) {
-      const select = document.getElementById(id);
-      if (!select) return;
-      select.innerHTML = `<option value="" selected disabled>Select location</option>` +
-        locations.map(loc => `<option value="${loc}">${loc}</option>`).join("");
+      const inputId = id;
+      const listId = id + 'List';
+      const input = document.getElementById(inputId);
+      const list = document.getElementById(listId);
+      
+      if (!input || !list) return;
+
+      let selectedValue = '';
+      let filteredLocations = locations;
+
+      function showDropdown() {
+        list.classList.add('show');
+      }
+
+      function hideDropdown() {
+        setTimeout(() => {
+          list.classList.remove('show');
+        }, 200);
+      }
+
+      function filterLocations(searchTerm) {
+        const term = searchTerm.toLowerCase();
+        return locations.filter(location => 
+          location.toLowerCase().includes(term)
+        ); // Show all matching results
+      }
+
+      function renderDropdownItems(locationsToShow) {
+        list.innerHTML = '';
+        locationsToShow.forEach(location => {
+          const item = document.createElement('div');
+          item.className = 'dropdown-item';
+          item.textContent = location;
+          item.addEventListener('click', () => {
+            input.value = location;
+            selectedValue = location;
+            hideDropdown();
+            input.classList.remove('error');
+          });
+          list.appendChild(item);
+        });
+      }
+
+      // Initialize with all locations
+      renderDropdownItems(locations);
+
+      // Handle input events
+      input.addEventListener('input', (e) => {
+        const searchTerm = e.target.value;
+        if (searchTerm.length === 0) {
+          filteredLocations = locations; // Show all locations when no search term
+        } else {
+          filteredLocations = filterLocations(searchTerm);
+        }
+        renderDropdownItems(filteredLocations);
+        showDropdown();
+        selectedValue = '';
+      });
+
+      input.addEventListener('focus', () => {
+        showDropdown();
+      });
+
+      input.addEventListener('blur', () => {
+        hideDropdown();
+      });
+
+      // Handle keyboard navigation
+      input.addEventListener('keydown', (e) => {
+        const items = list.querySelectorAll('.dropdown-item');
+        let selectedIndex = Array.from(items).findIndex(item => item.classList.contains('selected'));
+
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          if (selectedIndex < items.length - 1) {
+            if (selectedIndex >= 0) items[selectedIndex].classList.remove('selected');
+            selectedIndex++;
+            items[selectedIndex].classList.add('selected');
+            items[selectedIndex].scrollIntoView({ block: 'nearest' });
+          }
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          if (selectedIndex > 0) {
+            items[selectedIndex].classList.remove('selected');
+            selectedIndex--;
+            items[selectedIndex].classList.add('selected');
+            items[selectedIndex].scrollIntoView({ block: 'nearest' });
+          }
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          if (selectedIndex >= 0 && items[selectedIndex]) {
+            input.value = items[selectedIndex].textContent;
+            selectedValue = items[selectedIndex].textContent;
+            hideDropdown();
+            input.classList.remove('error');
+          }
+        } else if (e.key === 'Escape') {
+          hideDropdown();
+        }
+      });
+
+      // Custom validation function
+      input.validateValue = function() {
+        return locations.includes(input.value);
+      };
     }
+
+    // Close all dropdowns when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.searchable-dropdown')) {
+        document.querySelectorAll('.dropdown-list').forEach(list => {
+          list.classList.remove('show');
+        });
+      }
+    });
 
     function populateShipDropdown(category) {
       const select = document.getElementById("shipName");
@@ -1269,7 +1206,18 @@ window.applyManifestPreset = applyManifestPreset;
   let firstError = null;
   for (const id of requiredFields) {
     const el = document.getElementById(id);
-    if (!el || el.value === "" || el.value === null) {
+    let isValid = false;
+    
+    if (!el) continue;
+    
+    // Special validation for location fields
+    if (id === 'startLocation' || id === 'routeStart' || id === 'routeEnd') {
+      isValid = el.value.trim() !== "" && locations.includes(el.value);
+    } else {
+      isValid = el.value !== "" && el.value !== null;
+    }
+    
+    if (!isValid) {
       if (el) el.classList.add('error');
       if (!firstError && el) firstError = el;
     }
@@ -1492,7 +1440,7 @@ ${totalLine}
 
 **Sign Off**
 Order completion time: ${completionDiscord}
-Order Duration: ${getOrderDurationText()}
+${getOrderDurationText()}
 
 **Deductibles**
 - **Repairs:** ${repairs.toLocaleString()} UEC
