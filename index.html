@@ -1590,13 +1590,8 @@ async function sendToDiscord() {
   try {
     // Try HTTPS first (required for GitHub Pages), then HTTP fallback
     const endpoints = [
-      "https://astro.wisp.uno:10478/send-discord",
-      "https://astro.wisp.uno:8080/send-discord",
-      "https://astro.wisp.uno:3000/send-discord",
       "http://astro.wisp.uno:10478/send-discord",
       "http://astro.wisp.uno:8080/send-discord",
-      "https://127.0.0.1:10478/send-discord",
-      "https://127.18.1.57:10478/send-discord",
       "http://127.18.1.57:10478/send-discord",
       "http://127.0.0.1:10478/send-discord"
     ];
