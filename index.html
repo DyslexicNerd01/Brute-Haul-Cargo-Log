@@ -2124,9 +2124,14 @@ async function sendToDiscord() {
     const quantumFuel = parseInt(get("quantumFuel") || "0", 10);
     const hydrogenFuel = parseInt(get("hydrogenFuel") || "0", 10);
     const crewCosts = parseInt(get("crewCosts") || "0", 10);
-    // Try HTTP first (server running in HTTP-only mode)
+    // Try HTTPS first (for GitHub Pages compatibility), then HTTP fallback
     const endpoints = [
-      "http://astro.wisp.uno:10478/send-discord",
+      "https://astro.wisp.uno:10478/send-discord",
+      "https://astro.wisp.uno:8080/send-discord",
+      "https://astro.wisp.uno:3000/send-discord",
+      "https://astro.wisp.uno:5000/send-discord",
+      "https://astro.wisp.uno:8000/send-discord",
+      "http://astro.wisp.uno:10478/send-discord",  // HTTP fallback for local testing
       "http://astro.wisp.uno:8080/send-discord",
       "http://astro.wisp.uno:3000/send-discord",
       "http://astro.wisp.uno:5000/send-discord",
