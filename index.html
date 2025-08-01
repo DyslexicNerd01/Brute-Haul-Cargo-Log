@@ -383,6 +383,143 @@
     #announcementsTabBtn.badge-hidden::after {
       display: none;
     }
+
+    /* Loading States & Progress Indicators */
+    .loading-spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid #fff;
+      border-radius: 50%;
+      border-top-color: transparent;
+      animation: spin 1s ease-in-out infinite;
+      margin-right: 8px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(35, 14, 9, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      backdrop-filter: blur(2px);
+    }
+
+    .loading-content {
+      background: #781d15;
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      color: #e2e2e2;
+      border: 2px solid #9d7523;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .loading-spinner-large {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #9d7523;
+      border-radius: 50%;
+      border-top-color: transparent;
+      animation: spin 1s ease-in-out infinite;
+      margin: 0 auto 16px auto;
+    }
+
+    .progress-bar-container {
+      background: #e2e2e2;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #9d7523;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: #ccc;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #43b581, #9d7523);
+      border-radius: 4px;
+      transition: width 0.3s ease;
+      width: 0%;
+    }
+
+    .progress-text {
+      font-size: 14px;
+      color: #230e09;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .button-loading {
+      position: relative;
+      pointer-events: none;
+      opacity: 0.7;
+    }
+
+    .success-feedback {
+      background: #43b581;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 6px;
+      margin: 10px 0;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      animation: slideInDown 0.3s ease;
+    }
+
+    .error-feedback {
+      background: #ed4245;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 6px;
+      margin: 10px 0;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      animation: slideInDown 0.3s ease;
+    }
+
+    @keyframes slideInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .form-step {
+      transition: border-left 0.3s ease, padding-left 0.3s ease;
+    }
+
+    .form-step.active {
+      border-left: 4px solid #9d7523;
+      padding-left: 16px;
+    }
+
+    .form-step.completed {
+      border-left: 4px solid #43b581;
+      padding-left: 16px;
+    }
   </style>
   <script src="locations.js"></script>
 </head>
@@ -406,8 +543,27 @@
   <div style="background:#e2e2e2; border-radius:8px; padding:12px; margin-bottom:5px;">
   <h2 style="color:#9d7523; margin:0; text-align:left;">Cargo Form</h2>
 </div>
+  
+  <!-- Progress Bar -->
+  <div class="progress-bar-container">
+    <div class="progress-bar">
+      <div class="progress-fill" id="formProgressFill"></div>
+    </div>
+    <div class="progress-text" id="formProgressText">Form Completion: 0%</div>
+  </div>
+
+  <!-- Feedback Messages -->
+  <div class="success-feedback" id="successFeedback">
+    <span>✓</span>
+    <span id="successMessage">Success!</span>
+  </div>
+  <div class="error-feedback" id="errorFeedback">
+    <span>⚠</span>
+    <span id="errorMessage">Error occurred!</span>
+  </div>
+
   <form id="haulForm">
-    <div class="section">
+    <div class="section form-step" id="basicInfoStep">
       <label>Order Category:</label>
       <select id="orderCategory" required>
         <option value="" selected disabled>Select category</option>
@@ -497,7 +653,9 @@
       <input type="number" id="crewAmount" min="0" max="20" step="1" required oninput="generateCrewInputs()" />
 
       <div id="crewNamesDiv"></div>
+    </div>
 
+    <div class="section form-step" id="locationTimeStep">
       <label>Start Location:</label>
       <div class="searchable-dropdown" id="startLocationDropdown">
         <input type="text" id="startLocation" placeholder="Search start location..." autocomplete="off" required>
@@ -521,7 +679,7 @@
       </div>
     </div>
 
-    <div class="section">
+    <div class="section form-step" id="manifestStep">
       <label>Cargo Manifest (add/remove lines as needed):</label>
       <div id="resourceDrivePresets" style="display:none; margin-bottom:10px;">
         <span style="font-size:13px; font-weight:bold; vertical-align:middle; margin-right:8px;">Resource Drive Presets:</span>
@@ -539,7 +697,7 @@
 </div>
     </div>
 
-    <div class="section">
+    <div class="section form-step" id="completionStep">
       <label>Order Completion Timestamp:</label>
       <input type="datetime-local" id="completionTime" required>
       <div id="orderDuration" style="font-weight:bold; color:#9d7523; margin-top:8px;"></div>
@@ -563,7 +721,7 @@
       <textarea id="notes"></textarea>
     </div>
 
-    <button type="button" onclick="generateOutput()">
+    <button type="button" onclick="generateOutput()" id="generateBtn">
       <img src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/DiscordLogo.png" alt="Discord Logo" class="discord-btn-logo" style="filter: brightness(0) invert(1);" />
       Generate Discord Post
     </button>
@@ -671,6 +829,9 @@
 
   // Clear notes
   document.getElementById("notes").value = "";
+  
+  // Reset progress bar
+  calculateFormProgress();
 }
 
 function showTab(tab) {
@@ -958,6 +1119,7 @@ window.addEventListener("DOMContentLoaded", function() {
     function addManifestLine() {
       manifestLineCount++;
       renderManifestLines();
+      calculateFormProgress(); // Update progress when adding manifest line
     }
 
     function removeManifestLine(index) {
@@ -989,6 +1151,7 @@ window.addEventListener("DOMContentLoaded", function() {
       });
 
       updateManifestTotals();
+      calculateFormProgress(); // Update progress when removing manifest line
     }
 
     function updateManifestTotals() {
@@ -1035,6 +1198,23 @@ window.applyManifestPreset = applyManifestPreset;
       manifestLineCount = 1;
       renderManifestLines();
       renderHistory();
+      
+      // Initialize progress tracking
+      calculateFormProgress();
+      
+      // Add event listeners for progress tracking
+      const formElements = document.querySelectorAll('input, select, textarea');
+      formElements.forEach(element => {
+        element.addEventListener('input', calculateFormProgress);
+        element.addEventListener('change', calculateFormProgress);
+      });
+      
+      // Add manifest-specific listeners
+      const manifestContainer = document.getElementById('manifestLines');
+      if (manifestContainer) {
+        const observer = new MutationObserver(calculateFormProgress);
+        observer.observe(manifestContainer, { childList: true, subtree: true });
+      }
     });
 
     document.getElementById("orderCategory").addEventListener("change", function() {
@@ -1073,6 +1253,330 @@ window.applyManifestPreset = applyManifestPreset;
       "WINC Caterpillar": "https://discord.com/channels/900478857436606535/1391878505905524817/1391904347117322322",
       "SPRT Icarus": "https://discord.com/channels/900478857436606535/1391878505905524817/1396265862268190830"
     };
+
+    // Loading States & Progress Indicators
+    function showLoadingOverlay(message = "Processing...") {
+      const overlay = document.createElement('div');
+      overlay.className = 'loading-overlay';
+      overlay.id = 'loadingOverlay';
+      overlay.innerHTML = `
+        <div class="loading-content">
+          <div class="loading-spinner-large"></div>
+          <div style="font-size: 16px; font-weight: bold; margin-bottom: 8px;">${message}</div>
+          <div style="font-size: 14px; opacity: 0.8;">Please wait...</div>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+    }
+
+    function showNotificationOverlay(message, type = 'info', duration = 3000) {
+      const overlay = document.createElement('div');
+      overlay.className = 'loading-overlay';
+      overlay.id = 'notificationOverlay';
+      
+      let icon = '';
+      let bgColor = '#781d15';
+      let borderColor = '#9d7523';
+      
+      switch(type) {
+        case 'success':
+          icon = '<div style="font-size: 32px; margin-bottom: 16px;">✓</div>';
+          bgColor = '#43b581';
+          borderColor = '#2ea964';
+          break;
+        case 'error':
+          icon = '<div style="font-size: 32px; margin-bottom: 16px;">⚠</div>';
+          bgColor = '#ed4245';
+          borderColor = '#b32428';
+          break;
+        case 'warning':
+          icon = '<div style="font-size: 32px; margin-bottom: 16px;">⚠</div>';
+          bgColor = '#faa61a';
+          borderColor = '#e18d00';
+          break;
+        default:
+          icon = '<div style="font-size: 32px; margin-bottom: 16px;">ℹ</div>';
+      }
+      
+      overlay.innerHTML = `
+        <div class="loading-content" style="background: ${bgColor}; border-color: ${borderColor};">
+          ${icon}
+          <div style="font-size: 16px; font-weight: bold; text-align: center; line-height: 1.4;">${message}</div>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+      
+      // Auto-hide after duration
+      setTimeout(() => {
+        const notificationOverlay = document.getElementById('notificationOverlay');
+        if (notificationOverlay) {
+          notificationOverlay.remove();
+        }
+      }, duration);
+      
+      // Allow clicking to dismiss
+      overlay.addEventListener('click', () => {
+        overlay.remove();
+      });
+    }
+
+    function hideLoadingOverlay() {
+      const overlay = document.getElementById('loadingOverlay');
+      if (overlay) {
+        overlay.remove();
+      }
+    }
+
+    function showButtonLoading(buttonId, loadingText = null) {
+      const button = document.getElementById(buttonId);
+      if (button) {
+        button.classList.add('button-loading');
+        button.disabled = true;
+        const originalHTML = button.innerHTML;
+        button.setAttribute('data-original-html', originalHTML);
+        
+        if (loadingText) {
+          button.innerHTML = `<div class="loading-spinner"></div>${loadingText}`;
+        } else {
+          button.innerHTML = `<div class="loading-spinner"></div>Processing...`;
+        }
+      }
+    }
+
+    function hideButtonLoading(buttonId) {
+      const button = document.getElementById(buttonId);
+      if (button) {
+        button.classList.remove('button-loading');
+        button.disabled = false;
+        const originalHTML = button.getAttribute('data-original-html');
+        if (originalHTML) {
+          button.innerHTML = originalHTML;
+          button.removeAttribute('data-original-html');
+        }
+      }
+    }
+
+    function showFeedback(type, message, duration = 5000) {
+      const feedbackElement = type === 'success' ? 
+        document.getElementById('successFeedback') : 
+        document.getElementById('errorFeedback');
+      const messageElement = type === 'success' ? 
+        document.getElementById('successMessage') : 
+        document.getElementById('errorMessage');
+      
+      if (feedbackElement && messageElement) {
+        messageElement.textContent = message;
+        feedbackElement.style.display = 'flex';
+        
+        setTimeout(() => {
+          feedbackElement.style.display = 'none';
+        }, duration);
+      }
+    }
+
+    function calculateFormProgress() {
+      const requiredFields = [
+        'orderCategory', 'companyName', 'orderType', 'shipName', 'captainName',
+        'crewAmount', 'startLocation', 'departureTime', 'routeStart', 'routeEnd',
+        'completionTime'
+      ];
+      
+      let filledFields = 0;
+      let totalFields = requiredFields.length;
+      
+      // Check main fields
+      for (const fieldId of requiredFields) {
+        const field = document.getElementById(fieldId);
+        let isFieldValid = false;
+        
+        if (field) {
+          // Special validation for location fields
+          if (fieldId === 'startLocation' || fieldId === 'routeStart' || fieldId === 'routeEnd') {
+            isFieldValid = field.value && field.value.trim() !== '' && locations.includes(field.value);
+          } else {
+            isFieldValid = field.value && field.value.trim() !== '';
+          }
+          
+          if (isFieldValid) {
+            filledFields++;
+          }
+        }
+      }
+      
+      // Check "Other" fields if applicable
+      const otherFieldChecks = [
+        { select: 'orderCategory', other: 'orderCategoryOther' },
+        { select: 'companyName', other: 'companyNameOther' },
+        { select: 'orderType', other: 'orderTypeOther' },
+        { select: 'shipName', other: 'shipNameOther' },
+        { select: 'captainName', other: 'captainNameOther' }
+      ];
+      
+      for (const check of otherFieldChecks) {
+        const selectField = document.getElementById(check.select);
+        const otherField = document.getElementById(check.other);
+        const otherDiv = document.getElementById(check.other + 'Div');
+        
+        if (selectField && selectField.value === 'Other' && otherDiv && otherDiv.style.display !== 'none') {
+          totalFields++; // Add the "other" field to total count
+          if (otherField && otherField.value && otherField.value.trim() !== '') {
+            filledFields++;
+          }
+        }
+      }
+      
+      // Check crew names
+      const crewAmount = parseInt(document.getElementById('crewAmount')?.value || '0', 10);
+      if (crewAmount > 0) {
+        totalFields += crewAmount;
+        for (let i = 1; i <= crewAmount; i++) {
+          const crewField = document.getElementById(`crewName${i}`);
+          if (crewField && crewField.value && crewField.value.trim() !== '') {
+            filledFields++;
+          }
+        }
+      }
+      
+      // Check manifest (at least one line with material)
+      const manifestRows = document.querySelectorAll('.manifest-row');
+      let hasValidManifest = false;
+      manifestRows.forEach(row => {
+        const material = row.querySelector('.manifest-material');
+        if (material && material.value && material.value.trim() !== '' && material.value !== 'Select Material') {
+          hasValidManifest = true;
+        }
+      });
+      
+      if (hasValidManifest) {
+        filledFields++;
+      }
+      totalFields++; // Add manifest to total count
+      
+      const percentage = Math.round((filledFields / totalFields) * 100);
+      
+      // Update progress bar
+      const progressFill = document.getElementById('formProgressFill');
+      const progressText = document.getElementById('formProgressText');
+      
+      if (progressFill) {
+        progressFill.style.width = `${percentage}%`;
+      }
+      
+      if (progressText) {
+        progressText.textContent = `Form Completion: ${percentage}%`;
+      }
+      
+      // Update form step states
+      updateFormStepStates();
+      
+      return percentage;
+    }
+
+    function updateFormStepStates() {
+      const steps = [
+        {
+          id: 'basicInfoStep',
+          fields: ['orderCategory', 'companyName', 'orderType', 'shipName', 'captainName', 'crewAmount']
+        },
+        {
+          id: 'locationTimeStep',
+          fields: ['startLocation', 'departureTime', 'routeStart', 'routeEnd']
+        },
+        {
+          id: 'manifestStep',
+          fields: [] // Special handling below
+        },
+        {
+          id: 'completionStep',
+          fields: ['completionTime']
+        }
+      ];
+      
+      steps.forEach(step => {
+        const stepElement = document.getElementById(step.id);
+        if (!stepElement) return;
+        
+        let completedFields = 0;
+        let totalStepFields = step.fields.length;
+        
+        // Handle manifest step separately
+        if (step.id === 'manifestStep') {
+          const manifestRows = document.querySelectorAll('.manifest-row');
+          let hasValidManifest = false;
+          manifestRows.forEach(row => {
+            const material = row.querySelector('.manifest-material');
+            if (material && material.value && material.value.trim() !== '' && material.value !== 'Select Material') {
+              hasValidManifest = true;
+            }
+          });
+          completedFields = hasValidManifest ? 1 : 0;
+          totalStepFields = 1;
+        } else {
+          // Handle regular fields
+          for (const fieldId of step.fields) {
+            const field = document.getElementById(fieldId);
+            let isFieldValid = false;
+            
+            if (field) {
+              // Special validation for location fields
+              if (fieldId === 'startLocation' || fieldId === 'routeStart' || fieldId === 'routeEnd') {
+                isFieldValid = field.value && field.value.trim() !== '' && locations.includes(field.value);
+              } else {
+                isFieldValid = field.value && field.value.trim() !== '';
+              }
+              
+              if (isFieldValid) {
+                completedFields++;
+              }
+            }
+          }
+          
+          // Add crew names to basic info step
+          if (step.id === 'basicInfoStep') {
+            const crewAmount = parseInt(document.getElementById('crewAmount')?.value || '0', 10);
+            if (crewAmount > 0) {
+              totalStepFields += crewAmount;
+              for (let i = 1; i <= crewAmount; i++) {
+                const crewField = document.getElementById(`crewName${i}`);
+                if (crewField && crewField.value && crewField.value.trim() !== '') {
+                  completedFields++;
+                }
+              }
+            }
+            
+            // Add "Other" fields if visible
+            const otherFieldChecks = [
+              { select: 'orderCategory', other: 'orderCategoryOther' },
+              { select: 'companyName', other: 'companyNameOther' },
+              { select: 'orderType', other: 'orderTypeOther' },
+              { select: 'shipName', other: 'shipNameOther' },
+              { select: 'captainName', other: 'captainNameOther' }
+            ];
+            
+            for (const check of otherFieldChecks) {
+              const selectField = document.getElementById(check.select);
+              const otherField = document.getElementById(check.other);
+              const otherDiv = document.getElementById(check.other + 'Div');
+              
+              if (selectField && selectField.value === 'Other' && otherDiv && otherDiv.style.display !== 'none') {
+                totalStepFields++;
+                if (otherField && otherField.value && otherField.value.trim() !== '') {
+                  completedFields++;
+                }
+              }
+            }
+          }
+        }
+        
+        // Update step classes
+        stepElement.classList.remove('active', 'completed');
+        if (completedFields === totalStepFields && completedFields > 0) {
+          stepElement.classList.add('completed');
+        } else if (completedFields > 0) {
+          stepElement.classList.add('active');
+        }
+      });
+    }
 
     function toggleOrderCategoryOther() {
       const val = document.getElementById("orderCategory").value;
@@ -1160,10 +1664,14 @@ window.applyManifestPreset = applyManifestPreset;
           input.name = `crewName${i}`;
           input.required = true;
           input.className = "crew-input";
+          // Add event listener for progress tracking
+          input.addEventListener('input', calculateFormProgress);
+          input.addEventListener('change', calculateFormProgress);
           crewNamesDiv.appendChild(label);
           crewNamesDiv.appendChild(input);
         }
       }
+      calculateFormProgress(); // Update progress when crew inputs change
     }
 
     function validateRequiredFields() {
@@ -1254,7 +1762,7 @@ window.applyManifestPreset = applyManifestPreset;
        // Validate manifest lines (UEC and material now required)
   const manifestRows = document.querySelectorAll('.manifest-row');
   if (manifestRows.length === 0) {
-    alert("Please add at least one manifest line. Do not report repositioning flights.");
+    showNotificationOverlay("Please add at least one manifest line.<br><br>Do not report repositioning flights.", 'error', 4000);
     return false;
   }
   for (const row of manifestRows) {
@@ -1270,7 +1778,7 @@ window.applyManifestPreset = applyManifestPreset;
 
   if (firstError) {
     firstError.scrollIntoView({behavior: "smooth", block: "center"});
-    alert("Please fill out all required fields!. Unanswered questions are highlighted in red.");
+    showNotificationOverlay("Please fill out all required fields!<br><br>Unanswered questions are highlighted in red.", 'error', 4000);
     return false;
   }
   return true;
@@ -1281,6 +1789,7 @@ window.applyManifestPreset = applyManifestPreset;
       discordOutput.select();
       discordOutput.setSelectionRange(0, 99999);
       document.execCommand("copy");
+      showNotificationOverlay("Discord post copied to clipboard!", 'success', 2000);
     }
 
     function updateOrderDuration() {
@@ -1326,9 +1835,16 @@ window.applyManifestPreset = applyManifestPreset;
     function generateOutput() {
   if (!validateRequiredFields()) return;
 
-  const get = id => document.getElementById(id)?.value?.trim() || "";
-  const departureDiscord = toDiscordTimestamp(get("departureTime"));
-  const completionDiscord = toDiscordTimestamp(get("completionTime"));
+  // Show loading state
+  showButtonLoading('generateBtn', 'Generating...');
+  showLoadingOverlay('Generating Discord post...');
+
+  // Simulate processing time for better UX
+  setTimeout(() => {
+    try {
+      const get = id => document.getElementById(id)?.value?.trim() || "";
+      const departureDiscord = toDiscordTimestamp(get("departureTime"));
+      const completionDiscord = toDiscordTimestamp(get("completionTime"));
 
   let orderCategoryText = get("orderCategory");
   if (orderCategoryText === "Other") orderCategoryText = get("orderCategoryOther");
@@ -1467,6 +1983,19 @@ ${notesText}
 
   document.getElementById("discordOutput").value = output;
   document.getElementById("discordSection").style.display = "block";
+  
+  // Hide loading states and show success
+  hideLoadingOverlay();
+  hideButtonLoading('generateBtn');
+  showFeedback('success', 'Discord post generated successfully!');
+  
+    } catch (error) {
+      console.error('Error generating output:', error);
+      hideLoadingOverlay();
+      hideButtonLoading('generateBtn');
+      showFeedback('error', 'Failed to generate Discord post. Please try again.');
+    }
+  }, 500); // Small delay for better UX
 }
 
 function renderHistory() {
@@ -1510,6 +2039,7 @@ function copyHistoryPost(idx) {
     temp.select();
     document.execCommand('copy');
     document.body.removeChild(temp);
+    showNotificationOverlay("History post copied to clipboard!", 'success', 2000);
   }
 }
 
@@ -1529,49 +2059,15 @@ async function sendToDiscord() {
     shipName = document.getElementById("shipNameOther").value;
   }
 
-  // Collect all additional fields for Google Sheets
-  const get = id => document.getElementById(id)?.value?.trim() || "";
-  
-  let orderCategoryText = get("orderCategory");
-  if (orderCategoryText === "Other") orderCategoryText = get("orderCategoryOther");
-  
-  let companyNameText = get("companyName");
-  if (companyNameText === "Other") companyNameText = get("companyNameOther");
-  
-  let orderTypeText = get("orderType");
-  if (orderTypeText === "Other") orderTypeText = get("orderTypeOther");
-  
-  let captainNameText = get("captainName");
-  if (captainNameText === "Other") captainNameText = get("captainNameOther");
-  
-  const crewAmount = parseInt(get("crewAmount"), 10);
-  let crewNamesList = [];
-  for (let i = 1; i <= crewAmount; i++) {
-    const crewInput = document.getElementById(`crewName${i}`);
-    if (crewInput && crewInput.value.trim()) {
-      crewNamesList.push(crewInput.value.trim());
-    }
-  }
-  const crewAmountWithNames = crewAmount > 0 ? `${crewAmount} (${crewNamesList.join(", ")})` : "0";
-  
-  const totalUECInput = document.getElementById("totalUECBox");
-  const totalUEC = totalUECInput && totalUECInput.value ? parseInt(totalUECInput.value.replace(/\D/g, "")) || 0 : 0;
-  
-  const repairs = parseInt(get("repairs") || "0", 10);
-  const restock = parseInt(get("restock") || "0", 10);
-  const quantumFuel = parseInt(get("quantumFuel") || "0", 10);
-  const hydrogenFuel = parseInt(get("hydrogenFuel") || "0", 10);
-  const crewCosts = parseInt(get("crewCosts") || "0", 10);
-
   // Error: No message generated
   if (!message) {
-    alert("No message to send. Please generate a Discord post first.");
+    showFeedback('error', 'No message to send. Please generate a Discord post first.');
     return;
   }
 
   // Error: Required fields missing
   if (!orderType || !captainName) {
-    alert("Order Type and Captain Name are required to send to Discord.");
+    showFeedback('error', 'Order Type and Captain Name are required to send to Discord.');
     return;
   }
 
@@ -1582,18 +2078,59 @@ async function sendToDiscord() {
     }
   }
 
-  // Disable button to prevent duplicate submissions
+  // Show loading states
   const sendBtn = Array.from(document.querySelectorAll("button"))
     .find(btn => btn.textContent.includes("Send to Discord"));
-  if (sendBtn) sendBtn.disabled = true;
+  
+  if (sendBtn) {
+    sendBtn.classList.add('button-loading');
+    sendBtn.disabled = true;
+    sendBtn.innerHTML = '<div class="loading-spinner"></div>Sending to Discord...';
+  }
+  
+  showLoadingOverlay('Sending to Brute Haul Discord...');
 
   try {
-    // Try HTTPS first (required for GitHub Pages), then HTTP fallback
+    // Collect all additional fields for Google Sheets
+    const get = id => document.getElementById(id)?.value?.trim() || "";
+    
+    let orderCategoryText = get("orderCategory");
+    if (orderCategoryText === "Other") orderCategoryText = get("orderCategoryOther");
+    
+    let companyNameText = get("companyName");
+    if (companyNameText === "Other") companyNameText = get("companyNameOther");
+    
+    let orderTypeText = get("orderType");
+    if (orderTypeText === "Other") orderTypeText = get("orderTypeOther");
+    
+    let captainNameText = get("captainName");
+    if (captainNameText === "Other") captainNameText = get("captainNameOther");
+    
+    const crewAmount = parseInt(get("crewAmount"), 10);
+    let crewNamesList = [];
+    for (let i = 1; i <= crewAmount; i++) {
+      const crewInput = document.getElementById(`crewName${i}`);
+      if (crewInput && crewInput.value.trim()) {
+        crewNamesList.push(crewInput.value.trim());
+      }
+    }
+    const crewAmountWithNames = crewAmount > 0 ? `${crewAmount} (${crewNamesList.join(", ")})` : "0";
+    
+    const totalUECInput = document.getElementById("totalUECBox");
+    const totalUEC = totalUECInput && totalUECInput.value ? parseInt(totalUECInput.value.replace(/\D/g, "")) || 0 : 0;
+    
+    const repairs = parseInt(get("repairs") || "0", 10);
+    const restock = parseInt(get("restock") || "0", 10);
+    const quantumFuel = parseInt(get("quantumFuel") || "0", 10);
+    const hydrogenFuel = parseInt(get("hydrogenFuel") || "0", 10);
+    const crewCosts = parseInt(get("crewCosts") || "0", 10);
+    // Try HTTP first (server running in HTTP-only mode)
     const endpoints = [
       "http://astro.wisp.uno:10478/send-discord",
       "http://astro.wisp.uno:8080/send-discord",
-      "http://127.18.1.57:10478/send-discord",
-      "http://127.0.0.1:10478/send-discord"
+      "http://astro.wisp.uno:3000/send-discord",
+      "http://astro.wisp.uno:5000/send-discord",
+      "http://astro.wisp.uno:8000/send-discord"
     ];
     
     let response;
@@ -1653,31 +2190,38 @@ async function sendToDiscord() {
     try {
       data = await response.json();
     } catch {
-      alert("The Brute Haul System is currently restarting. Please try again shortly.");
+      showNotificationOverlay("The Brute Haul System is currently restarting.<br><br>Please try again shortly.", 'warning', 4000);
       if (sendBtn) sendBtn.disabled = false;
       return;
     }
 
     if (response.ok) {
-      alert("Successfully sent to Brute Haul - Standy by for updated logs");
+      hideLoadingOverlay();
+      showFeedback('success', 'Successfully sent to Brute Haul - Standy by for updated logs');
       // Hide the Discord output section
       document.getElementById("discordSection").style.display = "none";
       // Clear the form fields
       clearFormFields();
     } else {
-      alert("Error sending to Brute Haul: " + (data.error || "Contact DyslexicNerd01"));
+      hideLoadingOverlay();
+      showFeedback('error', 'Error sending to Brute Haul: ' + (data.error || 'Contact DyslexicNerd01'));
     }
   } catch (err) {
-    alert("The Brute Haul System is currently offline. Please try again later.");
+    hideLoadingOverlay();
+    showFeedback('error', 'The Brute Haul System is currently offline. Please try again later.');
   } finally {
-    if (sendBtn) sendBtn.disabled = false;
+    if (sendBtn) {
+      sendBtn.classList.remove('button-loading');
+      sendBtn.disabled = false;
+      sendBtn.innerHTML = '<img src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/DiscordLogo.png" alt="Discord Logo" style="height:1.6em;width:auto;filter:brightness(0) invert(1);" />Send to Discord';
+    }
   }
 }
 function generateAnnouncement() {
   const title = document.getElementById("announcementTitle").value.trim();
   const body = document.getElementById("announcementBody").value.trim();
   if (!title && !body) {
-    alert("Please enter a title or body for the announcement.");
+    showNotificationOverlay("Please enter a title or body for the announcement.", 'warning', 3000);
     return;
   }
   const output = `📢 **${title || "Announcement"}**\n\n${body}`;
@@ -1689,6 +2233,7 @@ function copyAnnouncementOutput() {
   output.select();
   output.setSelectionRange(0, 99999);
   document.execCommand("copy");
+  showNotificationOverlay("Announcement copied to clipboard!", 'success', 2000);
 }
 
 window.generateAnnouncement = generateAnnouncement;
