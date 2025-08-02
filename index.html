@@ -754,7 +754,7 @@
   </div>
   
   <div id="announcementsList" style="max-height:600px;overflow-y:auto;">
-    <!-- Announcement Post -->
+    <!-- Announcement Post 1 -->
     <div class="announcement-post" style="background:#fff;border-radius:8px;padding:20px;margin-bottom:20px;border:1px solid #9d7523;box-shadow:0 2px 4px rgba(0,0,0,0.1);">
       <div class="announcement-header" style="border-bottom:2px solid #9d7523;padding-bottom:10px;margin-bottom:15px;">
         <h3 style="color:#781d15;margin:0;font-size:1.4em;">Send to Discord Enabled! (For Real)</h3>
@@ -763,14 +763,13 @@
         </div>
       </div>
       <div class="announcement-body" style="color:#230e09;line-height:1.6;">
-        <p>The Send to Discord feature is now enabled!(For real this time) <b>Please only use the <i>"Send to Discord"</i> button to upload your cargo manifests.</b> </p>
+        <p>The Send to Discord feature is now enabled! (For real this time!) <b>Please only use the <i>"Send to Discord"</i> button to upload your cargo manifests.</b> </p>
         <p>If you encounter any issues, please report them to the development team as soon as possible. Hotfixes will be regularly released to keep the form up-to-date with any changes to Star Citizen or Brute Haul policy.</p>
-        <p>The copy button will remain active in the event that there is an issue with the discord bot in the future. If you do not see the message appear in Discord after 5 minutes, please use the copy button to manually copy the message. Please alert the Brute Haul staff of the issue as soon as possible</p>
-        <p>Thank you for your patience and support!</p>
+        <p>The copy button will remain active in the event that there is an issue with the discord bot in the future. If the discord bot does not respond, and error code will appear and you will gain access to the copy button again. The copy button no longer will appear under the output box as it did before.</p>
       </div>
     </div>
 
-    <!-- New Announcement Post -->
+    <!-- Announcement Post 2 -->
     <div class="announcement-post" style="background:#fff;border-radius:8px;padding:20px;margin-bottom:20px;border:1px solid #9d7523;box-shadow:0 2px 4px rgba(0,0,0,0.1);">
       <div class="announcement-header" style="border-bottom:2px solid #9d7523;padding-bottom:10px;margin-bottom:15px;">
         <h3 style="color:#781d15;margin:0;font-size:1.4em;">KNOWN FREIGHT ELEVATOR ISSUES</h3>
@@ -779,9 +778,9 @@
         </div>
       </div>
       <div class="announcement-body" style="color:#230e09;line-height:1.6;">
-        <p>There are currently 2 known issues with freight elevators in Star Citizen. Currently there are no official fixes or 100% reliable workarounds.</p>
-        
-        <p><strong>1. Issue:</strong> Unable to lower hangar freight elevator.<br>
+        <p>There are currently 2 known issues with freight elevators in Star Citizen. Currently there are no official fixes or 100% reliable workarounds.</p><br>
+
+        <p><strong>1. Issue:</strong> Unable to lower hangar freight elevator. (Possibly Fixed)</p><br>
         <strong>Fix:</strong> Only place 1 layer of containers on the elevator then send it down. The elevators will not move if there is more than one layer/containers stacked on top of each other.</p>
         
         <p><strong>2. Issue:</strong> Freight Elevator Overloaded<br>
@@ -2293,9 +2292,127 @@ async function sendToDiscord() {
       clearFormFields();
     } else {
       hideLoadingOverlay();
-      const errorCode = response.status || 'UNKNOWN';
-      const errorMsg = data?.error || 'Unknown server error';
-      showNotificationOverlay(`❌ Failed to send to Discord<br><br><strong>Error ${errorCode}:</strong> ${errorMsg}<br><br>Please try again or contact DyslexicNerd01`, 'error', 6000);
+      let errorCode = response.status || 'UNKNOWN';
+      let errorMsg = data?.error || 'Unknown server error';
+      let instructions = 'Please try again or contact DyslexicNerd01';
+      
+      // Enhanced error code handling
+      switch (response.status) {
+        case 400:
+          errorCode = 'E400';
+          errorMsg = 'Invalid request data';
+          instructions = 'Please check all form fields are filled correctly and try again.';
+          break;
+        case 401:
+          errorCode = 'E401';
+          errorMsg = 'Authentication required';
+          instructions = 'Server access denied. Please refresh the page and try again.';
+          break;
+        case 403:
+          errorCode = 'E403';
+          errorMsg = 'Access forbidden';
+          instructions = 'Server rejected the request. Contact DyslexicNerd01 if this persists.';
+          break;
+        case 404:
+          errorCode = 'E404';
+          errorMsg = 'Service not found';
+          instructions = 'The Brute Haul service endpoint is not available. Contact DyslexicNerd01.';
+          break;
+        case 429:
+          errorCode = 'E429';
+          errorMsg = 'Too many requests';
+          instructions = 'You are sending requests too quickly. Please wait 1 minute and try again.';
+          break;
+        case 500:
+          errorCode = 'E500';
+          errorMsg = 'Internal server error';
+          instructions = 'The Brute Haul server encountered an error. Please try again in a few minutes.';
+          break;
+        case 502:
+          errorCode = 'E502';
+          errorMsg = 'Bad gateway';
+          instructions = 'Server gateway error. The service may be restarting - try again shortly.';
+          break;
+        case 503:
+          errorCode = 'E503';
+          errorMsg = 'Service unavailable';
+          instructions = 'The Brute Haul server is temporarily unavailable. Please try again later.';
+          break;
+        case 504:
+          errorCode = 'E504';
+          errorMsg = 'Gateway timeout';
+          instructions = 'Server took too long to respond. Please try again.';
+          break;
+        default:
+          if (data?.error?.includes('Discord')) {
+            if (data.error.includes('webhook')) {
+              errorCode = 'D001';
+              errorMsg = 'Discord webhook error';
+              instructions = 'Discord connection failed. Contact DyslexicNerd01 to check webhook settings.';
+            } else if (data.error.includes('rate limit')) {
+              errorCode = 'D002';
+              errorMsg = 'Discord rate limited';
+              instructions = 'Discord is rate limiting requests. Please wait 5 minutes and try again.';
+            } else if (data.error.includes('message')) {
+              errorCode = 'D003';
+              errorMsg = 'Discord message error';
+              instructions = 'Your message format was rejected by Discord. Contact DyslexicNerd01.';
+            }
+          } else if (data?.error?.includes('Google') || data?.error?.includes('Sheets')) {
+            if (data.error.includes('credentials') || data.error.includes('authentication')) {
+              errorCode = 'G001';
+              errorMsg = 'Google Sheets credentials error';
+              instructions = 'Server configuration issue. Contact DyslexicNerd01 to fix Google Sheets access.';
+            } else if (data.error.includes('permission') || data.error.includes('access')) {
+              errorCode = 'G003';
+              errorMsg = 'Google Sheets permission denied';
+              instructions = 'Server lacks permission to write data. Contact DyslexicNerd01.';
+            } else if (data.error.includes('quota') || data.error.includes('limit')) {
+              errorCode = 'G004';
+              errorMsg = 'Google Sheets quota exceeded';
+              instructions = 'Google Sheets API limit reached. Please try again in an hour.';
+            } else {
+              errorCode = 'G002';
+              errorMsg = 'Google Sheets connection failed';
+              instructions = 'Unable to save to spreadsheet. Your Discord post was sent but data logging failed.';
+            }
+          } else if (data?.error?.includes('bot') || data?.error?.includes('token')) {
+            if (data.error.includes('token') || data.error.includes('authentication')) {
+              errorCode = 'B001';
+              errorMsg = 'Discord bot authentication failed';
+              instructions = 'Server configuration issue. Contact DyslexicNerd01 to fix bot authentication.';
+            } else if (data.error.includes('offline') || data.error.includes('disconnected')) {
+              errorCode = 'B002';
+              errorMsg = 'Discord bot offline';
+              instructions = 'The Discord bot is currently offline. Contact DyslexicNerd01.';
+            } else if (data.error.includes('channel') || data.error.includes('not found')) {
+              errorCode = 'B003';
+              errorMsg = 'Discord channel not found';
+              instructions = 'Server cannot find the Discord channel. Contact DyslexicNerd01.';
+            } else if (data.error.includes('permission') || data.error.includes('access')) {
+              errorCode = 'B004';
+              errorMsg = 'Discord bot lacks permissions';
+              instructions = 'Bot cannot post to channel. Contact DyslexicNerd01 to fix bot permissions.';
+            }
+          } else if (data?.error?.includes('validation') || data?.error?.includes('invalid')) {
+            if (data.error.includes('manifest') || data.error.includes('format')) {
+              errorCode = 'V001';
+              errorMsg = 'Invalid manifest data format';
+              instructions = 'Your form data format is invalid. Please refresh the page and try again.';
+            } else if (data.error.includes('required') || data.error.includes('missing')) {
+              errorCode = 'V002';
+              errorMsg = 'Server validation failed';
+              instructions = 'Server rejected your data. Please check all required fields and try again.';
+            } else if (data.error.includes('parse') || data.error.includes('JSON')) {
+              errorCode = 'V003';
+              errorMsg = 'Data parsing error';
+              instructions = 'Server cannot read your form data. Please refresh the page and try again.';
+            }
+          }
+          break;
+      }
+      
+      showNotificationOverlay(`❌ Failed to send to Discord<br><br><strong>Error ${errorCode}:</strong> ${errorMsg}<br><br>${instructions}`, 'error', 8000);
       showFeedback('error', `Error sending to Brute Haul (${errorCode}): ${errorMsg}`);
       showCopyButton(); // Show copy button when Discord posting fails
     }
@@ -2315,9 +2432,39 @@ async function sendToDiscord() {
     } else if (err.message.includes('fetch') || err.message.includes('Network')) {
       errorCode = 'E703';
       errorMsg = 'Network connection error';
+      instructions = 'Check your internet connection and try again.';
     } else if (err.message.includes('CORS')) {
       errorCode = 'E704';
       errorMsg = 'Cross-origin request blocked';
+      instructions = 'Browser security blocked the request. Try refreshing the page.';
+    } else if (err.message.includes('timeout') || err.message.includes('aborted')) {
+      errorCode = 'E408';
+      errorMsg = 'Request timeout';
+      instructions = 'The server took too long to respond. Please try again.';
+    } else if (err.message.includes('Failed to fetch') || err.name === 'TypeError') {
+      errorCode = 'E702';
+      errorMsg = 'Network request blocked';
+      instructions = 'Check your firewall/antivirus settings or try a different network.';
+    } else if (err.message.includes('SSL') || err.message.includes('certificate')) {
+      errorCode = 'S001';
+      errorMsg = 'SSL/Certificate error';
+      instructions = 'Server SSL certificate issue. Try using HTTP or contact DyslexicNerd01.';
+    } else if (err.message.includes('abort') || err.message.includes('cancelled')) {
+      errorCode = 'C001';
+      errorMsg = 'Request cancelled';
+      instructions = 'The request was cancelled. Please try again.';
+    } else if (err.message.includes('quota') || err.message.includes('usage limit')) {
+      errorCode = 'Q001';
+      errorMsg = 'API quota exceeded';
+      instructions = 'Service usage limit reached. Please try again in an hour.';
+    } else if (err.message.includes('maintenance') || err.message.includes('scheduled')) {
+      errorCode = 'M001';
+      errorMsg = 'Scheduled maintenance';
+      instructions = 'System is under maintenance. Please check Discord for updates.';
+    } else if (err.message.includes('memory') || err.message.includes('resource')) {
+      errorCode = 'R002';
+      errorMsg = 'Server resource limit';
+      instructions = 'Server is under high load. Please try again in a few minutes.';
     }
     
     showNotificationOverlay(`❌ Connection Failed<br><br><strong>Error ${errorCode}:</strong> ${errorMsg}<br><br>${instructions}`, 'error', 8000);
