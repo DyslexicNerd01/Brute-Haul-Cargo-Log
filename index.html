@@ -780,10 +780,10 @@
       <div class="announcement-body" style="color:#230e09;line-height:1.6;">
         <p>There are currently 2 known issues with freight elevators in Star Citizen. Currently there are no official fixes or 100% reliable workarounds.</p><br>
 
-        <p><strong>1. Issue:</strong> Unable to lower hangar freight elevator. (Possibly Fixed)</p><br>
+        <p><strong>1. Issue:</strong> Unable to lower hangar freight elevator. (Possibly Fixed)</p>
         <strong>Fix:</strong> Only place 1 layer of containers on the elevator then send it down. The elevators will not move if there is more than one layer/containers stacked on top of each other.</p>
         
-        <p><strong>2. Issue:</strong> Freight Elevator Overloaded<br>
+        <p><strong>2. Issue:</strong> Freight Elevator Overloaded
         <strong>Workaround:</strong> Follow this Reddit post: <a href="https://www.reddit.com/r/starcitizen/comments/1mbaxkj/elevator_overloaded_fix" target="_blank" style="color:#781d15;">https://www.reddit.com/r/starcitizen/comments/1mbaxkj/elevator_overloaded_fix</a><br>
         It does not work 100% of the time. We have found a success rate of about 25% when going to -40k. At this time there are no other workarounds.</p>
         
@@ -1971,6 +1971,20 @@ window.applyManifestPreset = applyManifestPreset;
     });
   });
 
+  // Validate SCU before generating post
+  if (totalSCU <= 0) {
+    hideLoadingOverlay();
+    hideButtonLoading('generateBtn');
+    // Reset button text manually
+    const generateBtn = document.getElementById('generateBtn');
+    if (generateBtn) {
+      generateBtn.innerHTML = 'Generate Post';
+    }
+    showNotificationOverlay(`❌ Manifest Validation Error<br><br><strong>Total SCU is 0</strong><br><br>Please add cargo to your manifest before generating the Discord post.`, 'error', 6000);
+    showFeedback('error', 'Cannot generate post: Total SCU is 0. Please add cargo to your manifest.');
+    return;
+  }
+
   // Format manifest table
   let manifestTable = "SCU   Material         UEC\n";
   manifestLines.forEach(line => {
@@ -2144,13 +2158,6 @@ async function sendToDiscord() {
   if (!orderType || !captainName) {
     showFeedback('error', 'Order Type and Captain Name are required to send to Discord.');
     return;
-  }
-
-  // Error: SCU is zero
-  if (totalSCU <= 0) {
-    if (!confirm("Total SCU is zero. Are you sure you want to send this manifest?")) {
-      return;
-    }
   }
 
   // Show loading states
