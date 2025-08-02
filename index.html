@@ -2195,13 +2195,20 @@ async function sendToDiscord() {
     try {
       data = await response.json();
     } catch {
-      showNotificationOverlay("The Brute Haul System is currently restarting.<br><br>Please try again shortly.", 'warning', 4000);
-      if (sendBtn) sendBtn.disabled = false;
+      hideLoadingOverlay();
+      showNotificationOverlay("⚠️ Server Restarting<br><br>The Brute Haul System is currently restarting.<br><br><strong>Error E005:</strong> Please try again in 30 seconds.", 'warning', 5000);
+      showFeedback('warning', 'Server restarting (E005) - Please try again shortly');
+      if (sendBtn) {
+        sendBtn.classList.remove('button-loading');
+        sendBtn.disabled = false;
+        sendBtn.innerHTML = '<img src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/DiscordLogo.png" alt="Discord Logo" style="height:1.6em;width:auto;filter:brightness(0) invert(1);" />Send to Discord';
+      }
       return;
     }
 
     if (response.ok) {
       hideLoadingOverlay();
+      showNotificationOverlay("✅ Successfully sent to Brute Haul Discord!<br><br>Your manifest has been posted and logged.", 'success', 4000);
       showFeedback('success', 'Successfully sent to Brute Haul - Standy by for updated logs');
       // Hide the Discord output section
       document.getElementById("discordSection").style.display = "none";
@@ -2209,11 +2216,32 @@ async function sendToDiscord() {
       clearFormFields();
     } else {
       hideLoadingOverlay();
-      showFeedback('error', 'Error sending to Brute Haul: ' + (data.error || 'Contact DyslexicNerd01'));
+      const errorCode = response.status || 'UNKNOWN';
+      const errorMsg = data?.error || 'Unknown server error';
+      showNotificationOverlay(`❌ Failed to send to Discord<br><br><strong>Error ${errorCode}:</strong> ${errorMsg}<br><br>Please try again or contact DyslexicNerd01`, 'error', 6000);
+      showFeedback('error', `Error sending to Brute Haul (${errorCode}): ${errorMsg}`);
     }
   } catch (err) {
     hideLoadingOverlay();
-    showFeedback('error', 'The Brute Haul System is currently offline. Please try again later.');
+    console.error('Send to Discord error:', err);
+    
+    // Determine error type and code
+    let errorCode = 'E701';
+    let errorMsg = 'Connection failed';
+    
+    if (err.message.includes('All endpoints failed')) {
+      errorCode = 'E702';
+      errorMsg = 'All server endpoints unreachable';
+    } else if (err.message.includes('fetch')) {
+      errorCode = 'E703';
+      errorMsg = 'Network connection error';
+    } else if (err.message.includes('CORS')) {
+      errorCode = 'E704';
+      errorMsg = 'Cross-origin request blocked';
+    }
+    
+    showNotificationOverlay(`❌ Connection Failed<br><br><strong>Error ${errorCode}:</strong> ${errorMsg}<br><br>Server may be offline. Please try again later or contact DyslexicNerd01`, 'error', 6000);
+    showFeedback('error', `The Brute Haul System is currently offline (${errorCode}). Please try again later.`);
   } finally {
     if (sendBtn) {
       sendBtn.classList.remove('button-loading');
