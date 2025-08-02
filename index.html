@@ -524,14 +524,6 @@
   <script src="locations.js"></script>
 </head>
 <body>
-  <!-- GitHub Pages Detection Banner -->
-  <div id="githubPagesBanner" style="display:none; background:#faa61a; border:2px solid #e18d00; border-radius:8px; padding:16px; margin-bottom:20px; text-align:center;">
-    <div style="font-size:18px; font-weight:bold; margin-bottom:8px; color:#000;">⚠️ GitHub Pages Detected</div>
-    <div style="color:#000; line-height:1.4;">
-      <strong>Discord posting may not work from GitHub Pages due to HTTPS requirements.</strong><br>
-      For full functionality, please <a href="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/index.html" style="color:#781d15; font-weight:bold;">download this page</a> and open it locally on your computer.
-    </div>
-  </div>
 
   <img class="logo" src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/BRHS-Logo.png" alt="BruteHaul Logo">
   <h1>Brute Haul Online Documentation System</h1>
@@ -878,12 +870,6 @@ window.addEventListener("DOMContentLoaded", function() {
   // Ensure totalUECBox starts blank on first load
   const totalUECInput = document.getElementById("totalUECBox");
   if (totalUECInput) totalUECInput.value = "";
-  
-  // Check if running on GitHub Pages and show warning banner
-  if (window.location.hostname.includes('github.io')) {
-    const banner = document.getElementById('githubPagesBanner');
-    if (banner) banner.style.display = 'block';
-  }
 });
 
     function populateLocationDropdown(id) {
