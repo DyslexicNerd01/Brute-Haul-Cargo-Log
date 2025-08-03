@@ -545,14 +545,6 @@
   <h2 style="color:#9d7523; margin:0; text-align:left;">Cargo Form</h2>
 </div>
   
-  <!-- Progress Bar -->
-  <div class="progress-bar-container">
-    <div class="progress-bar">
-      <div class="progress-fill" id="formProgressFill"></div>
-    </div>
-    <div class="progress-text" id="formProgressText">Form Completion: 0%</div>
-  </div>
-
   <!-- Feedback Messages -->
   <div class="success-feedback" id="successFeedback">
     <span>✓</span>
@@ -730,6 +722,15 @@
   Clear Form
 </button>
   </form>
+
+  <!-- Progress Bar -->
+  <div class="progress-bar-container">
+    <div class="progress-bar">
+      <div class="progress-fill" id="formProgressFill"></div>
+    </div>
+    <div class="progress-text" id="formProgressText">Form Completion: 0%</div>
+  </div>
+
   <div class="section" id="discordSection" style="display:none;">
     </button>
     <button type="button" onclick="sendToDiscord()" style="background:#43b581;color:#fff;border:none;padding:8px 16px;border-radius:5px;font-weight:bold;display:inline-flex;align-items:center;gap:8px;margin-left:8px;">
@@ -778,17 +779,19 @@
         </div>
       </div>
       <div class="announcement-body" style="color:#230e09;line-height:1.6;">
-        <p>There are currently 2 known issues with freight elevators in Star Citizen. Currently there are no official fixes or 100% reliable workarounds.</p><br>
+        <p><strong>Below are currently known major issues affecting Brute Haul/Ad Astra Operations. Currently there are no official fixes or 100% reliable workarounds.</strong></p>
 
-        <p><strong>1. Issue:</strong> Unable to lower hangar freight elevator. (Possibly Fixed)</p>
+        <p><strong>🟢Issue:</strong> <u>Unable to lower hanger freight elevator. (Confirmed Fixed)</u></p>
         <strong>Fix:</strong> Only place 1 layer of containers on the elevator then send it down. The elevators will not move if there is more than one layer/containers stacked on top of each other.</p>
         
-        <p><strong>2. Issue:</strong> Freight Elevator Overloaded
-        <strong>Workaround:</strong> Follow this Reddit post: <a href="https://www.reddit.com/r/starcitizen/comments/1mbaxkj/elevator_overloaded_fix" target="_blank" style="color:#781d15;">https://www.reddit.com/r/starcitizen/comments/1mbaxkj/elevator_overloaded_fix</a><br>
+        <p><strong>🔴 Issue:</strong> <u>Freight Elevator Overloaded</u></p>
+        <p><strong>Workaround:</strong> Follow this Reddit post: <a href="https://www.reddit.com/r/starcitizen/comments/1mbaxkj/elevator_overloaded_fix" target="_blank" style="color:#781d15;">https://www.reddit.com/r/starcitizen/comments/1mbaxkj/elevator_overloaded_fix</a><br>
         It does not work 100% of the time. We have found a success rate of about 25% when going to -40k. At this time there are no other workarounds.</p>
-        
+
+        <p><strong>🔴 Issue:</strong> <u>Elevators not lowering/storing items</u></p>
+        <p><strong>Workaround:</strong> There is no known work around. Do not use the Stormageddon Specimen facility and possibly the Shubin Mining Facility elevators</p>
+        <p>_____________________________________________________________________________________</p>
         <p>We will provide updates as these issues develop or if new solutions are found.</p>
-        
         <p>Follow this support ticket for more information on current issues within the game: <a href="https://support.robertsspaceindustries.com/hc/en-us/articles/360056254754-Star-Citizen-Alpha-4-2-1-Known-Issues" target="_blank" style="color:#781d15;">Star Citizen Alpha 4.2.1 Known Issues</a></p>
       </div>
     </div>
