@@ -1,12 +1,8 @@
-// Star Citizen Locations Database - Complete Collection (1,198+ Locations)
-// Updated from https://starcitizen.tools/Category:Locations
 // Complete list of all Star Citizen universe locations
-
 const locations = [
   // === NUMERICAL & SPECIAL CHARACTERS ===
   "2930-CRU983",
   "78 Leonis (star)",
-
   // === MAJOR LANDING ZONES & TRADING HUBS ===
   "Aaron Halo",
   "Aberdeen",
@@ -58,7 +54,6 @@ const locations = [
   "Asura",
   "August Dunlow Spaceport",
   "Aydo",
-
   // === B LOCATIONS ===
   "Bacchus - Garron",
   "Bacchus - Geddon", 
@@ -119,7 +114,7 @@ const locations = [
   "Bremen I",
   "Bremen III",
   "Bremen IV",
-  "Brentworth Care Center (New Babbage)",
+  "Brentworth Care Center",
   "Brio's Breaker Yard",
   "Broken Moon",
   "Broken Patch",
@@ -130,7 +125,6 @@ const locations = [
   "Bullock's Reach",
   "Buloi Sataball Arena",
   "Burnout",
-
   // === C LOCATIONS ===
   "Café Musain",
   "Calhoun Pass Emergency Shelter",
@@ -245,13 +239,12 @@ const locations = [
   "Covalex Hub Wightman",
   "Covalex Hub Young",
   "Covalex Hub Ziegler",
-    "Coven",
+  "Coven",
   "Cry-Astro Plant CRY-B01",
   "Cry-Astro Plant CRY-B02",
   "Cry-Astro Plant CRY-B11",
   "Cry-Astro Plant CRY-B16",
   "Cygnus",
-
   // === D LOCATIONS ===
   "Davien (star)",
   "Davien - Cano",
@@ -281,7 +274,6 @@ const locations = [
   "Dupree Storage Depot E",
   "Dupree Storage Depot F",
   "Dupree Storage Template",
-
   // === E LOCATIONS ===
   "Eager Flats Aid Shelter",
   "Eealus (star)",
@@ -319,7 +311,6 @@ const locations = [
   "Empire Health Services",
   "Europa",
   "Everus Harbor",
-
   // === F LOCATIONS ===
   "Fallow Field",
   "Farro Data Center Alpha",
@@ -346,7 +337,6 @@ const locations = [
   "Fora III",
   "Frigid Knot",
   "Frostbite (settlement)",
-
   // === G LOCATIONS ===  
   "G-Loc Bar",
   "Gallete Family Farms",
@@ -396,7 +386,6 @@ const locations = [
   "Greycat Pomeroy",
   "Greycat Roc",
   "Greycat Stanton",
-
   // === H LOCATIONS ===
   "Hades (star)",
   "Hades - Cathcart",
@@ -449,7 +438,6 @@ const locations = [
   "Hurston",
   "Hurston Dynamics Showcase",
   "Hurston Security Station",
-
   // === I LOCATIONS ===
   "ICC ScanHub Stanton",
   "Independent Arbitrator Hub",
@@ -458,7 +446,6 @@ const locations = [
   "Invictus Base",
   "IO",
   "IO-North tower",
-
   // === J LOCATIONS ===
   "Jackson's Swap",
   "JRPC Alpha Outpost",
@@ -489,7 +476,6 @@ const locations = [
   "JRPC Zulu Outpost",
   "Jumptown",
   "JusticeStar Satellite",
-
   // === K LOCATIONS ===
   "Kabir's Post",
   "Kallis (star)",
@@ -534,8 +520,7 @@ const locations = [
   "Kyuk'ya (star)",
   "Kyuk'ya - Ail'ka",
   "Kyuk'ya Belt Alpha",
-    "Kyuk'ya I",
-
+  "Kyuk'ya I",
   // === L LOCATIONS ===
   "L19 Residences",
   "La'uo (star)",
@@ -590,7 +575,6 @@ const locations = [
   "Lyria",
   "Lyris Flotilla",
   "Lūng'xyi",
-
   // === M LOCATIONS ===
   "M.iiy'ong",
   "MacArthur",
@@ -641,12 +625,11 @@ const locations = [
   "MT DataCenter D79-ECG-R",
   "MT DataCenter E2Q-NSG-Y",
   "MT DataCenter KH3-AAE-L",
-  "MT DataCenter L8P-JUC-8 (offline)",
+  "MT DataCenter L8P-JUC-8",
   "MT DataCenter QVX-J88-J",
   "MT DataCenter TMG-XEV-2",
   "MT OpCenter TLI-4",
   "Mya",
-
   // === N LOCATIONS ===
   "Najita",
   "Nakamura Valley Aid Shelter",
@@ -689,7 +672,6 @@ const locations = [
   "Nyx I",
   "Nyx II",
   "Nyx III",
-
   // === O LOCATIONS ===
   "OB Heller",
   "OB Kobold",
@@ -747,42 +729,36 @@ const locations = [
   "Oya II",
   "Oya III",
   "Oya IV",
-
   // === SPACE STATIONS & LAGRANGE POINTS ===
   "Port Olisar",
   "Port Renatus", 
   "Port Tressler",
   "Seraphim Station",
-  
   // Crusader Lagrange Points
   "CRU-L1",
   "CRU-L4", 
   "CRU-L5",
   "CRU-L1 Ambitious Dream Station",
   "CRU-L4 Shallow Fields Station",
-  "CRU-L5 Beautiful Glen Station",
-  
+  "CRU-L5 Beautiful Glen Station", 
   // MicroTech Lagrange Points
   "MIC-L1",
   "MIC-L2",
   "MIC-L3",
   "MIC-L4",
-  "MIC-L5",
-  
+  "MIC-L5",  
   // ArcCorp Lagrange Points
   "ARC-L1 Wide Forest Station",
   "ARC-L2 Lively Pathway Station", 
   "ARC-L3 Modern Express Station",
   "ARC-L4 Faint Glen Station",
-  "ARC-L5 Yellow Core Station",
-  
+  "ARC-L5 Yellow Core Station",  
   // Hurston Lagrange Points
   "HUR-L1 Green Glade Station",
   "HUR-L2 Faithful Dream Station",
   "HUR-L3 Thundering Express Station",
   "HUR-L4 Melodic Fields Station",
   "HUR-L5 High Course Station",
-
   // === P LOCATIONS ===
   "P.uay'aha",
   "Paradise Cove",
@@ -815,13 +791,11 @@ const locations = [
   "Pyro I",
   "Pyro IV",
   "Pyro V",
-
   // === Q LOCATIONS ===
   "QuarterDeck",
   "Quasi",
   "Queeg",
   "Quinton",
-
   // === R LOCATIONS ===
   "R.il'a (star)",
   "R.il'a VI",
@@ -872,7 +846,6 @@ const locations = [
   "RyiXy'an",
   "Rytif",
   "Ryōl",
-
   // === S LOCATIONS ===
   "S.ap'uāng",
   "Sacren's Plot",
@@ -952,7 +925,6 @@ const locations = [
   "Sunset Mesa",
   "Supply Gap",
   "Synthworld",
-
   // === T LOCATIONS ===
   "T.āl (star)",
   "T.āl - Ail'ka",
@@ -1062,7 +1034,6 @@ const locations = [
   "Tyrol V",
   "Tyrol VI",
   "Tyrol VII",
-
   // === U LOCATIONS ===
   "Umbriel",
   "Unnamed abandoned outpost (Cellin)",
@@ -1071,7 +1042,6 @@ const locations = [
   "Uranus",
   "Uriel",
   "Utopia",
-
   // === V LOCATIONS ===
   "Vagabond (star)",
   "Vanduul Attack",
@@ -1114,7 +1084,6 @@ const locations = [
   "Vulture (star)",
   "Vulture - Orion",
   "Vuur",
-
   // === W LOCATIONS ===
   "Wailing Rock",
   "Wala",
@@ -1132,14 +1101,12 @@ const locations = [
   "Windfall",
   "Wolf Point Aid Shelter",
   "World's End",
-
   // === X LOCATIONS ===
   "Xenia",
   "Xi",
   "Xis",
   "Xyeping",
   "Xōl'uu",
-
   // === Y LOCATIONS ===
   "Y.ōm'e",
   "Yadar Valley",
@@ -1169,12 +1136,10 @@ const locations = [
   "Yā'ti",
   "Yām'ping",
   "Yā'mon Belt Alpha",
-
   // === Z LOCATIONS ===
   "Zephyr (settlement)"
 ];
 
-// Export for use in other files
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { locations };
 }
