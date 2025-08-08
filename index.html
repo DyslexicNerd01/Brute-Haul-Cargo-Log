@@ -611,32 +611,20 @@
       </div>
 
       <label>Ship Name:</label>
-      <select id="shipName" required onchange="toggleShipNameOther()">
-        <!-- Options will be populated by JS -->
-      </select>
+      <div class="searchable-dropdown" id="shipNameDropdown">
+        <input type="text" id="shipName" placeholder="Search ship name..." autocomplete="off" required>
+        <div class="dropdown-list" id="shipNameList"></div>
+      </div>
       <div id="shipNameOtherDiv" class="other-div">
         <label>Specify Other:</label>
         <input type="text" id="shipNameOther" required />
       </div>
 
       <label>Captain Name:</label>
-      <select id="captainName" required onchange="toggleCaptainNameOther()">
-        <option value="" selected disabled>Select captain</option>
-        <option value="DyslexicNerd">DyslexicNerd</option>
-        <option value="Spartan">Spartan</option>
-        <option value="jjetstreamm">jjetstreamm</option>
-        <option value="Roflnomish">Roflnomish</option>
-        <option value="BenjiNotorious">BenjiNotorious</option>
-        <option value="zarainia">zarainia</option>
-        <option value="Venomnom">Venomnom</option>
-        <option value="BigDaddyTortuga">BigDaddyTortuga</option>
-        <option value="ItzProto">ItzProto</option>
-        <option value="Newt">Newt</option>
-        <option value="Xolion">Xolion</option>
-        <option value="Bakes Kamuari">Bakes Kamuari</option>
-        <option value="LockEmUpJas">LockEmUpJas</option>
-        <option value="Other">Other</option>
-      </select>
+      <div class="searchable-dropdown" id="captainNameDropdown">
+        <input type="text" id="captainName" placeholder="Search captain name..." autocomplete="off" required>
+        <div class="dropdown-list" id="captainNameList"></div>
+      </div>
       <div id="captainNameOtherDiv" class="other-div">
         <label>Specify Other:</label>
         <input type="text" id="captainNameOther" required />
@@ -833,11 +821,19 @@
       "SPRT Icarus", "BRHS Lednik", "BRHS Trireme", "WINC Caterpillar", "WINC Rafto"    
     ];
     const securityShips = [
-      "AACS Landsknecht", "AACS Feder", "BRHS Seastorm"
+      "AACS Landsknecht", "AACS Feder", "BRHS Seastorm", "BRHS Sword Of Twilight", "AACS Dendrobium", "AACS Judgement’s Bow"
     ];
     const allShips = [
       ...transportShips,
       ...securityShips,
+    ];
+
+    // Captain names list
+    const captainNames = [
+      "DyslexicNerd", "Spartan", "Lightblade", "jjetstreamm", "Roflnomish", 
+      "BenjiNotorious", "zarainia", "Astol", "Venomnom", "BigDaddyTortuga", 
+      "ItzProto", "Newt", "Xolion", "Bakes Kamuari", "LockEmUpJas", 
+      "sadfish", "Efazer"
     ];
 
     // Manifest material list (customize as needed)
@@ -879,6 +875,10 @@
 
   // Clear start location
   document.getElementById("startLocation").value = "";
+
+  // Clear ship name and captain name
+  document.getElementById("shipName").value = "";
+  document.getElementById("captainName").value = "";
 
   // Clear notes
   document.getElementById("notes").value = "";
@@ -1048,7 +1048,13 @@ window.addEventListener("DOMContentLoaded", function() {
     });
 
     function populateShipDropdown(category) {
-      const select = document.getElementById("shipName");
+      const inputId = 'shipName';
+      const listId = 'shipNameList';
+      const input = document.getElementById(inputId);
+      const list = document.getElementById(listId);
+      
+      if (!input || !list) return;
+
       let ships = [];
       if (category === "Transport") {
         ships = transportShips;
@@ -1057,10 +1063,233 @@ window.addEventListener("DOMContentLoaded", function() {
       } else {
         ships = allShips;
       }
-      select.innerHTML = `<option value="" selected disabled>Select ship</option>` +
-        ships.map(ship => `<option value="${ship}">${ship}</option>`).join("") +
-        `<option value="Other">Other</option>`;
-      toggleShipNameOther();
+
+      // Add "Other" option to the ships list
+      const shipsWithOther = [...ships, "Other"];
+
+      let selectedValue = '';
+      let filteredShips = shipsWithOther;
+
+      function showDropdown() {
+        list.classList.add('show');
+      }
+
+      function hideDropdown() {
+        setTimeout(() => {
+          list.classList.remove('show');
+        }, 200);
+      }
+
+      function filterShips(searchTerm) {
+        const term = searchTerm.toLowerCase();
+        return shipsWithOther.filter(ship => 
+          ship.toLowerCase().includes(term)
+        );
+      }
+
+      function renderDropdownItems(shipsToShow) {
+        list.innerHTML = '';
+        shipsToShow.forEach(ship => {
+          const item = document.createElement('div');
+          item.className = 'dropdown-item';
+          item.textContent = ship;
+          item.addEventListener('click', () => {
+            input.value = ship;
+            selectedValue = ship;
+            hideDropdown();
+            input.classList.remove('error');
+            toggleShipNameOther();
+          });
+          list.appendChild(item);
+        });
+      }
+
+      // Initialize with ships for category
+      renderDropdownItems(shipsWithOther);
+
+      // Remove existing event listeners
+      input.removeEventListener('input', input._shipInputHandler);
+      input.removeEventListener('focus', input._shipFocusHandler);
+      input.removeEventListener('blur', input._shipBlurHandler);
+      input.removeEventListener('keydown', input._shipKeydownHandler);
+
+      // Handle input events
+      input._shipInputHandler = (e) => {
+        const searchTerm = e.target.value;
+        if (searchTerm.length === 0) {
+          filteredShips = shipsWithOther;
+        } else {
+          filteredShips = filterShips(searchTerm);
+        }
+        renderDropdownItems(filteredShips);
+        showDropdown();
+        selectedValue = '';
+      };
+      input.addEventListener('input', input._shipInputHandler);
+
+      input._shipFocusHandler = () => {
+        showDropdown();
+      };
+      input.addEventListener('focus', input._shipFocusHandler);
+
+      input._shipBlurHandler = () => {
+        hideDropdown();
+      };
+      input.addEventListener('blur', input._shipBlurHandler);
+
+      // Handle keyboard navigation
+      input._shipKeydownHandler = (e) => {
+        const items = list.querySelectorAll('.dropdown-item');
+        let selectedIndex = Array.from(items).findIndex(item => item.classList.contains('selected'));
+
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          if (selectedIndex < items.length - 1) {
+            if (selectedIndex >= 0) items[selectedIndex].classList.remove('selected');
+            selectedIndex++;
+            items[selectedIndex].classList.add('selected');
+            items[selectedIndex].scrollIntoView({ block: 'nearest' });
+          }
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          if (selectedIndex > 0) {
+            items[selectedIndex].classList.remove('selected');
+            selectedIndex--;
+            items[selectedIndex].classList.add('selected');
+            items[selectedIndex].scrollIntoView({ block: 'nearest' });
+          }
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          if (selectedIndex >= 0 && items[selectedIndex]) {
+            input.value = items[selectedIndex].textContent;
+            selectedValue = items[selectedIndex].textContent;
+            hideDropdown();
+            input.classList.remove('error');
+            toggleShipNameOther();
+          }
+        } else if (e.key === 'Escape') {
+          hideDropdown();
+        }
+      };
+      input.addEventListener('keydown', input._shipKeydownHandler);
+
+      // Custom validation function
+      input.validateValue = function() {
+        return shipsWithOther.includes(input.value);
+      };
+    }
+
+    function populateCaptainDropdown() {
+      const inputId = 'captainName';
+      const listId = 'captainNameList';
+      const input = document.getElementById(inputId);
+      const list = document.getElementById(listId);
+      
+      if (!input || !list) return;
+
+      // Add "Other" option to the captains list
+      const captainsWithOther = [...captainNames, "Other"];
+
+      let selectedValue = '';
+      let filteredCaptains = captainsWithOther;
+
+      function showDropdown() {
+        list.classList.add('show');
+      }
+
+      function hideDropdown() {
+        setTimeout(() => {
+          list.classList.remove('show');
+        }, 200);
+      }
+
+      function filterCaptains(searchTerm) {
+        const term = searchTerm.toLowerCase();
+        return captainsWithOther.filter(captain => 
+          captain.toLowerCase().includes(term)
+        );
+      }
+
+      function renderDropdownItems(captainsToShow) {
+        list.innerHTML = '';
+        captainsToShow.forEach(captain => {
+          const item = document.createElement('div');
+          item.className = 'dropdown-item';
+          item.textContent = captain;
+          item.addEventListener('click', () => {
+            input.value = captain;
+            selectedValue = captain;
+            hideDropdown();
+            input.classList.remove('error');
+            toggleCaptainNameOther();
+          });
+          list.appendChild(item);
+        });
+      }
+
+      // Initialize with all captains
+      renderDropdownItems(captainsWithOther);
+
+      // Handle input events
+      input.addEventListener('input', (e) => {
+        const searchTerm = e.target.value;
+        if (searchTerm.length === 0) {
+          filteredCaptains = captainsWithOther;
+        } else {
+          filteredCaptains = filterCaptains(searchTerm);
+        }
+        renderDropdownItems(filteredCaptains);
+        showDropdown();
+        selectedValue = '';
+      });
+
+      input.addEventListener('focus', () => {
+        showDropdown();
+      });
+
+      input.addEventListener('blur', () => {
+        hideDropdown();
+      });
+
+      // Handle keyboard navigation
+      input.addEventListener('keydown', (e) => {
+        const items = list.querySelectorAll('.dropdown-item');
+        let selectedIndex = Array.from(items).findIndex(item => item.classList.contains('selected'));
+
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          if (selectedIndex < items.length - 1) {
+            if (selectedIndex >= 0) items[selectedIndex].classList.remove('selected');
+            selectedIndex++;
+            items[selectedIndex].classList.add('selected');
+            items[selectedIndex].scrollIntoView({ block: 'nearest' });
+          }
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          if (selectedIndex > 0) {
+            items[selectedIndex].classList.remove('selected');
+            selectedIndex--;
+            items[selectedIndex].classList.add('selected');
+            items[selectedIndex].scrollIntoView({ block: 'nearest' });
+          }
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          if (selectedIndex >= 0 && items[selectedIndex]) {
+            input.value = items[selectedIndex].textContent;
+            selectedValue = items[selectedIndex].textContent;
+            hideDropdown();
+            input.classList.remove('error');
+            toggleCaptainNameOther();
+          }
+        } else if (e.key === 'Escape') {
+          hideDropdown();
+        }
+      });
+
+      // Custom validation function
+      input.validateValue = function() {
+        return captainsWithOther.includes(input.value);
+      };
     }
 
     let manifestLineCount = 1;
@@ -1255,6 +1484,7 @@ window.applyManifestPreset = applyManifestPreset;
       populateLocationDropdown("routeStart");
       populateLocationDropdown("routeEnd");
       populateShipDropdown(""); // Show all ships initially
+      populateCaptainDropdown(); // Initialize captain dropdown
       document.getElementById("discordSection").style.display = "none";
       manifestLineCount = 1;
       renderManifestLines();
@@ -1451,7 +1681,16 @@ window.applyManifestPreset = applyManifestPreset;
           // Special validation for location fields
           if (fieldId === 'startLocation' || fieldId === 'routeStart' || fieldId === 'routeEnd') {
             isFieldValid = field.value && field.value.trim() !== '' && locations.includes(field.value);
-          } else {
+          } 
+          // Special validation for ship name field
+          else if (fieldId === 'shipName') {
+            isFieldValid = field.value && field.value.trim() !== '' && (allShips.includes(field.value) || field.value === 'Other');
+          }
+          // Special validation for captain name field
+          else if (fieldId === 'captainName') {
+            isFieldValid = field.value && field.value.trim() !== '' && (captainNames.includes(field.value) || field.value === 'Other');
+          }
+          else {
             isFieldValid = field.value && field.value.trim() !== '';
           }
           
