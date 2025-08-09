@@ -2842,6 +2842,9 @@ window.copyAnnouncementOutput = copyAnnouncementOutput;
 
 // GitHub Error Logging Function
 async function logErrorToGitHub(errorCode, errorMsg, fullError, stackTrace, additionalContext = {}) {
+  // Add debug logging to see if function is called
+  console.log('🔧 logErrorToGitHub called with:', { errorCode, errorMsg });
+  
   try {
     // ========================================
     // 🔧 SECURE TOKEN CONFIGURATION:
@@ -2897,10 +2900,14 @@ async function logErrorToGitHub(errorCode, errorMsg, fullError, stackTrace, addi
     const GITHUB_TOKEN = getGitHubToken();
     const GITHUB_REPO = 'DyslexicNerd01/Brute-Haul-Cargo-Log'; // 📁 UPDATE YOUR REPO NAME HERE
     
+    console.log('🔧 GitHub token status:', GITHUB_TOKEN ? 'Found' : 'Not found');
+    
     if (!GITHUB_TOKEN) {
       console.log('🔧 GitHub error logging not configured - add your GitHub Personal Access Token to enable automatic error reporting');
       return;
     }
+    
+    console.log('🔧 Proceeding with GitHub issue creation...');
     
     // Collect comprehensive error context
     const errorContext = {
