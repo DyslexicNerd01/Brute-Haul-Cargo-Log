@@ -20,9 +20,38 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       
-      - name: Inject GitHub Token
+      - name: Debug - Check file before injection
         run: |
-          sed -i "s/ERROR_REPORTER_TOKEN_PLACEHOLDER/${{ secrets.ERROR_REPORTER_TOKEN }}/g" index.html
+          echo "=== BEFORE TOKEN INJECTION ==="
+          echo "Checking for placeholder occurrences:"
+          grep -n "ERROR_REPORTER_TOKEN_PLACEHOLDER" index.html || echo "No placeholder found"
+          echo "File size: $(wc -c < index.html) bytes"
+      
+      - name: Inject GitHub Token
+        env:
+          GITHUB_TOKEN_SECRET: ${{ secrets.ERROR_REPORTER_TOKEN }}
+        run: |
+          echo "=== INJECTING TOKEN ==="
+          echo "Token length: ${#GITHUB_TOKEN_SECRET}"
+          if [ -z "$GITHUB_TOKEN_SECRET" ]; then
+            echo "❌ ERROR: GitHub secret ERROR_REPORTER_TOKEN is empty or not found!"
+            exit 1
+          fi
+          
+          # Use a more robust replacement method
+          sed -i "s|ERROR_REPORTER_TOKEN_PLACEHOLDER|${GITHUB_TOKEN_SECRET}|g" index.html
+          
+          echo "=== AFTER TOKEN INJECTION ==="
+          echo "Checking for remaining placeholders:"
+          if grep -q "ERROR_REPORTER_TOKEN_PLACEHOLDER" index.html; then
+            echo "❌ ERROR: Placeholder still found after replacement!"
+            grep -n "ERROR_REPORTER_TOKEN_PLACEHOLDER" index.html
+            exit 1
+          else
+            echo "✅ SUCCESS: All placeholders replaced"
+          fi
+          
+          echo "New file size: $(wc -c < index.html) bytes"
       
       - name: Setup Pages
         uses: actions/configure-pages@v4
