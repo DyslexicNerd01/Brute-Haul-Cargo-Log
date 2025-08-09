@@ -3081,5 +3081,74 @@ function showErrorReportLink() {
   }
 }
 window.copyAnnouncementOutput = copyAnnouncementOutput;
+
+// Debug function to manually set GitHub token for local testing
+window.setupGitHubErrorReporting = function() {
+  const token = prompt('Enter your GitHub Personal Access Token for error reporting:');
+  if (token && token.startsWith('ghp_')) {
+    const encrypted = btoa(token).split('').reverse().join('');
+    localStorage.setItem('github_error_token_encrypted', encrypted);
+    console.log('✅ GitHub token stored successfully for error reporting');
+    
+    // Test the token by making a simple API call
+    fetch('https://api.github.com/user', {
+      headers: {
+        'Authorization': `token ${token}`,
+        'Accept': 'application/vnd.github.v3+json'
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.login) {
+        console.log(`✅ Token validated for user: ${data.login}`);
+        alert(`GitHub token setup successful!\nUser: ${data.login}\nError reporting is now active.`);
+      } else {
+        console.error('❌ Token validation failed:', data);
+        alert('Token validation failed. Please check your token.');
+      }
+    })
+    .catch(err => {
+      console.error('❌ Token test failed:', err);
+      alert('Token test failed. Please check your internet connection.');
+    });
+  } else {
+    alert('Invalid token. GitHub tokens start with "ghp_"');
+  }
+};
+
+// Debug function to test error reporting
+window.testGitHubErrorReporting = function() {
+  console.log('🧪 Testing GitHub error reporting...');
+  logErrorToGitHub('TEST001', 'Manual test error', 'This is a test error to verify GitHub Issues integration', null, {
+    testType: 'Manual test',
+    timestamp: new Date().toISOString(),
+    testUser: 'Developer'
+  });
+};
+
+// Debug function to check token status
+window.checkGitHubTokenStatus = function() {
+  const storedToken = localStorage.getItem('github_error_token_encrypted');
+  if (storedToken) {
+    try {
+      const decrypted = atob(storedToken.split('').reverse().join(''));
+      if (decrypted.startsWith('ghp_')) {
+        console.log('✅ GitHub token found in localStorage');
+        console.log('✅ Token format appears valid');
+        return true;
+      } else {
+        console.log('❌ Token format invalid');
+        return false;
+      }
+    } catch (e) {
+      console.log('❌ Failed to decode stored token');
+      return false;
+    }
+  } else {
+    console.log('❌ No GitHub token found in localStorage');
+    return false;
+  }
+};
+
   </script>
 </div>
