@@ -2859,6 +2859,11 @@ async function logErrorToGitHub(errorCode, errorMsg, fullError, stackTrace, addi
         return token;
       }
       
+      // Method 1.5: For local testing - simulate deployed environment
+      if (localStorage.getItem('simulate_deployed_token')) {
+        return localStorage.getItem('simulate_deployed_token');
+      }
+      
       // Method 2: Check for environment-specific token (if available)
       if (typeof process !== 'undefined' && process.env?.ERROR_REPORTER_TOKEN) {
         return process.env.ERROR_REPORTER_TOKEN;
@@ -3086,9 +3091,9 @@ window.copyAnnouncementOutput = copyAnnouncementOutput;
 window.setupGitHubErrorReporting = function() {
   const token = prompt('Enter your GitHub Personal Access Token for error reporting:');
   if (token && token.startsWith('ghp_')) {
-    const encrypted = btoa(token).split('').reverse().join('');
-    localStorage.setItem('github_error_token_encrypted', encrypted);
-    console.log('✅ GitHub token stored successfully for error reporting');
+    // Store as if it was injected by GitHub Actions
+    localStorage.setItem('simulate_deployed_token', token);
+    console.log('✅ GitHub token stored (simulating deployed environment)');
     
     // Test the token by making a simple API call
     fetch('https://api.github.com/user', {
@@ -3101,7 +3106,7 @@ window.setupGitHubErrorReporting = function() {
     .then(data => {
       if (data.login) {
         console.log(`✅ Token validated for user: ${data.login}`);
-        alert(`GitHub token setup successful!\nUser: ${data.login}\nError reporting is now active.`);
+        alert(`GitHub token setup successful!\nUser: ${data.login}\nError reporting is now active.\n\nNote: This simulates the deployed environment.`);
       } else {
         console.error('❌ Token validation failed:', data);
         alert('Token validation failed. Please check your token.');
