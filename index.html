@@ -2454,6 +2454,12 @@ async function sendToDiscord() {
   
   showLoadingOverlay('Sending to Brute Haul Discord...');
 
+  // Configure endpoints based on environment - define outside try block for scope access
+  const endpoints = [
+    // Railway production endpoint - works for both GitHub Pages and local
+    "https://brutehaulrailway-production.up.railway.app/send-discord"
+  ];
+
   try {
     // Collect all additional fields for Google Sheets
     const get = id => document.getElementById(id)?.value?.trim() || "";
@@ -2488,13 +2494,6 @@ async function sendToDiscord() {
     const quantumFuel = parseInt(get("quantumFuel") || "0", 10);
     const hydrogenFuel = parseInt(get("hydrogenFuel") || "0", 10);
     const crewCosts = parseInt(get("crewCosts") || "0", 10);
-
-    
-    // Configure endpoints based on environment
-    const endpoints = [
-      // Railway production endpoint - works for both GitHub Pages and local
-      "https://brutehaulrailway-production.up.railway.app/send-discord"
-    ];
     
     let response;
     let successfulEndpoint = null;
