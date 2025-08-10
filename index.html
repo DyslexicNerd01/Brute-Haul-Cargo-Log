@@ -2207,7 +2207,7 @@ window.applyManifestPreset = applyManifestPreset;
   let captainNameText = get("captainName");
   if (captainNameText === "Other") captainNameText = get("captainNameOther");
 
-  const shipLink = shipLinks[shipNameText] || "#";
+  const shipLink = shipLinks[shipNameText];
 
   const crewAmount = parseInt(get("crewAmount"), 10);
   let crewNamesList = [];
@@ -2284,12 +2284,15 @@ window.applyManifestPreset = applyManifestPreset;
   // Notes
   const notesText = get("notes");
 
+  // Format ship name with link only if valid link exists
+  const shipDisplayText = shipLink ? `[${shipNameText}](${shipLink})` : shipNameText;
+
   // Build Discord output
     let output = `**${orderCategoryText}**
 ${companyNameText} ${orderTypeText === "Resource Drive" ? "Resource Drive" : orderTypeText}
 ${resourceDriveCompanyText ? `Resource Drive Company: ${resourceDriveCompanyText}` : ""}
 
-**Ship:** [${shipNameText}](${shipLink})
+**Ship:** ${shipDisplayText}
 **Captain:** ${captainNameText}
 **Crew:** ${crewNamesText}
 
