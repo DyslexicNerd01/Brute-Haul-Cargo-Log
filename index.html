@@ -6,16 +6,117 @@
   <title>Brute Haul Cargo Manifest Form</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      max-width: 800px;
-      background: #e2e2e2;
-      color: #230e09;
-    }
-    form {
-      background: #781d15;
-      border-radius: 12px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
       padding: 20px;
+      background: linear-gradient(135deg, #e2e2e2 0%, #d0d0d0 100%);
+      color: #230e09;
+      min-height: 100vh;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .main-container {
+      max-width: 95%;
+      width: 100%;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+      padding: 0 20px;
+    }
+
+    .page-header {
+      background: linear-gradient(135deg, #781d15 0%, #5a1510 100%);
+      border-radius: 16px;
+      padding: 32px;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+      margin-bottom: 8px;
+    }
+
+    .page-header h1 {
+      color: #e2e2e2;
+      margin: 0;
+      font-size: 2.5em;
+      font-weight: 300;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+      width: 100%;
+    }
+
+    .card {
+      background: linear-gradient(145deg, #ffffff 0%, #f8f8f8 100%);
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+      border: 1px solid rgba(157, 117, 35, 0.2);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      width: 100%;
+      box-sizing: border-box;
+      margin-bottom: 24px; /* Add gap between individual cards */
+    }
+
+    /* Ensure form-step cards also get spacing */
+    .card.form-step {
+      margin-bottom: 24px;
+    }
+    
+    /* Remove navigation width constraints */
+    #navigationCard {
+      margin-bottom: 24px;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid #9d7523;
+    }
+
+    .card-header h2 {
+      color: #781d15;
+      margin: 0;
+      font-size: 1.4em;
+      font-weight: 600;
+    }
+
+    .card-icon {
+      width: 24px;
+      height: 24px;
+      margin-right: 12px;
+      background: #9d7523;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .icon {
+      font-size: 24px;
+      margin-right: 12px;
+      display: inline-block;
+    }
+
+    form {
+      background: transparent;
+      border-radius: 0;
+      padding: 0;
     }
     textarea {
       width: 100%;
@@ -46,18 +147,23 @@
       border: 1px solid #781d15;
     }
     .section {
-      margin-top: 20px;
-      padding: 10px;
-      border: 1px solid #9d7523;
-      background: #fff;
-      border-radius: 8px;
+      margin-top: 0;
+      padding: 0;
+      border: none;
+      background: transparent;
+      border-radius: 0;
     }
+
+    .form-step {
+      margin-bottom: 0;
+    }
+
     .logo {
       display: block;
       margin: 0 auto 20px auto;
-      max-width: 250px;
+      max-width: 200px;
       width: 100%;
-      background: #e2e2e2;
+      background: transparent;
       border-radius: 8px;
     }
     input[type="number"] {
@@ -358,30 +464,56 @@
     .route-row .searchable-dropdown {
       flex: 1;
     }
-    .tab-button-container button {
-      position: relative;
+
+    /* Tab Content Styling */
+    #historyTab {
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
     }
-    #announcementsTabBtn::after {
-      content: "1";
-      position: absolute;
-      top: -8px;
-      right: -8px;
-      background: #ed4245;
-      color: white;
-      border-radius: 50%;
-      width: 20px;
-      height: 20px;
-      font-size: 12px;
-      font-weight: bold;
+    
+    /* Two-column layout for form and announcements */
+    .main-content-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      width: 100%;
+      align-items: start;
+    }
+    
+    .form-column {
+      min-width: 0; /* Prevents grid blowout */
+      width: 100%;
+    }
+    
+    .announcements-sidebar {
+      position: static;
+      height: auto;
+      width: 100%;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 10;
-      border: 2px solid white;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      flex-direction: column;
     }
-    #announcementsTabBtn.badge-hidden::after {
-      display: none;
+    
+    .announcements-sidebar .card {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+    
+    .announcements-sidebar .card-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+    
+    /* Responsive: Stack on smaller screens */
+    @media (max-width: 1200px) {
+      .main-content-wrapper {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
     }
 
     /* Loading States & Progress Indicators */
@@ -422,6 +554,128 @@
       color: #e2e2e2;
       border: 2px solid #9d7523;
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      position: relative;
+    }
+
+    .close-button {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      background: none;
+      border: none;
+      color: #e2e2e2;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+      padding: 0;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: background-color 0.2s, color 0.2s;
+    }
+
+    .close-button:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+    }
+
+    .close-button:active {
+      background-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .time-now-btn {
+      background: #9d7523;
+      color: #e2e2e2;
+      border: 1px solid #781d15;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .time-now-btn:hover {
+      background: #b88629;
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .time-now-btn:active {
+      background: #8a6b1f;
+      transform: translateY(0);
+    }
+
+    /* Enhanced input styling for card layout */
+    input, select, textarea {
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 14px;
+      transition: all 0.2s ease;
+      background: #ffffff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: #9d7523;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(157, 117, 35, 0.1);
+      transform: translateY(-1px);
+    }
+
+    input:hover, select:hover, textarea:hover {
+      border-color: #c4a140;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    label {
+      font-weight: 600;
+      color: #781d15;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    /* Enhanced button styling */
+    button {
+      background: linear-gradient(135deg, #9d7523 0%, #8a6b1f 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 24px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(157, 117, 35, 0.3);
+    }
+
+    button:hover {
+      background: linear-gradient(135deg, #b88629 0%, #9d7523 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(157, 117, 35, 0.4);
+    }
+
+    button:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(157, 117, 35, 0.3);
+    }
+
+    /* Special styling for primary action buttons */
+    .primary-btn {
+      background: linear-gradient(135deg, #781d15 0%, #5a1510 100%);
+      font-size: 16px;
+      padding: 16px 32px;
+      box-shadow: 0 6px 16px rgba(120, 29, 21, 0.3);
+    }
+
+    .primary-btn:hover {
+      background: linear-gradient(135deg, #8a2419 0%, #6b1914 100%);
+      box-shadow: 0 8px 20px rgba(120, 29, 21, 0.4);
     }
 
     .loading-spinner-large {
@@ -520,30 +774,159 @@
       border-left: 4px solid #43b581;
       padding-left: 16px;
     }
+
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .main-container {
+        max-width: 900px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 12px;
+      }
+      
+      .page-header {
+        padding: 20px;
+      }
+      
+      .page-header h1 {
+        font-size: 2em;
+      }
+      
+      .card {
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+      
+      .card.form-step {
+        margin-bottom: 20px;
+      }
+      
+      .form-grid {
+        gap: 20px;
+        grid-template-columns: 1fr;
+      }
+      
+      input, select, textarea {
+        padding: 10px 12px;
+      }
+      
+      button {
+        padding: 10px 20px;
+      }
+      
+      .primary-btn {
+        padding: 14px 28px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .page-header h1 {
+        font-size: 1.6em;
+      }
+      
+      .card {
+        padding: 16px;
+      }
+      
+      .card-header h2 {
+        font-size: 1.2em;
+      }
+    }
+    /* Tab content styling */
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    #formTab {
+      display: block; /* Form tab visible by default */
+    }
+    
+    #historyTab {
+      display: none; /* History tab hidden by default */
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 20px;
+      /* Force visibility when shown */
+      position: relative !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      height: auto !important;
+      min-height: 300px !important;
+      z-index: 1000 !important;
+    }
+    
+    #historyTab.active {
+      display: block !important;
+    }
+    
+    #historyList {
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      height: auto !important;
+      min-height: 200px !important;
+    }
   </style>
   <script src="locations.js"></script>
 </head>
 <body>
+  <div class="main-container">
+    <!-- Page Header -->
+    <div class="page-header">
+      <img class="logo" src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/BRHS-Logo.png" alt="BruteHaul Logo">
+      <h1>Brute Haul Online Documentation System</h1>
+    </div>
 
-  <img class="logo" src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/BRHS-Logo.png" alt="BruteHaul Logo">
-  <h1>Brute Haul Online Documentation System</h1>
+    <!-- Navigation Tabs -->
+    <div class="card" id="navigationCard">
+      <div style="display: flex; gap: 12px; margin-bottom: 0;">
+        <button type="button" onclick="showTab('formTab')" id="formTabBtn" style="border: 3px solid transparent;">Form</button>
+        <button type="button" onclick="showTab('historyTab')" id="historyTabBtn" style="border: 3px solid transparent;">History</button>
+        <a href="https://robertsspaceindustries.com/en/orgs/BRHS" target="_blank" title="Join BRHS"
+           style="margin-left:auto; display:inline-flex; align-items:center; justify-content:center; width:60px; height:60px; background:#222; border-radius:8px; text-decoration:none; border:0px solid #9d7523;">
+          <img src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/starcitizenwhite.png" alt="Star Citizen" style="width:82px; height:82px; object-fit:contain; filter:invert(1);">
+        </a>
+      </div>
+    </div>
 
-  <div style="display: flex; gap: 12px; margin-bottom: 0;">
-  <button type="button" onclick="showTab('formTab')" id="formTabBtn" style="border: 3px solid transparent;">Form</button>
-  <button type="button" onclick="showTab('historyTab')" id="historyTabBtn" style="border: 3px solid transparent;">History</button>
-  <div class="tab-button-container">
-    <button type="button" onclick="showTab('announcementsTab')" id="announcementsTabBtn" style="border: 3px solid transparent;">Announcements</button>
-  </div>
-  <a href="https://robertsspaceindustries.com/en/orgs/BRHS" target="_blank" title="Join BRHS"
-     style="margin-left:auto; display:inline-flex; align-items:center; justify-content:center; width:60px; height:60px; background:#222; border-radius:8px; text-decoration:none; border:0px solid #9d7523;">
-    <img src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/starcitizenwhite.png" alt="Star Citizen" style="width:82px; height:82px; object-fit:contain; filter:invert(1);">
-  </a>
-</div>
-<hr style="border: none; border-bottom: 5px solid #9d7523; margin: 0 0 20px 0;">
-<div id="formTab">
-  <div style="background:#e2e2e2; border-radius:8px; padding:12px; margin-bottom:5px;">
-  <h2 style="color:#9d7523; margin:0; text-align:left;">Cargo Form</h2>
-</div>
+    <!-- COMPLETELY NEW History Tab positioned right after navigation -->
+    <div id="historyTab" style="display: none; width: 100%; max-width: 95%; margin: 0 auto;">
+      <div style="background: linear-gradient(145deg, #ffffff 0%, #f8f8f8 100%); border-radius: 16px; padding: 28px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); border: 1px solid rgba(157, 117, 35, 0.2);">
+        <div id="historyList" style="min-height: 300px; padding: 20px;">
+          <div style="text-align: center; background: #fff; border: 3px solid #9d7523; border-radius: 12px; padding: 30px;">
+            <img src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/BRHS-Logo.png" 
+                 alt="BruteHaul Logo" 
+                 style="max-width: 200px; width: 100%; margin-bottom: 20px; border-radius: 8px;">
+            <h2 style="color: #9d7523; margin: 20px 0; font-size: 24px;">Brute Haul Manifest Log</h2>
+            <p style="font-size: 18px; color: #781d15; font-weight: bold; margin: 15px 0;">
+              No posts generated this session.
+            </p>
+            <p style="color: #666; margin: 10px 0; font-size: 16px;">
+              Complete and submit manifests to see them listed here.
+            </p>
+            <div style="margin-top: 20px; padding: 10px; background: #e8f5e8; border-radius: 8px; border: 2px solid #28a745;">
+              <strong style="color: #28a745;">✓ History Tab Finally Working!</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Tab Content -->
+    <div id="formTab">
+      <div class="form-grid">
   
   <!-- Feedback Messages -->
   <div class="success-feedback" id="successFeedback">
@@ -555,8 +938,16 @@
     <span id="errorMessage">Error occurred!</span>
   </div>
 
-  <form id="haulForm">
-    <div class="section form-step" id="basicInfoStep">
+  <div class="main-content-wrapper">
+    <div class="form-column">
+      <form id="haulForm">
+    <!-- Basic Information Card -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">1</div>
+        <h2>Basic Information</h2>
+      </div>
+      <div class="section form-step" id="basicInfoStep">
       <label>Order Category:</label>
       <select id="orderCategory" required>
         <option value="" selected disabled>Select category</option>
@@ -635,8 +1026,14 @@
 
       <div id="crewNamesDiv"></div>
     </div>
+    </div>
 
-    <div class="section form-step" id="locationTimeStep">
+    <div class="card form-step" id="locationTimeStep">
+      <div class="card-header">
+        <i class="icon">📍</i>
+        <h2>Locations & Timeline</h2>
+      </div>
+      <div class="card-content">
       <label>Start Location:</label>
       <div class="searchable-dropdown" id="startLocationDropdown">
         <input type="text" id="startLocation" placeholder="Search start location..." autocomplete="off" required>
@@ -644,7 +1041,10 @@
       </div>
 
       <label>Departure Timestamp:</label>
-      <input type="datetime-local" id="departureTime" required>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <input type="datetime-local" id="departureTime" required style="flex: 1;">
+        <button type="button" class="time-now-btn" onclick="setCurrentTime('departureTime')" title="Set to current time">Now</button>
+      </div>
 
       <label>Route:</label>
       <div class="route-row">
@@ -659,8 +1059,14 @@
         </div>
       </div>
     </div>
+    </div>
 
-    <div class="section form-step" id="manifestStep">
+    <div class="card form-step" id="manifestStep">
+      <div class="card-header">
+        <i class="icon">📦</i>
+        <h2>Cargo Manifest</h2>
+      </div>
+      <div class="card-content">
       <label>Cargo Manifest (add/remove lines as needed):</label>
       <div id="resourceDrivePresets" style="display:none; margin-bottom:10px;">
         <span style="font-size:13px; font-weight:bold; vertical-align:middle; margin-right:8px;">Resource Drive Presets:</span>
@@ -677,10 +1083,19 @@
 <input type="number" id="totalUECBox" style="color:#230e09; font-weight:bold; vertical-align:middle; width:120px;" value="" />
 </div>
     </div>
+    </div>
 
-    <div class="section form-step" id="completionStep">
+    <div class="card form-step" id="completionStep">
+      <div class="card-header">
+        <i class="icon">✅</i>
+        <h2>Order Completion</h2>
+      </div>
+      <div class="card-content">
       <label>Order Completion Timestamp:</label>
-      <input type="datetime-local" id="completionTime" required>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <input type="datetime-local" id="completionTime" required style="flex: 1;">
+        <button type="button" class="time-now-btn" onclick="setCurrentTime('completionTime')" title="Set to current time">Now</button>
+      </div>
       <div id="orderDuration" style="font-weight:bold; color:#9d7523; margin-top:8px;"></div>
 
       <label>Repairs (UEC):</label>
@@ -699,7 +1114,8 @@
       <input type="number" id="crewCosts" min="0" step="1" class="deductible-input" required value="0">
 
       <label>Notes:</label>
-      <textarea id="notes"></textarea>
+      <textarea id="notes" style="width: 100%; max-width: 100%; box-sizing: border-box; resize: vertical;"></textarea>
+    </div>
     </div>
 
     <button type="button" onclick="generateOutput()" id="generateBtn">
@@ -710,13 +1126,6 @@
   Clear Form
 </button>
   </form>
-  <!-- Progress Bar -->
-  <div class="progress-bar-container">
-    <div class="progress-bar">
-      <div class="progress-fill" id="formProgressFill"></div>
-    </div>
-    <div class="progress-text" id="formProgressText">Form Completion: 0%</div>
-  </div>
 
   <div class="section" id="discordSection" style="display:none;">
     </button>
@@ -731,120 +1140,74 @@
       Copy to Clipboard
     </button>
   </div>
-</div>
-<div id="historyTab" style="display:none;">
-  <h2>Session History</h2>
-  <div id="historyList" style="max-height:400px;overflow-y:auto;background:#fff;border-radius:8px;padding:12px;border:1px solid #9d7523;"></div>
-</div>
-<div id="announcementsTab" style="display:none;">
-  <div style="text-align:center; margin-bottom:30px;">
-    <h2 style="color:#9d7523;">Announcements</h2>
-  </div>  
-  <div id="announcementsList" style="max-height:600px;overflow-y:auto;">
-    <!-- Announcement Post 1 -->
-    <div class="announcement-post" style="background:#fff;border-radius:8px;padding:20px;margin-bottom:20px;border:1px solid #9d7523;box-shadow:0 2px 4px rgba(0,0,0,0.1);">
-      <div class="announcement-header" style="border-bottom:2px solid #9d7523;padding-bottom:10px;margin-bottom:15px;">
-        <h3 style="color:#781d15;margin:0;font-size:1.4em;">* Send to Discord Enabled! (For Real)</h3>
-        <div style="color:#666;font-size:0.9em;margin-top:5px;">
-          <strong>By:</strong> DyslexicNerd01 | <strong>Date:</strong> August 3, 2025
+    </div> <!-- End form-column -->
+    
+    <!-- Announcements Sidebar -->
+    <div class="announcements-sidebar">
+      <div class="card" id="announcementsSection">
+        <div class="card-header">
+          <i class="icon">📢</i>
+          <h2>Announcements</h2>
+        </div>
+        <div class="card-content">
+          <div id="announcementsContent" style="height: auto; max-height: none;">
+            <!-- Announcement Post 1 -->
+            <div class="announcement-post" style="background:#fff;border-radius:8px;padding:20px;margin-bottom:20px;border:1px solid #9d7523;box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+              <div class="announcement-header" style="border-bottom:2px solid #9d7523;padding-bottom:10px;margin-bottom:15px;">
+                <h3 style="color:#781d15;margin:0;font-size:1.2em;">* Send to Discord Enabled! (For Real)</h3>
+                <div style="color:#666;font-size:0.8em;margin-top:5px;">
+                  <strong>By:</strong> DyslexicNerd01<br><strong>Date:</strong> August 3, 2025
+                </div>
+              </div>
+              <div class="announcement-body" style="color:#230e09;line-height:1.5;font-size:0.9em;">
+                <p>The Send to Discord feature is now enabled! (For real this time!) <b>Please only use the <i>"Send to Discord"</i> button to upload your cargo manifests.</b></p>
+                <p>If you encounter any issues, please report them to the development team as soon as possible. Hotfixes will be regularly released to keep the form up-to-date with any changes to Star Citizen or Brute Haul policy.</p>
+                <p>The copy button will remain active in the event that there is an issue with the discord bot in the future. If the discord bot does not respond, and error code will appear and you will gain access to the copy button again.</p>
+              </div>
+            </div>
+            
+            <!-- Announcement Post 2 -->
+            <div class="announcement-post" style="background:#fff;border-radius:8px;padding:20px;margin-bottom:20px;border:1px solid #9d7523;box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+              <div class="announcement-header" style="border-bottom:2px solid #9d7523;padding-bottom:10px;margin-bottom:15px;">
+                <h3 style="color:#781d15;margin:0;font-size:1.2em;">KNOWN FREIGHT ELEVATOR ISSUES</h3>
+                <div style="color:#666;font-size:0.8em;margin-top:5px;">
+                  <strong>By:</strong> DyslexicNerd01<br><strong>Date:</strong> August 2, 2025
+                </div>
+              </div>
+              <div class="announcement-body" style="color:#230e09;line-height:1.5;font-size:0.9em;">
+                <p><strong>Below are currently known major issues affecting Brute Haul/Ad Astra Operations. Currently there are no official fixes or 100% reliable workarounds.</strong></p>
+                <p><strong>🟢 Issue:</strong> <u>Unable to lower hanger freight elevator. (Confirmed Fixed)</u><br>
+                <strong>Fix:</strong> Only place 1 layer of containers on the elevator then send it down. The elevators will not move if there is more than one layer/containers stacked on top of each other.</p>
+                <p><strong>🔴 Issue:</strong> <u>Freight Elevator Overloaded</u><br>
+                <strong>Workaround:</strong> Follow this Reddit post: <a href="https://www.reddit.com/r/starcitizen/comments/1mbaxkj/elevator_overloaded_fix" target="_blank" style="color:#781d15;">Elevator Fix Reddit</a><br>
+                It does not work 100% of the time. We have found a success rate of about 25% when going to -40k. At this time there are no other workarounds.</p>
+                <p><strong>🔴 Issue:</strong> <u>Elevators not lowering/storing items</u><br>
+                <strong>Workaround:</strong> There is no known work around. Do not use the Stormageddon Specimen facility and possibly the Shubin Mining Facility elevators</p>
+                <p><strong>____________________________________________________________________________________</strong></p>
+                <p>We will provide updates as these issues develop or if new solutions are found.</p>
+                <p>Follow this support ticket for more information: <a href="https://support.robertsspaceindustries.com/hc/en-us/articles/360056254754-Star-Citizen-Alpha-4-2-1-Known-Issues" target="_blank" style="color:#781d15;">Star Citizen Known Issues</a></p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="announcement-body" style="color:#230e09;line-height:1.6;">
-        <p>The Send to Discord feature is now enabled! (For real this time!) <b>Please only use the <i>"Send to Discord"</i> button to upload your cargo manifests.</b> </p>
-        <p>If you encounter any issues, please report them to the development team as soon as possible. Hotfixes will be regularly released to keep the form up-to-date with any changes to Star Citizen or Brute Haul policy.</p>
-        <p>The copy button will remain active in the event that there is an issue with the discord bot in the future. If the discord bot does not respond, and error code will appear and you will gain access to the copy button again. The copy button no longer will appear under the output box as it did before.</p>
-      </div>
     </div>
-    <!-- Announcement Post 2 -->
-    <div class="announcement-post" style="background:#fff;border-radius:8px;padding:20px;margin-bottom:20px;border:1px solid #9d7523;box-shadow:0 2px 4px rgba(0,0,0,0.1);">
-      <div class="announcement-header" style="border-bottom:2px solid #9d7523;padding-bottom:10px;margin-bottom:15px;">
-        <h3 style="color:#781d15;margin:0;font-size:1.4em;">KNOWN FREIGHT ELEVATOR ISSUES</h3>
-        <div style="color:#666;font-size:0.9em;margin-top:5px;">
-          <strong>By:</strong> DyslexicNerd01 | <strong>Date:</strong> August 2, 2025
-        </div>
-      </div>
-      <div class="announcement-body" style="color:#230e09;line-height:1.6;">
-        <p><strong>Below are currently known major issues affecting Brute Haul/Ad Astra Operations. Currently there are no official fixes or 100% reliable workarounds.</strong></p>
-
-        <p><strong>🟢 Issue:</strong> <u>Unable to lower hanger freight elevator. (Confirmed Fixed)</u></p>
-        <strong>Fix:</strong> Only place 1 layer of containers on the elevator then send it down. The elevators will not move if there is more than one layer/containers stacked on top of each other.</p>
-        
-        <p><strong>🔴 Issue:</strong> <u>Freight Elevator Overloaded</u></p>
-        <p><strong>Workaround:</strong> Follow this Reddit post: <a href="https://www.reddit.com/r/starcitizen/comments/1mbaxkj/elevator_overloaded_fix" target="_blank" style="color:#781d15;">https://www.reddit.com/r/starcitizen/comments/1mbaxkj/elevator_overloaded_fix</a><br>
-        It does not work 100% of the time. We have found a success rate of about 25% when going to -40k. At this time there are no other workarounds.</p>
-
-        <p><strong>🔴 Issue:</strong> <u>Elevators not lowering/storing items</u></p>
-        <p><strong>Workaround:</strong> There is no known work around. Do not use the Stormageddon Specimen facility and possibly the Shubin Mining Facility elevators</p>
-        <p><strong>____________________________________________________________________________________</strong></p>
-        <p>We will provide updates as these issues develop or if new solutions are found.</p>
-        <p>Follow this support ticket for more information on current issues within the game: <a href="https://support.robertsspaceindustries.com/hc/en-us/articles/360056254754-Star-Citizen-Alpha-4-2-1-Known-Issues" target="_blank" style="color:#781d15;">Star Citizen Alpha 4.2.1 Known Issues</a></p>
-      </div>
+  </div> <!-- End main-content-wrapper -->
+  
+  <!-- Full-width Progress Bar at Bottom of Form -->
+  <div class="progress-bar-container" style="width: 100%; margin: 24px 0; padding: 0 40px; box-sizing: border-box;">
+    <div class="progress-bar">
+      <div class="progress-fill" id="formProgressFill"></div>
     </div>
+    <div class="progress-text" id="formProgressText">Form Completion: 0%</div>
   </div>
-</div>
+  
+  </div> <!-- End formTab -->
+  
+  </div> <!-- End main-container -->
 
 <script type="module">
    // Locations are now loaded from external locations.js file
-
-   // ========================================
-   // 🔧 GITHUB ERROR REPORTING CONFIGURATION
-   // ========================================
-   // 
-   // To enable automatic error reporting to GitHub Issues:
-   // 1. Create a GitHub Personal Access Token (PAT):
-   //    - Go to: https://github.com/settings/tokens/new
-   //    - Name: "Brute Haul Error Reporter"
-   //    - Expiration: Your choice (90 days recommended)
-   //    - Scopes: Check "repo" (Full control of private repositories)
-   //    - Click "Generate token"
-   //    - Copy the token (it will only be shown once!)
-   //
-   // 2. Replace 'your_github_personal_access_token_here' below with your actual token
-   //
-   // 3. Update the repository name if different from 'DyslexicNerd01/Brute-Haul-Cargo-Log'
-   //
-   // 4. SECURITY NOTE: For production, consider moving the token to your Railway server
-   //    and sending errors there first, then forwarding to GitHub to avoid exposing the token
-   //
-   // 5. When enabled, the system will automatically create GitHub Issues when:
-   //    - Discord sends fail with any error code
-   //    - Network/server connection issues occur
-   //    - Form validation errors happen
-   //    - Server restart/maintenance errors occur
-   //
-   // Each issue will include detailed error information, user context, 
-   // form data (anonymized), and technical debugging details.
-   // ========================================
-
-   // Announcement notification badge configuration
-   // Set to true to show the "1" badge on the Announcements tab
-   // Set to false to hide the badge completely
-   let showAnnouncementBadge = true;
-
-   // Function to toggle the announcement badge
-   function toggleAnnouncementBadge(show = null) {
-     if (show !== null) {
-       showAnnouncementBadge = show;
-     } else {
-       showAnnouncementBadge = !showAnnouncementBadge;
-     }
-     updateAnnouncementBadgeVisibility();
-   }
-
-   // Function to update badge visibility
-   function updateAnnouncementBadgeVisibility() {
-     const announcementsBtn = document.getElementById('announcementsTabBtn');
-     if (announcementsBtn) {
-       if (showAnnouncementBadge) {
-         announcementsBtn.classList.remove('badge-hidden');
-       } else {
-         announcementsBtn.classList.add('badge-hidden');
-       }
-     }
-   }
-
-   // Make toggle function globally available
-   window.toggleAnnouncementBadge = toggleAnnouncementBadge;
 
     // Ship lists for each category
     const transportShips = [
@@ -922,43 +1285,76 @@
 }
 
 function showTab(tab) {
-  document.getElementById('formTab').style.display = tab === 'formTab' ? 'block' : 'none';
-  document.getElementById('historyTab').style.display = tab === 'historyTab' ? 'block' : 'none';
-  document.getElementById('announcementsTab').style.display = tab === 'announcementsTab' ? 'block' : 'none';
-
-  // Hide notification badge when announcements tab is clicked (if badge is enabled)
-  if (tab === 'announcementsTab' && showAnnouncementBadge) {
-    const announcementsBtn = document.getElementById('announcementsTabBtn');
-    if (announcementsBtn) {
-      announcementsBtn.classList.add('badge-hidden');
+  // Simple display switching
+  const formTab = document.getElementById('formTab');
+  const historyTab = document.getElementById('historyTab');
+  
+  if (formTab && historyTab) {
+    if (tab === 'formTab') {
+      formTab.style.display = 'block';
+      historyTab.style.display = 'none';
+    } else if (tab === 'historyTab') {
+      formTab.style.display = 'none';
+      historyTab.style.display = 'block';
+      // Render history when showing history tab
+      renderHistory();
     }
   }
 
   // Tab highlighting
-  document.getElementById('formTabBtn').style.background = tab === 'formTab' ? '#9d7523' : '#781d15';
-  document.getElementById('historyTabBtn').style.background = tab === 'historyTab' ? '#9d7523' : '#781d15';
-  document.getElementById('announcementsTabBtn').style.background = tab === 'announcementsTab' ? '#9d7523' : '#781d15';
+  const formTabBtn = document.getElementById('formTabBtn');
+  const historyTabBtn = document.getElementById('historyTabBtn');
+  
+  if (formTabBtn && historyTabBtn) {
+    formTabBtn.style.background = tab === 'formTab' ? '#9d7523' : '#781d15';
+    historyTabBtn.style.background = tab === 'historyTab' ? '#9d7523' : '#781d15';
 
-  document.getElementById('formTabBtn').style.color = '#fff';
-  document.getElementById('historyTabBtn').style.color = '#fff';
-  document.getElementById('announcementsTabBtn').style.color = '#fff';
+    formTabBtn.style.color = '#fff';
+    historyTabBtn.style.color = '#fff';
 
-  // Black outline for selected tab
-  document.getElementById('formTabBtn').style.border = tab === 'formTab' ? '3px solid #000' : '3px solid transparent';
-  document.getElementById('historyTabBtn').style.border = tab === 'historyTab' ? '3px solid #000' : '3px solid transparent';
-  document.getElementById('announcementsTabBtn').style.border = tab === 'announcementsTab' ? '3px solid #000' : '3px solid transparent';
+    // Black outline for selected tab
+    formTabBtn.style.border = tab === 'formTab' ? '3px solid #000' : '3px solid transparent';
+    historyTabBtn.style.border = tab === 'historyTab' ? '3px solid #000' : '3px solid transparent';
+  }
 }
 window.showTab = showTab;
 
 window.addEventListener("DOMContentLoaded", function() {
   showTab('formTab');
-  renderHistory();
-  // Initialize announcement badge visibility
-  updateAnnouncementBadgeVisibility();
   // Ensure totalUECBox starts blank on first load
   const totalUECInput = document.getElementById("totalUECBox");
   if (totalUECInput) totalUECInput.value = "";
+  
+  // Set up dynamic announcements height
+  resizeAnnouncementsContent();
 });
+
+// Function to dynamically resize announcements content
+function resizeAnnouncementsContent() {
+  const announcementsContent = document.getElementById('announcementsContent');
+  const formCompletionCard = document.getElementById('completionStep');
+  
+  if (announcementsContent && formCompletionCard) {
+    // Get the natural height of the content
+    announcementsContent.style.height = 'auto';
+    announcementsContent.style.maxHeight = 'none';
+    announcementsContent.style.overflow = 'visible';
+    
+    const contentRect = announcementsContent.getBoundingClientRect();
+    const completionRect = formCompletionCard.getBoundingClientRect();
+    
+    // If announcements content goes below the completion card, add scroll
+    if (contentRect.bottom > completionRect.bottom) {
+      const maxHeight = completionRect.bottom - contentRect.top - 20; // 20px buffer
+      announcementsContent.style.height = maxHeight + 'px';
+      announcementsContent.style.maxHeight = maxHeight + 'px';
+      announcementsContent.style.overflow = 'auto';
+    }
+  }
+}
+
+// Resize on window resize
+window.addEventListener('resize', resizeAnnouncementsContent);
 
     function populateLocationDropdown(id) {
       const inputId = id;
@@ -1331,7 +1727,7 @@ window.addEventListener("DOMContentLoaded", function() {
           <label>SCU:</label>
           <input type="number" min="0" step="1" class="manifest-scu" id="manifestSCU${index}" style="width:70px;" oninput="updateManifestTotals()">
           <label>Material:</label>
-          <select class="manifest-material" id="manifestMaterial${index}" style="width:120px;">
+          <select class="manifest-material" id="manifestMaterial${index}" style="width:160px;">
             ${materialList.map(m => `<option value="${m}">${m}</option>`).join("")}
           </select>
           <label>UEC:</label>
@@ -1554,6 +1950,17 @@ window.applyManifestPreset = applyManifestPreset;
       }
     });
 
+    // Enhanced timestamp handling
+    document.getElementById("departureTime").addEventListener("change", function() {
+      this.classList.remove('error');
+      updateOrderDuration();
+    });
+    
+    document.getElementById("completionTime").addEventListener("change", function() {
+      this.classList.remove('error');
+      updateOrderDuration();
+    });
+
     function toDiscordTimestamp(dtString) {
       if (!dtString) return "";
       const date = new Date(dtString);
@@ -1564,12 +1971,15 @@ window.applyManifestPreset = applyManifestPreset;
       const unix = Math.floor(date.getTime() / 1000);
       return `<t:${unix}:f>`;
     }
-
+    // Ship Threads on Discord bh-ship-log
     const shipLinks = {
-      "AACS Feder": "https://discord.com/channels/900478857436606535/1391878505905524817/1393365523407835196",
-      "AACS Landsknecht": "https://discord.com/channels/900478857436606535/1391878505905524817/1392713534005186730",
-      "WINC Caterpillar": "https://discord.com/channels/900478857436606535/1391878505905524817/1391904347117322322",
-      "SPRT Icarus": "https://discord.com/channels/900478857436606535/1391878505905524817/1396265862268190830",
+      "AACS Feder": "https://discord.com/channels/900478857436606535/1393365523407835196",
+      "AACS Landsknecht": "https://discord.com/channels/900478857436606535/1392713534005186730",
+      "WINC Caterpillar": "https://discord.com/channels/900478857436606535/1391904347117322322",
+      "SPRT Icarus": "https://discord.com/channels/900478857436606535/1396265862268190830",
+      "BRHS Lednik": "https://discord.com/channels/900478857436606535/1392397123907223643",
+      "BRHS Trireme": "https://discord.com/channels/900478857436606535/1391904991710806069",
+      "BRHS Seastorm": "https://discord.com/channels/900478857436606535/1392395299275800576",
     };
 
     // Loading States & Progress Indicators
@@ -1587,7 +1997,7 @@ window.applyManifestPreset = applyManifestPreset;
       document.body.appendChild(overlay);
     }
 
-    function showNotificationOverlay(message, type = 'info', duration = 3000) {
+    function showNotificationOverlay(message, type = 'info', duration = 0) {
       const overlay = document.createElement('div');
       overlay.className = 'loading-overlay';
       overlay.id = 'notificationOverlay';
@@ -1618,24 +2028,51 @@ window.applyManifestPreset = applyManifestPreset;
       
       overlay.innerHTML = `
         <div class="loading-content" style="background: ${bgColor}; border-color: ${borderColor};">
+          <button class="close-button" onclick="document.getElementById('notificationOverlay').remove()">×</button>
           ${icon}
           <div style="font-size: 16px; font-weight: bold; text-align: center; line-height: 1.4;">${message}</div>
         </div>
       `;
       document.body.appendChild(overlay);
       
-      // Auto-hide after duration
-      setTimeout(() => {
-        const notificationOverlay = document.getElementById('notificationOverlay');
-        if (notificationOverlay) {
-          notificationOverlay.remove();
-        }
-      }, duration);
+      // Messages with X buttons NEVER auto-close
+      // Only loading messages (handled separately) should auto-close
+    }
+
+    // Special function for loading messages that auto-close after success
+    function showLoadingMessage(message, autoCloseAfterMs = 0) {
+      const overlay = document.createElement('div');
+      overlay.className = 'loading-overlay';
+      overlay.id = 'loadingMessageOverlay';
       
-      // Allow clicking to dismiss
-      overlay.addEventListener('click', () => {
+      overlay.innerHTML = `
+        <div class="loading-content">
+          <div class="loading-spinner-large"></div>
+          <div style="font-size: 16px; font-weight: bold; margin-bottom: 8px;">${message}</div>
+          <div style="font-size: 14px; opacity: 0.8;">Please wait...</div>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+      
+      // Auto-close after specified time (for successful completion)
+      if (autoCloseAfterMs > 0) {
+        setTimeout(() => {
+          const loadingOverlay = document.getElementById('loadingMessageOverlay');
+          if (loadingOverlay) {
+            loadingOverlay.remove();
+          }
+        }, autoCloseAfterMs);
+      }
+      
+      return overlay; // Return overlay for manual control if needed
+    }
+
+    // Function to hide loading messages manually
+    function hideLoadingMessage() {
+      const overlay = document.getElementById('loadingMessageOverlay');
+      if (overlay) {
         overlay.remove();
-      });
+      }
     }
 
     function hideLoadingOverlay() {
@@ -2038,76 +2475,154 @@ window.applyManifestPreset = applyManifestPreset;
     el.addEventListener('change', () => el.classList.remove('error'));
   });
 
-  let firstError = null;
+  // Collect all errors instead of stopping at first one
+  let allErrors = [];
+  let firstErrorElement = null;
+
+  // Helper function to add error
+  function addError(element, message, fieldName) {
+    if (element) {
+      element.classList.add('error');
+      if (!firstErrorElement) firstErrorElement = element;
+    }
+    allErrors.push({ element, message, fieldName });
+  }
+
+  // Validate basic required fields
   for (const id of requiredFields) {
     const el = document.getElementById(id);
     let isValid = false;
+    let fieldLabel = id.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
     
     if (!el) continue;
     
     // Special validation for location fields
     if (id === 'startLocation' || id === 'routeStart' || id === 'routeEnd') {
-      isValid = el.value.trim() !== "" && locations.includes(el.value);
+      if (el.value.trim() === "") {
+        addError(el, `${fieldLabel} is required`, fieldLabel);
+      } else if (!locations.includes(el.value)) {
+        addError(el, `${fieldLabel} must be a valid location from the dropdown`, fieldLabel);
+      }
     } else {
-      isValid = el.value !== "" && el.value !== null;
-    }
-    
-    if (!isValid) {
-      if (el) el.classList.add('error');
-      if (!firstError && el) firstError = el;
+      if (el.value === "" || el.value === null) {
+        addError(el, `${fieldLabel} is required`, fieldLabel);
+      }
     }
   }
 
-      const otherFields = [
-        {select: "orderCategory", other: "orderCategoryOtherDiv", input: "orderCategoryOther"},
-        {select: "companyName", other: "companyNameOtherDiv", input: "companyNameOther"},
-        {select: "orderType", other: "orderTypeOtherDiv", input: "orderTypeOther"},
-        {select: "shipName", other: "shipNameOtherDiv", input: "shipNameOther"},
-        {select: "captainName", other: "captainNameOtherDiv", input: "captainNameOther"}
-      ];
-      for (const field of otherFields) {
-        const selectEl = document.getElementById(field.select);
-        const otherDiv = document.getElementById(field.other);
-        const otherInput = document.getElementById(field.input);
-        if (selectEl && selectEl.value === "Other" && otherDiv.style.display === "block") {
-          if (!otherInput.value.trim()) {
-            otherInput.classList.add('error');
-            if (!firstError) firstError = otherInput;
-          }
-        }
+  // Validate "Other" fields
+  const otherFields = [
+    {select: "orderCategory", other: "orderCategoryOtherDiv", input: "orderCategoryOther", label: "Order Category (Other)"},
+    {select: "companyName", other: "companyNameOtherDiv", input: "companyNameOther", label: "Company Name (Other)"},
+    {select: "orderType", other: "orderTypeOtherDiv", input: "orderTypeOther", label: "Order Type (Other)"},
+    {select: "shipName", other: "shipNameOtherDiv", input: "shipNameOther", label: "Ship Name (Other)"},
+    {select: "captainName", other: "captainNameOtherDiv", input: "captainNameOther", label: "Captain Name (Other)"}
+  ];
+  
+  for (const field of otherFields) {
+    const selectEl = document.getElementById(field.select);
+    const otherDiv = document.getElementById(field.other);
+    const otherInput = document.getElementById(field.input);
+    if (selectEl && selectEl.value === "Other" && otherDiv && otherDiv.style.display === "block") {
+      if (!otherInput || !otherInput.value.trim()) {
+        addError(otherInput, `${field.label} is required when "Other" is selected`, field.label);
       }
+    }
+  }
 
-      const crewAmount = parseInt(document.getElementById("crewAmount").value, 10);
-      for (let i = 1; i <= crewAmount; i++) {
-        const crewInput = document.getElementById(`crewName${i}`);
-        if (!crewInput || !crewInput.value.trim()) {
-          if (crewInput) crewInput.classList.add('error');
-          if (!firstError && crewInput) firstError = crewInput;
-        }
+  // Validate crew names
+  const crewAmount = parseInt(document.getElementById("crewAmount").value, 10);
+  if (!isNaN(crewAmount) && crewAmount > 0) {
+    for (let i = 1; i <= crewAmount; i++) {
+      const crewInput = document.getElementById(`crewName${i}`);
+      if (!crewInput || !crewInput.value.trim()) {
+        addError(crewInput, `Crew ${i} Name is required`, `Crew ${i} Name`);
       }
+    }
+  }
 
-       // Validate manifest lines (UEC and material now required)
+  // Validate manifest lines
   const manifestRows = document.querySelectorAll('.manifest-row');
   if (manifestRows.length === 0) {
-    showNotificationOverlay("Please add at least one manifest line.<br><br>Do not report repositioning flights.", 'error', 4000);
-    return false;
-  }
-  for (const row of manifestRows) {
-    const scu = row.querySelector('.manifest-scu');
-    const mat = row.querySelector('.manifest-material');
-    // UEC is NOT required
-    if (!scu.value || !mat.value) {
-      scu.classList.add('error');
-      mat.classList.add('error');
-      if (!firstError) firstError = scu;
+    allErrors.push({ 
+      element: null, 
+      message: "At least one manifest line is required", 
+      fieldName: "Manifest" 
+    });
+  } else {
+    let manifestIndex = 1;
+    for (const row of manifestRows) {
+      const scu = row.querySelector('.manifest-scu');
+      const mat = row.querySelector('.manifest-material');
+      
+      if (!scu || !scu.value.trim()) {
+        addError(scu, `Manifest Line ${manifestIndex}: SCU is required`, `Manifest Line ${manifestIndex} SCU`);
+      }
+      if (!mat || !mat.value.trim()) {
+        addError(mat, `Manifest Line ${manifestIndex}: Material is required`, `Manifest Line ${manifestIndex} Material`);
+      }
+      manifestIndex++;
     }
   }
 
-  if (firstError) {
-    firstError.scrollIntoView({behavior: "smooth", block: "center"});
-    showNotificationOverlay("Please fill out all required fields!<br><br>Unanswered questions are highlighted in red.", 'error', 4000);
+  // Enhanced timestamp validation
+  const timestampErrors = validateTimestampsDetailed();
+  if (timestampErrors.length > 0) {
+    allErrors.push(...timestampErrors);
+  }
+
+  // If there are errors, display them all
+  if (allErrors.length > 0) {
+    if (firstErrorElement) {
+      firstErrorElement.scrollIntoView({behavior: "smooth", block: "center"});
+    }
+    
+    // Group errors by category for better organization
+    const errorsByCategory = {
+      'Basic Information': [],
+      'Route & Timing': [],
+      'Crew Information': [],
+      'Manifest': [],
+      'Financial Information': [],
+      'Other': []
+    };
+    
+    allErrors.forEach(error => {
+      const fieldName = error.fieldName.toLowerCase();
+      if (fieldName.includes('category') || fieldName.includes('company') || fieldName.includes('type') || fieldName.includes('ship') || fieldName.includes('captain')) {
+        errorsByCategory['Basic Information'].push(error.message);
+      } else if (fieldName.includes('location') || fieldName.includes('route') || fieldName.includes('time') || fieldName.includes('timestamp')) {
+        errorsByCategory['Route & Timing'].push(error.message);
+      } else if (fieldName.includes('crew')) {
+        errorsByCategory['Crew Information'].push(error.message);
+      } else if (fieldName.includes('manifest')) {
+        errorsByCategory['Manifest'].push(error.message);
+      } else if (fieldName.includes('repair') || fieldName.includes('restock') || fieldName.includes('fuel') || fieldName.includes('cost') || fieldName.includes('uec')) {
+        errorsByCategory['Financial Information'].push(error.message);
+      } else {
+        errorsByCategory['Other'].push(error.message);
+      }
+    });
+    
+    // Build comprehensive error message
+    let errorMessage = `<strong>Please fix the following ${allErrors.length} error${allErrors.length === 1 ? '' : 's'}:</strong><br><br>`;
+    
+    Object.keys(errorsByCategory).forEach(category => {
+      if (errorsByCategory[category].length > 0) {
+        errorMessage += `<strong>${category}:</strong><br>`;
+        errorsByCategory[category].forEach(error => {
+          errorMessage += `• ${error}<br>`;
+        });
+        errorMessage += '<br>';
+      }
+    });
+    
+    errorMessage += '<small style="opacity: 0.8;">Fields with errors are highlighted in red.</small>';
+    
+    showNotificationOverlay(errorMessage, 'error');
     return false;
   }
+  
   return true;
 }
 
@@ -2116,7 +2631,7 @@ window.applyManifestPreset = applyManifestPreset;
       discordOutput.select();
       discordOutput.setSelectionRange(0, 99999);
       document.execCommand("copy");
-      showNotificationOverlay("Discord post copied to clipboard!", 'success', 2000);
+      showNotificationOverlay("Discord post copied to clipboard!", 'success');
     }
 
     function showCopyButton() {
@@ -2149,13 +2664,258 @@ window.applyManifestPreset = applyManifestPreset;
       }
       let diffMs = compDate - depDate;
       if (diffMs < 0) {
-        durationDiv.textContent = "Completion time is before departure!";
+        durationDiv.textContent = "⚠️ Completion time is before departure!";
+        durationDiv.style.color = "#ed4245";
         return;
       }
       const diffMins = Math.floor(diffMs / 60000);
       const hours = Math.floor(diffMins / 60);
       const mins = diffMins % 60;
       durationDiv.textContent = `Order Duration: ${hours}h ${mins}m`;
+      durationDiv.style.color = "#9d7523";
+    }
+
+    // Set current time function for timestamp buttons
+    function setCurrentTime(fieldId) {
+      try {
+        const now = new Date();
+        // Format for datetime-local input (YYYY-MM-DDTHH:MM)
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        
+        const timeString = `${year}-${month}-${day}T${hours}:${minutes}`;
+        
+        const field = document.getElementById(fieldId);
+        if (field) {
+          field.value = timeString;
+          field.classList.remove('error'); // Remove error class if present
+          updateOrderDuration(); // Update duration if both fields are filled
+          
+          // Simple success feedback without complex DOM manipulation
+          console.log(`✓ Time set for ${fieldId}: ${timeString}`);
+        } else {
+          throw new Error(`Field with ID '${fieldId}' not found`);
+        }
+      } catch (error) {
+        console.error('Error setting current time:', error);
+        // Use the enhanced error handler but don't call showTimestampFeedback
+        handleError('Failed to set current time', error, { fieldId });
+      }
+    }
+
+    // Make setCurrentTime available globally
+    window.setCurrentTime = setCurrentTime;
+
+    // Enhanced error handling system
+    function handleError(message, error = null, context = {}) {
+      // Log detailed error information
+      const errorInfo = {
+        message,
+        error: error ? {
+          name: error.name,
+          message: error.message,
+          stack: error.stack
+        } : null,
+        context,
+        timestamp: new Date().toISOString(),
+        userAgent: navigator.userAgent,
+        url: window.location.href
+      };
+      
+      console.error('Enhanced Error Log:', errorInfo);
+      
+      // Determine user-friendly message
+      let userMessage = message;
+      let suggestions = [];
+      
+      if (error) {
+        switch (error.name) {
+          case 'TypeError':
+            if (error.message.includes('null') || error.message.includes('undefined')) {
+              userMessage = 'A required field or element was not found.';
+              suggestions.push('Please refresh the page and try again.');
+              suggestions.push('Ensure all required fields are properly filled.');
+            }
+            break;
+          case 'ReferenceError':
+            userMessage = 'A programming error occurred.';
+            suggestions.push('Please refresh the page.');
+            suggestions.push('If the problem persists, contact support.');
+            break;
+          case 'NetworkError':
+          case 'Failed to fetch':
+            userMessage = 'Network connection error.';
+            suggestions.push('Check your internet connection.');
+            suggestions.push('Try again in a few moments.');
+            break;
+        }
+      }
+      
+      // Show specific error messages for common issues
+      if (message.includes('timestamp') || message.includes('time')) {
+        suggestions.push('Ensure your system clock is set correctly.');
+        suggestions.push('Try clicking the "Now" button instead of manual entry.');
+      }
+      
+      if (message.includes('validation') || message.includes('required')) {
+        suggestions.push('Check that all required fields are filled.');
+        suggestions.push('Look for fields highlighted in red.');
+      }
+      
+      // Show error to user with suggestions
+      const fullMessage = suggestions.length > 0 
+        ? `${userMessage}<br><br><strong>Suggestions:</strong><br>• ${suggestions.join('<br>• ')}`
+        : userMessage;
+      
+      // Don't pass duration for error messages - they should require manual dismissal
+      showNotificationOverlay(fullMessage, 'error');
+      
+      // Store error for potential debugging
+      const recentErrors = JSON.parse(localStorage.getItem('bruteHaulErrors') || '[]');
+      recentErrors.push(errorInfo);
+      
+      // Keep only last 10 errors
+      if (recentErrors.length > 10) {
+        recentErrors.splice(0, recentErrors.length - 10);
+      }
+      
+      localStorage.setItem('bruteHaulErrors', JSON.stringify(recentErrors));
+    }
+
+    // Enhanced validation with better error messages
+    function validateTimestamps() {
+      const departureField = document.getElementById('departureTime');
+      const completionField = document.getElementById('completionTime');
+      
+      if (!departureField.value || !completionField.value) {
+        return false; // Let normal validation handle empty fields
+      }
+      
+      try {
+        const depDate = new Date(departureField.value);
+        const compDate = new Date(completionField.value);
+        
+        if (isNaN(depDate.getTime()) || isNaN(compDate.getTime())) {
+          handleError('Invalid timestamp format detected', null, { 
+            departure: departureField.value, 
+            completion: completionField.value 
+          });
+          return false;
+        }
+        
+        if (compDate <= depDate) {
+          const timeDiff = Math.abs(compDate - depDate) / (1000 * 60); // minutes
+          handleError(
+            `Completion time must be after departure time.<br><br>Current difference: ${Math.round(timeDiff)} minutes backwards.`, 
+            null, 
+            { departure: departureField.value, completion: completionField.value }
+          );
+          completionField.classList.add('error');
+          return false;
+        }
+        
+        // Check if times are unreasonably far in the future
+        const now = new Date();
+        const oneYearFromNow = new Date(now.getTime() + (365 * 24 * 60 * 60 * 1000));
+        
+        if (depDate > oneYearFromNow || compDate > oneYearFromNow) {
+          handleError('Timestamps appear to be set too far in the future. Please verify the dates.', null, {
+            departure: departureField.value,
+            completion: completionField.value
+          });
+          return false;
+        }
+        
+        return true;
+      } catch (error) {
+        handleError('Error validating timestamps', error, {
+          departure: departureField.value,
+          completion: completionField.value
+        });
+        return false;
+      }
+    }
+
+    // New function that returns detailed timestamp errors for comprehensive validation
+    function validateTimestampsDetailed() {
+      const errors = [];
+      const departureField = document.getElementById('departureTime');
+      const completionField = document.getElementById('completionTime');
+      
+      if (!departureField.value || !completionField.value) {
+        return errors; // Empty fields handled by normal validation
+      }
+      
+      try {
+        const depDate = new Date(departureField.value);
+        const compDate = new Date(completionField.value);
+        
+        if (isNaN(depDate.getTime())) {
+          departureField.classList.add('error');
+          errors.push({
+            element: departureField,
+            message: 'Departure timestamp has invalid format',
+            fieldName: 'Departure Time'
+          });
+        }
+        
+        if (isNaN(compDate.getTime())) {
+          completionField.classList.add('error');
+          errors.push({
+            element: completionField,
+            message: 'Completion timestamp has invalid format',
+            fieldName: 'Completion Time'
+          });
+        }
+        
+        // Only check time logic if both dates are valid
+        if (!isNaN(depDate.getTime()) && !isNaN(compDate.getTime())) {
+          if (compDate <= depDate) {
+            const timeDiff = Math.abs(compDate - depDate) / (1000 * 60); // minutes
+            completionField.classList.add('error');
+            errors.push({
+              element: completionField,
+              message: `Completion time must be after departure time (currently ${Math.round(timeDiff)} minutes before departure)`,
+              fieldName: 'Completion Time'
+            });
+          }
+          
+          // Check if times are unreasonably far in the future
+          const now = new Date();
+          const oneYearFromNow = new Date(now.getTime() + (365 * 24 * 60 * 60 * 1000));
+          
+          if (depDate > oneYearFromNow) {
+            departureField.classList.add('error');
+            errors.push({
+              element: departureField,
+              message: 'Departure time appears to be set too far in the future',
+              fieldName: 'Departure Time'
+            });
+          }
+          
+          if (compDate > oneYearFromNow) {
+            completionField.classList.add('error');
+            errors.push({
+              element: completionField,
+              message: 'Completion time appears to be set too far in the future',
+              fieldName: 'Completion Time'
+            });
+          }
+        }
+        
+        return errors;
+      } catch (error) {
+        console.error('Error validating timestamps:', error);
+        errors.push({
+          element: null,
+          message: 'Error occurred while validating timestamps',
+          fieldName: 'Timestamps'
+        });
+        return errors;
+      }
     }
 
     function getOrderDurationText() {
@@ -2249,7 +3009,7 @@ window.applyManifestPreset = applyManifestPreset;
     if (generateBtn) {
       generateBtn.innerHTML = 'Generate Post';
     }
-    showNotificationOverlay(`❌ Manifest Validation Error<br><br><strong>Total SCU is 0</strong><br><br>Please add cargo to your manifest before generating the Discord post.`, 'error', 6000);
+    showNotificationOverlay(`❌ Manifest Validation Error<br><br><strong>Total SCU is 0</strong><br><br>Please add cargo to your manifest before generating the Discord post.`, 'error');
     showFeedback('error', 'Cannot generate post: Total SCU is 0. Please add cargo to your manifest.');
     return;
   }
@@ -2342,7 +3102,7 @@ ${notesText}
   document.getElementById("discordOutput").value = output;
   document.getElementById("discordSection").style.display = "block";
   
-  // Hide the copy button since we're generating a new post
+  // Hide the copy button for new post
   hideCopyButton();
   
   // Hide loading states and show success
@@ -2361,27 +3121,57 @@ ${notesText}
 
 function renderHistory() {
   const historyList = document.getElementById('historyList');
-  let history = JSON.parse(sessionStorage.getItem('discordHistory') || '[]');
-  if (history.length === 0) {
-    historyList.innerHTML = `
-      <div style="text-align:center;">
-        <img src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/BRHS-Logo.png" alt="BruteHaul Logo" style="max-width:200px;width:100%;margin-bottom:16px;border-radius:8px;">
-        <h2 style="color:#9d7523;">Brute Haul Manifest Log</h2>
-        <strong><em>No posts generated this session.</em></strong>
-      </div>
-    `;
-    return;
+  
+  if (historyList) {
+    // Get any existing history from session storage
+    const history = JSON.parse(sessionStorage.getItem('discordHistory') || '[]');
+    
+    if (history.length === 0) {
+      // Show default message when no history
+      historyList.innerHTML = `
+        <div style="text-align: center; background: #fff; border: 3px solid #9d7523; border-radius: 12px; padding: 30px;">
+          <img src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/BRHS-Logo.png" 
+               alt="BruteHaul Logo" 
+               style="max-width: 200px; width: 100%; margin-bottom: 20px; border-radius: 8px;">
+          <h2 style="color: #9d7523; margin: 20px 0; font-size: 24px;">Brute Haul Manifest Log</h2>
+          <p style="font-size: 18px; color: #781d15; font-weight: bold; margin: 15px 0;">
+            No posts generated this session.
+          </p>
+          <p style="color: #666; margin: 10px 0; font-size: 16px;">
+            Complete and submit manifests to see them listed here.
+          </p>
+        </div>
+      `;
+    } else {
+      // Show history posts when they exist
+      let historyHTML = `
+        <div style="margin-bottom: 20px; text-align: center;">
+          <img src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/BRHS-Logo.png" 
+               alt="BruteHaul Logo" 
+               style="max-width: 150px; border-radius: 8px;">
+          <h2 style="color: #9d7523; margin: 15px 0;">Session History (${history.length} posts)</h2>
+        </div>
+      `;
+      
+      history.forEach((post, index) => {
+        historyHTML += `
+          <div style="background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+              <strong style="color: #781d15;">Post ${index + 1}</strong>
+              <button onclick="deleteHistoryPost(${index})" 
+                      style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">
+                Delete
+              </button>
+            </div>
+            <div style="background: white; padding: 10px; border-radius: 4px; font-family: monospace; font-size: 14px; white-space: pre-wrap;">${post.content}</div>
+            <small style="color: #666; margin-top: 10px; display: block;">${post.timestamp}</small>
+          </div>
+        `;
+      });
+      
+      historyList.innerHTML = historyHTML;
+    }
   }
-  historyList.innerHTML = history.map((post, idx) => `
-    <div style="margin-bottom:18px;padding:10px;border-bottom:1px solid #9d7523;">
-      <strong>Post #${post.id}</strong>
-      <textarea readonly style="width:100%;height:120px;">${post.content}</textarea>
-      <div style="display:flex;gap:8px;margin-top:6px;">
-        <button type="button" onclick="copyHistoryPost(${idx})" style="padding:2px 6px;font-size:0.85em;min-width:28px;">Copy</button>
-        <button type="button" onclick="deleteHistoryPost(${idx})" style="background:#ed4245;padding:2px 6px;font-size:0.85em;min-width:28px;">🗑️</button>
-      </div>
-    </div>
-  `).join('');
 }
 
 function deleteHistoryPost(idx) {
@@ -2400,7 +3190,7 @@ function copyHistoryPost(idx) {
     temp.select();
     document.execCommand('copy');
     document.body.removeChild(temp);
-    showNotificationOverlay("History post copied to clipboard!", 'success', 2000);
+    showNotificationOverlay("History post copied to clipboard!", 'success');
   }
 }
 
@@ -2562,7 +3352,7 @@ async function sendToDiscord() {
       data = await response.json();
     } catch {
       hideLoadingOverlay();
-      showNotificationOverlay("⚠️ Server Restarting<br><br>The Brute Haul System is currently restarting.<br><br><strong>Error E005:</strong> Please try again in 30 seconds.", 'warning', 5000);
+      showNotificationOverlay("⚠️ Server Restarting<br><br>The Brute Haul System is currently restarting.<br><br><strong>Error E005:</strong> Please try again in 30 seconds.", 'warning');
       showFeedback('warning', 'Server restarting (E005) - Please try again shortly');
       showCopyButton(); // Show copy button when Discord posting fails
       
@@ -2585,7 +3375,8 @@ async function sendToDiscord() {
 
     if (response.ok) {
       hideLoadingOverlay();
-      showNotificationOverlay("✅ Successfully sent to Brute Haul Discord!<br><br>Your manifest has been posted and logged.", 'success', 4000);
+      // Use loading message that auto-closes after 2 seconds
+      showLoadingMessage("✅ Successfully sent to Brute Haul Discord!<br><br>Your manifest has been posted and logged.", 2000);
       showFeedback('success', 'Successfully sent to Brute Haul - Standy by for updated logs');
       // Hide the Discord output section
       document.getElementById("discordSection").style.display = "none";
@@ -2713,11 +3504,11 @@ async function sendToDiscord() {
           break;
       }
       
-      showNotificationOverlay(`❌ Failed to send to Discord<br><br><strong>Error ${errorCode}:</strong> ${errorMsg}<br><br>${instructions}`, 'error', 8000);
+      showNotificationOverlay(`❌ Failed to send to Discord<br><br><strong>Error ${errorCode}:</strong> ${errorMsg}<br><br>${instructions}`, 'error');
       showFeedback('error', `Error sending to Brute Haul (${errorCode}): ${errorMsg}`);
       showCopyButton(); // Show copy button when Discord posting fails
       
-      // Log server errors to GitHub Issues with additional context
+      // Log server errors to GitHub Issues
       logErrorToGitHub(errorCode, errorMsg, `HTTP ${response.status}: ${data?.error || 'Unknown server error'}`, null, {
         httpStatus: response.status,
         httpStatusText: response.statusText,
@@ -2787,7 +3578,7 @@ async function sendToDiscord() {
       instructions = 'Server is under high load. Please try again in a few minutes.';
     }
     
-    showNotificationOverlay(`❌ Connection Failed<br><br><strong>Error ${errorCode}:</strong> ${errorMsg}<br><br>${instructions}`, 'error', 8000);
+    showNotificationOverlay(`❌ Connection Failed<br><br><strong>Error ${errorCode}:</strong> ${errorMsg}<br><br>${instructions}`, 'error');
     showFeedback('error', `The Brute Haul System is currently offline (${errorCode}). Please try again later.`);
     showCopyButton(); // Show copy button when Discord posting fails
     
@@ -2836,7 +3627,7 @@ function copyAnnouncementOutput() {
   output.select();
   output.setSelectionRange(0, 99999);
   document.execCommand("copy");
-  showNotificationOverlay("Announcement copied to clipboard!", 'success', 2000);
+  showNotificationOverlay("Announcement copied to clipboard!", 'success');
 }
 
 window.generateAnnouncement = generateAnnouncement;
@@ -2847,16 +3638,7 @@ async function logErrorToGitHub(errorCode, errorMsg, fullError, stackTrace, addi
   // Add debug logging to see if function is called
   console.log('🔧 logErrorToGitHub called with:', { errorCode, errorMsg });
   
-  try {
-    // ========================================
-    // 🔧 SECURE TOKEN CONFIGURATION:
-    // ========================================
-    // Multi-layered approach to securely obtain GitHub token:
-    // 1. GitHub Actions injection (production)
-    // 2. Local environment variable (development) 
-    // 3. Encrypted storage in localStorage (fallback)
-    // ========================================
-    
+  try {    
     function getGitHubToken() {
       // Method 1: GitHub Actions injected token (production)
       let token = 'ERROR_REPORTER_TOKEN_PLACEHOLDER';
@@ -2900,7 +3682,7 @@ async function logErrorToGitHub(errorCode, errorMsg, fullError, stackTrace, addi
     }
     
     const GITHUB_TOKEN = getGitHubToken();
-    const GITHUB_REPO = 'DyslexicNerd01/Brute-Haul-Cargo-Log'; // 📁 UPDATE YOUR REPO NAME HERE
+    const GITHUB_REPO = 'DyslexicNerd01/Brute-Haul-Cargo-Log'; // Repo Name
     
     console.log('🔧 GitHub token status:', GITHUB_TOKEN ? 'Found' : 'Not found');
     
@@ -3076,7 +3858,7 @@ A user attempted to send a cargo manifest to Discord but encountered this error.
   }
 }
 
-// Optional: Show error report link to users
+// Show error report link to users
 function showErrorReportLink() {
   const lastErrorIssue = sessionStorage.getItem('lastErrorIssue');
   if (lastErrorIssue) {
@@ -3136,7 +3918,7 @@ window.testGitHubErrorReporting = function() {
   logErrorToGitHub('TEST001', 'Manual test error', 'This is a test error to verify GitHub Issues integration', null, {
     testType: 'Manual test',
     timestamp: new Date().toISOString(),
-    testUser: 'Developer'
+    testUser: 'FrontEndConsole'
   });
 };
 
@@ -3163,6 +3945,24 @@ window.checkGitHubTokenStatus = function() {
     return false;
   }
 };
+
+    // Global error handling for uncaught errors
+    window.addEventListener('error', function(event) {
+      handleError('Uncaught JavaScript error occurred', event.error, {
+        filename: event.filename,
+        lineno: event.lineno,
+        colno: event.colno,
+        message: event.message
+      });
+    });
+
+    // Handle unhandled promise rejections
+    window.addEventListener('unhandledrejection', function(event) {
+      handleError('Unhandled promise rejection', event.reason, {
+        promise: event.promise
+      });
+      event.preventDefault(); // Prevent default browser error handling
+    });
 
   </script>
 </div>
