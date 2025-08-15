@@ -111,6 +111,7 @@
       font-size: 24px;
       margin-right: 12px;
       display: inline-block;
+      font-style: normal; /* Prevent emojis from being italicized */
     }
 
     form {
@@ -1140,8 +1141,10 @@
       Copy to Clipboard
     </button>
   </div>
-    </div> <!-- End form-column -->
-    
+    </div>
+    <!-- End form-column -->
+
+    <!-- THIS IS A JUMPPOINT FOR ANNOUCEMENTS BECAUSE I'M LAZY AND I DON'T WANT TO SCROLL TO FIND THIS -->
     <!-- Announcements Sidebar -->
     <div class="announcements-sidebar">
       <div class="card" id="announcementsSection">
@@ -1154,36 +1157,34 @@
             <!-- Announcement Post 1 -->
             <div class="announcement-post" style="background:#fff;border-radius:8px;padding:20px;margin-bottom:20px;border:1px solid #9d7523;box-shadow:0 2px 4px rgba(0,0,0,0.1);">
               <div class="announcement-header" style="border-bottom:2px solid #9d7523;padding-bottom:10px;margin-bottom:15px;">
-                <h3 style="color:#781d15;margin:0;font-size:1.2em;">* Send to Discord Enabled! (For Real)</h3>
+                <h3 style="color:#781d15;margin:0;font-size:1.2em;">Brute Haul Manifest Error Reporting</h3>
                 <div style="color:#666;font-size:0.8em;margin-top:5px;">
-                  <strong>By:</strong> DyslexicNerd01<br><strong>Date:</strong> August 3, 2025
+                  <strong>By:</strong> DyslexicNerd01<br><strong>Date:</strong> August 14, 2025
                 </div>
               </div>
               <div class="announcement-body" style="color:#230e09;line-height:1.5;font-size:0.9em;">
-                <p>The Send to Discord feature is now enabled! (For real this time!) <b>Please only use the <i>"Send to Discord"</i> button to upload your cargo manifests.</b></p>
-                <p>If you encounter any issues, please report them to the development team as soon as possible. Hotfixes will be regularly released to keep the form up-to-date with any changes to Star Citizen or Brute Haul policy.</p>
-                <p>The copy button will remain active in the event that there is an issue with the discord bot in the future. If the discord bot does not respond, and error code will appear and you will gain access to the copy button again.</p>
+                <p><strong>Brute Haul Manifest Logs now automatically get sent to discord after pressing the "Send to Discord" button!</strong></p>
+                <p>If you do encounter any issues, you should see an error code and message explaining the problem. If this issue relates to the function of the bot, a GitHub issue will automatically open adressing the issue to have it solved as soon as possible.</p>
+                <p>If you do see any of these messages, please do not panic as your current manifest will be printed in the bug report to be uploaded later! If you encounter an issue that does not generate an error message, please report it in <i>#space-truckers-diner</i> to be addressed later.</p>
+                <p>Please do not report your ship not appearing in the list! The list is automatically generated from ships in <i>#ship-log</i>. Please DM Spartan to have your ship added! Until then please use the <i>"Other"</i> selection to manually enter your name/captain name.</p>
               </div>
             </div>
             
             <!-- Announcement Post 2 -->
             <div class="announcement-post" style="background:#fff;border-radius:8px;padding:20px;margin-bottom:20px;border:1px solid #9d7523;box-shadow:0 2px 4px rgba(0,0,0,0.1);">
               <div class="announcement-header" style="border-bottom:2px solid #9d7523;padding-bottom:10px;margin-bottom:15px;">
-                <h3 style="color:#781d15;margin:0;font-size:1.2em;">KNOWN FREIGHT ELEVATOR ISSUES</h3>
+                <h3 style="color:#781d15;margin:0;font-size:1.2em;">KNOWN ISSUES AFFECTING BRUTE HAUL OPERATIONS</h3>
                 <div style="color:#666;font-size:0.8em;margin-top:5px;">
-                  <strong>By:</strong> DyslexicNerd01<br><strong>Date:</strong> August 2, 2025
+                  <strong>By:</strong> DyslexicNerd01<br><strong>Date:</strong> August 14, 2025
                 </div>
               </div>
               <div class="announcement-body" style="color:#230e09;line-height:1.5;font-size:0.9em;">
                 <p><strong>Below are currently known major issues affecting Brute Haul/Ad Astra Operations. Currently there are no official fixes or 100% reliable workarounds.</strong></p>
-                <p><strong>🟢 Issue:</strong> <u>Unable to lower hanger freight elevator. (Confirmed Fixed)</u><br>
-                <strong>Fix:</strong> Only place 1 layer of containers on the elevator then send it down. The elevators will not move if there is more than one layer/containers stacked on top of each other.</p>
                 <p><strong>🔴 Issue:</strong> <u>Freight Elevator Overloaded</u><br>
                 <strong>Workaround:</strong> Follow this Reddit post: <a href="https://www.reddit.com/r/starcitizen/comments/1mbaxkj/elevator_overloaded_fix" target="_blank" style="color:#781d15;">Elevator Fix Reddit</a><br>
-                It does not work 100% of the time. We have found a success rate of about 25% when going to -40k. At this time there are no other workarounds.</p>
+                It does not work 100% of the time. We have found a success rate of about 25% when going to -40k. <b>This issue is fixed in PTU and expected to be fixed in 4.3.0 LIVE</b></p>
                 <p><strong>🔴 Issue:</strong> <u>Elevators not lowering/storing items</u><br>
-                <strong>Workaround:</strong> There is no known work around. Do not use the Stormageddon Specimen facility and possibly the Shubin Mining Facility elevators</p>
-                <p><strong>____________________________________________________________________________________</strong></p>
+                <strong>Workaround:</strong> Do not use the Stormageddon Specimen facility and possibly the Shubin Mining Facility elevators. <b>This issue is fixed in PTU and expected to be fixed in 4.3.0 LIVE</b> </p>
                 <p>We will provide updates as these issues develop or if new solutions are found.</p>
                 <p>Follow this support ticket for more information: <a href="https://support.robertsspaceindustries.com/hc/en-us/articles/360056254754-Star-Citizen-Alpha-4-2-1-Known-Issues" target="_blank" style="color:#781d15;">Star Citizen Known Issues</a></p>
               </div>
@@ -1211,7 +1212,7 @@
 
     // Ship lists for each category
     const transportShips = [
-      "SPRT Icarus", "BRHS Lednik", "BRHS Trireme", "WINC Caterpillar", "WINC Rafto"    
+      "SPRT Icarus", "BRHS Lednik", "BRHS Trireme", "WINC Caterpillar", "WINC Rafto"
     ];
     const securityShips = [
       "AACS Landsknecht", "AACS Feder", "BRHS Seastorm", "BRHS Sword Of Twilight", "AACS Dendrobium", "AACS Judgement’s Bow"
@@ -2604,22 +2605,22 @@ window.applyManifestPreset = applyManifestPreset;
       }
     });
     
-    // Build comprehensive error message
-    let errorMessage = `<strong>Please fix the following ${allErrors.length} error${allErrors.length === 1 ? '' : 's'}:</strong><br><br>`;
+    // Build comprehensive validation message
+    let validationMessage = `Form Validation Issues<br><br><strong>Please fix the following ${allErrors.length} issue${allErrors.length === 1 ? '' : 's'}:</strong><br><br>`;
     
     Object.keys(errorsByCategory).forEach(category => {
       if (errorsByCategory[category].length > 0) {
-        errorMessage += `<strong>${category}:</strong><br>`;
+        validationMessage += `<strong>${category}:</strong><br>`;
         errorsByCategory[category].forEach(error => {
-          errorMessage += `• ${error}<br>`;
+          validationMessage += `• ${error}<br>`;
         });
-        errorMessage += '<br>';
+        validationMessage += '<br>';
       }
     });
     
-    errorMessage += '<small style="opacity: 0.8;">Fields with errors are highlighted in red.</small>';
+    validationMessage += '<small style="opacity: 0.8;">Fields with issues are highlighted in red.</small>';
     
-    showNotificationOverlay(errorMessage, 'error');
+    showNotificationOverlay(validationMessage, 'warning');
     return false;
   }
   
@@ -2664,7 +2665,7 @@ window.applyManifestPreset = applyManifestPreset;
       }
       let diffMs = compDate - depDate;
       if (diffMs < 0) {
-        durationDiv.textContent = "⚠️ Completion time is before departure!";
+        durationDiv.textContent = "Completion time is before departure!";
         durationDiv.style.color = "#ed4245";
         return;
       }
@@ -3009,8 +3010,8 @@ window.applyManifestPreset = applyManifestPreset;
     if (generateBtn) {
       generateBtn.innerHTML = 'Generate Post';
     }
-    showNotificationOverlay(`❌ Manifest Validation Error<br><br><strong>Total SCU is 0</strong><br><br>Please add cargo to your manifest before generating the Discord post.`, 'error');
-    showFeedback('error', 'Cannot generate post: Total SCU is 0. Please add cargo to your manifest.');
+    showNotificationOverlay(`Manifest Validation Issue<br><br><strong>Total SCU is 0</strong><br><br>Please add cargo to your manifest before generating the Discord post.`, 'warning');
+    showFeedback('warning', 'Cannot generate post: Total SCU is 0. Please add cargo to your manifest.');
     return;
   }
 
@@ -3116,7 +3117,7 @@ ${notesText}
       hideButtonLoading('generateBtn');
       showFeedback('error', 'Failed to generate Discord post. Please try again.');
     }
-  }, 500); // Small delay for better UX
+  }, 500);
 }
 
 function renderHistory() {
@@ -3210,10 +3211,10 @@ async function sendToDiscord() {
     shipName = document.getElementById("shipNameOther").value;
   }
 
-  // Error: No message generated
+  // Warning: No message generated
   if (!message) {
-    showFeedback('error', 'No message to send. Please generate a Discord post first.');
-    // Log validation error
+    showNotificationOverlay("Missing Discord Post<br><br><strong>No message to send</strong><br><br>Please generate a Discord post first by clicking the 'Generate Discord Post' button.", 'warning');
+    showFeedback('warning', 'No message to send. Please generate a Discord post first.');
     logErrorToGitHub('V004', 'No message generated', 'User attempted to send without generating Discord post first', null, {
       validationStep: 'Message check',
       formCompleted: false
@@ -3221,10 +3222,10 @@ async function sendToDiscord() {
     return;
   }
 
-  // Error: Required fields missing
+  // Warning: Required fields missing
   if (!orderType || !captainName) {
-    showFeedback('error', 'Order Type and Captain Name are required to send to Discord.');
-    // Log validation error
+    showNotificationOverlay("Required Information Missing<br><br><strong>Order Type and Captain Name are required</strong><br><br>Please fill in these fields to send to Discord.", 'warning');
+    showFeedback('warning', 'Order Type and Captain Name are required to send to Discord.');
     logErrorToGitHub('V005', 'Required fields missing', `Missing fields - Order Type: ${orderType ? 'Present' : 'Missing'}, Captain Name: ${captainName ? 'Present' : 'Missing'}`, null, {
       validationStep: 'Required fields check',
       missingFields: [
@@ -3247,9 +3248,9 @@ async function sendToDiscord() {
   
   showLoadingOverlay('Sending to Brute Haul Discord...');
 
-  // Configure endpoints based on environment - define outside try block for scope access
+ 
   const endpoints = [
-    // Railway production endpoint - works for both GitHub Pages and local
+    // Railway production endpoint
     "https://brutehaulrailway-production.up.railway.app/send-discord"
   ];
 
@@ -3300,7 +3301,7 @@ async function sendToDiscord() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             message,
-            date: new Date().toISOString().split('T')[0], // Current date in YYYY-MM-DD format
+            date: new Date().toISOString().split('T')[0], // Current date
             orderCategory: orderCategoryText,
             companyName: companyNameText,
             orderType: orderTypeText,
@@ -3352,7 +3353,7 @@ async function sendToDiscord() {
       data = await response.json();
     } catch {
       hideLoadingOverlay();
-      showNotificationOverlay("⚠️ Server Restarting<br><br>The Brute Haul System is currently restarting.<br><br><strong>Error E005:</strong> Please try again in 30 seconds.", 'warning');
+      showNotificationOverlay("Server Restarting<br><br>The Brute Haul System is currently restarting.<br><br><strong>Error E005:</strong> Please try again in 30 seconds.", 'warning');
       showFeedback('warning', 'Server restarting (E005) - Please try again shortly');
       showCopyButton(); // Show copy button when Discord posting fails
       
@@ -3377,7 +3378,7 @@ async function sendToDiscord() {
       hideLoadingOverlay();
       // Use loading message that auto-closes after 2 seconds
       showLoadingMessage("✅ Successfully sent to Brute Haul Discord!<br><br>Your manifest has been posted and logged.", 2000);
-      showFeedback('success', 'Successfully sent to Brute Haul - Standy by for updated logs');
+      showFeedback('success', 'Successfully sent to Brute Haul');
       // Hide the Discord output section
       document.getElementById("discordSection").style.display = "none";
       // Clear the form fields
@@ -3386,7 +3387,7 @@ async function sendToDiscord() {
       hideLoadingOverlay();
       let errorCode = response.status || 'UNKNOWN';
       let errorMsg = data?.error || 'Unknown server error';
-      let instructions = 'Please try again or contact DyslexicNerd01';
+      let instructions = 'Please try again later. Bug Report Submitted';
       
       // Enhanced error code handling
       switch (response.status) {
@@ -3403,12 +3404,12 @@ async function sendToDiscord() {
         case 403:
           errorCode = 'E403';
           errorMsg = 'Access forbidden';
-          instructions = 'Server rejected the request. Contact DyslexicNerd01 if this persists.';
+          instructions = 'Server rejected the request.';
           break;
         case 404:
           errorCode = 'E404';
           errorMsg = 'Service not found';
-          instructions = 'The Brute Haul service endpoint is not available. Contact DyslexicNerd01.';
+          instructions = 'The Brute Haul service endpoint is not available.';
           break;
         case 429:
           errorCode = 'E429';
@@ -3440,7 +3441,7 @@ async function sendToDiscord() {
             if (data.error.includes('webhook')) {
               errorCode = 'D001';
               errorMsg = 'Discord webhook error';
-              instructions = 'Discord connection failed. Contact DyslexicNerd01 to check webhook settings.';
+              instructions = 'Discord connection failed.';
             } else if (data.error.includes('rate limit')) {
               errorCode = 'D002';
               errorMsg = 'Discord rate limited';
@@ -3448,17 +3449,17 @@ async function sendToDiscord() {
             } else if (data.error.includes('message')) {
               errorCode = 'D003';
               errorMsg = 'Discord message error';
-              instructions = 'Your message format was rejected by Discord. Contact DyslexicNerd01.';
+              instructions = 'Your message format was rejected by Discord.';
             }
           } else if (data?.error?.includes('Google') || data?.error?.includes('Sheets')) {
             if (data.error.includes('credentials') || data.error.includes('authentication')) {
               errorCode = 'G001';
               errorMsg = 'Google Sheets credentials error';
-              instructions = 'Server configuration issue. Contact DyslexicNerd01 to fix Google Sheets access.';
+              instructions = 'Server configuration issue.';
             } else if (data.error.includes('permission') || data.error.includes('access')) {
               errorCode = 'G003';
               errorMsg = 'Google Sheets permission denied';
-              instructions = 'Server lacks permission to write data. Contact DyslexicNerd01.';
+              instructions = 'Server lacks permission to write data.';
             } else if (data.error.includes('quota') || data.error.includes('limit')) {
               errorCode = 'G004';
               errorMsg = 'Google Sheets quota exceeded';
@@ -3472,19 +3473,19 @@ async function sendToDiscord() {
             if (data.error.includes('token') || data.error.includes('authentication')) {
               errorCode = 'B001';
               errorMsg = 'Discord bot authentication failed';
-              instructions = 'Server configuration issue. Contact DyslexicNerd01 to fix bot authentication.';
+              instructions = 'Server configuration issue.';
             } else if (data.error.includes('offline') || data.error.includes('disconnected')) {
               errorCode = 'B002';
               errorMsg = 'Discord bot offline';
-              instructions = 'The Discord bot is currently offline. Contact DyslexicNerd01.';
+              instructions = 'The Discord bot is currently offline.';
             } else if (data.error.includes('channel') || data.error.includes('not found')) {
               errorCode = 'B003';
               errorMsg = 'Discord channel not found';
-              instructions = 'Server cannot find the Discord channel. Contact DyslexicNerd01.';
+              instructions = 'Server cannot find the Discord channel.';
             } else if (data.error.includes('permission') || data.error.includes('access')) {
               errorCode = 'B004';
               errorMsg = 'Discord bot lacks permissions';
-              instructions = 'Bot cannot post to channel. Contact DyslexicNerd01 to fix bot permissions.';
+              instructions = 'Bot cannot post to channel.';
             }
           } else if (data?.error?.includes('validation') || data?.error?.includes('invalid')) {
             if (data.error.includes('manifest') || data.error.includes('format')) {
@@ -3682,7 +3683,7 @@ async function logErrorToGitHub(errorCode, errorMsg, fullError, stackTrace, addi
     }
     
     const GITHUB_TOKEN = getGitHubToken();
-    const GITHUB_REPO = 'DyslexicNerd01/Brute-Haul-Cargo-Log'; // Repo Name
+    const GITHUB_REPO = 'DyslexicNerd01/Brute-Haul-Cargo-Log';
     
     console.log('🔧 GitHub token status:', GITHUB_TOKEN ? 'Found' : 'Not found');
     
@@ -3728,8 +3729,8 @@ async function logErrorToGitHub(errorCode, errorMsg, fullError, stackTrace, addi
     
     // Create detailed GitHub issue
     const issueData = {
-      title: `🚨 Discord Send Failure - ${errorCode}: ${errorMsg}`,
-      body: `## 🚨 Automatic Error Report
+      title: `🚨 Brute Haul Bot Send Failure - ${errorCode}: ${errorMsg}`,
+      body: `## 🚨 Automatic Error Report Generation
 
 **Error Code:** \`${errorCode}\`  
 **Error Message:** ${errorMsg}  
@@ -3780,7 +3781,7 @@ ${errorContext.formData ? `
 | **Company Name** | ${errorContext.formData.companyName} |
 | **Total SCU** | ${errorContext.formData.totalSCU} |
 | **Message Length** | ${errorContext.formData.messageLength} characters |
-` : `⚠️ Form data unavailable: ${errorContext.formDataError || 'Unknown reason'}`}
+` : `Form data unavailable: ${errorContext.formDataError || 'Unknown reason'}`}
 
 ---
 
@@ -3793,15 +3794,6 @@ A user attempted to send a cargo manifest to Discord but encountered this error.
 - ✅ Error message displayed to user
 - ✅ Copy button provided as fallback
 - ✅ Error logged for developer review
-
----
-
-## 🔧 Next Steps
-
-- [ ] Investigate error cause
-- [ ] Implement fix if needed
-- [ ] Test resolution
-- [ ] Update error handling if necessary
 
 ---
 
@@ -3854,7 +3846,6 @@ A user attempted to send a cargo manifest to Discord but encountered this error.
   } catch (logError) {
     console.error('❌ GitHub error logging failed:', logError);
     // Don't show this error to users - it's just for logging
-    // But do log it to console for debugging
   }
 }
 
@@ -3961,7 +3952,7 @@ window.checkGitHubTokenStatus = function() {
       handleError('Unhandled promise rejection', event.reason, {
         promise: event.promise
       });
-      event.preventDefault(); // Prevent default browser error handling
+      event.preventDefault(); // Prevent default browser error handling with popup box 
     });
 
   </script>
