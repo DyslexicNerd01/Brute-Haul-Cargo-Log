@@ -879,6 +879,27 @@
       height: auto !important;
       min-height: 200px !important;
     }
+    
+    /* Discord output toggle styles */
+    #discordOutputContainer {
+      transition: all 0.3s ease;
+      overflow: hidden;
+    }
+    
+    #toggleOutputBtn {
+      transition: all 0.2s ease;
+    }
+    
+    #toggleOutputBtn:hover {
+      background: #7d6a1e !important;
+      transform: translateY(-1px);
+    }
+    
+    #toggleOutputIcon {
+      transition: transform 0.2s ease;
+      font-size: 12px;
+      display: inline-block;
+    }
   </style>
   <script src="locations.js"></script>
 </head>
@@ -918,7 +939,7 @@
               Complete and submit manifests to see them listed here.
             </p>
             <div style="margin-top: 20px; padding: 10px; background: #e8f5e8; border-radius: 8px; border: 2px solid #28a745;">
-              <strong style="color: #28a745;">✓ History Tab Finally Working!</strong>
+              <strong style="color: #28a745;">✓ History Tab Working!</strong>
             </div>
           </div>
         </div>
@@ -962,18 +983,13 @@
       </div>
 
       <label>Company Name:</label>
-      <select id="companyName" required onchange="toggleCompanyNameOther()">
+      <select id="companyName" required>
         <option value="" selected disabled>Select company</option>
         <option value="Brute Haul">Brute Haul</option>
         <option value="Wildcard Inc.">Wildcard Inc.</option>
         <option value="Space Rats">Space Rats</option>
         <option value="The Benjineering Project">The Benjineering Project</option>
-        <option value="Other">Other</option>
       </select>
-      <div id="companyNameOtherDiv" class="other-div">
-        <label>Specify Other:</label>
-        <input type="text" id="companyNameOther" required />
-      </div>
 
       <label>Order Type:</label>
       <select id="orderType" required onchange="toggleOrderTypeOther()">
@@ -1123,28 +1139,42 @@
       <img src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/DiscordLogo.png" alt="Discord Logo" class="discord-btn-logo" style="filter: brightness(0) invert(1);" />
       Generate Discord Post
     </button>
-    <button type="button" onclick="clearFormFields()" style="background:#b32428;color:#fff;border:none;padding:10px 16px;border-radius:5px;font-weight:bold;display:flex;align-items:center;gap:8px;margin-left:8px;">
+    <button type="button" onclick="clearFormFields()" style="background:#b32428;color:#fff;border:none;padding:10px 16px;border-radius:5px;font-weight:bold;display:flex;align-items:center;gap:8px;margin-left:8px;margin-bottom:20px;">
   Clear Form
 </button>
   </form>
 
   <div class="section" id="discordSection" style="display:none;">
-    </button>
-    <button type="button" onclick="sendToDiscord()" style="background:#43b581;color:#fff;border:none;padding:8px 16px;border-radius:5px;font-weight:bold;display:inline-flex;align-items:center;gap:8px;margin-left:8px;">
-    <img src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/DiscordLogo.png" alt="Discord Logo" style="height:1.6em;width:auto;filter:brightness(0) invert(1);" />
-    Send to Discord
-  </button>
-    <h2>Discord Output:</h2>
-    <textarea id="discordOutput" readonly></textarea>
-    <button type="button" onclick="copyDiscordOutput()" id="copyDiscordBtn" style="background:#5865F2;color:#fff;border:none;padding:8px 16px;border-radius:5px;font-weight:bold;display:none;align-items:center;gap:8px;">
-      <img src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/DiscordLogo.png" alt="Discord Logo" style="height:1.6em;width:auto;filter:brightness(0) invert(1);" />
-      Copy to Clipboard
-    </button>
+    
+    <!-- Border line -->
+    <div style="border-bottom: 1px solid #9d7523; margin-bottom: 16px;"></div>
+    
+    <!-- Button Row: Send to Discord and Show Output Toggle -->
+    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+      <button type="button" onclick="sendToDiscord()" style="background:#43b581;color:#fff;border:none;padding:8px 16px;border-radius:5px;font-weight:bold;display:inline-flex;align-items:center;gap:8px;">
+        <img src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/DiscordLogo.png" alt="Discord Logo" style="height:1.6em;width:auto;filter:brightness(0) invert(1);" />
+        Send to Discord
+      </button>
+      
+      <button type="button" onclick="toggleDiscordOutput()" id="toggleOutputBtn" style="background:#9d7523;color:#fff;border:none;padding:8px 16px;border-radius:5px;font-weight:bold;display:inline-flex;align-items:center;gap:8px;">
+        <span id="toggleOutputIcon">▶</span>
+        <span id="toggleOutputText">Show Generated Output</span>
+      </button>
+    </div>
+    
+    <!-- Collapsible Output Container -->
+    <div id="discordOutputContainer" style="display:none;">
+      <textarea id="discordOutput" readonly></textarea>
+      <button type="button" onclick="copyDiscordOutput()" id="copyDiscordBtn" style="background:#5865F2;color:#fff;border:none;padding:8px 16px;border-radius:5px;font-weight:bold;display:none;align-items:center;gap:8px;">
+        <img src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/DiscordLogo.png" alt="Discord Logo" style="height:1.6em;width:auto;filter:brightness(0) invert(1);" />
+        Copy to Clipboard
+      </button>
+    </div>
   </div>
     </div>
     <!-- End form-column -->
 
-    <!-- THIS IS A JUMPPOINT FOR ANNOUCEMENTS BECAUSE I'M LAZY AND I DON'T WANT TO SCROLL TO FIND THIS -->
+    <!-- THIS IS A JUMPPOINT FOR ANNOUCEMENTS BECAUSE I'M LAZY AND I DON'T WANT TO SCROLL TO FIND THIS SECTION-->
     <!-- Announcements Sidebar -->
     <div class="announcements-sidebar">
       <div class="card" id="announcementsSection">
@@ -1208,9 +1238,9 @@
   </div> <!-- End main-container -->
 
 <script type="module">
-   // Locations are now loaded from external locations.js file
+   // Locations are loaded from external locations.js file
 
-    // Ship lists for each category
+    // Ship lists per category
     const transportShips = [
       "SPRT Icarus", "BRHS Lednik", "BRHS Trireme", "WINC Caterpillar", "WINC Rafto"
     ];
@@ -1230,11 +1260,12 @@
       "sadfish", "Efazer"
     ];
 
-    // Manifest material list (customize as needed)
+    // Manifest material list
     const materialList = [
       "Select Material", "Agricium", "Aluminium", "Aphorite", "Beryl", "Bexalite", "Borase", "Copper", "Corundum", "Diamond", "Dolivine", "Dyslexium", "Gold", "Hadanite", "Hephaestanite", "Inert materials", "Laranite", "Placeholder", "Spartanium", "Quantanium", "Quartz", "Taranite", "Tungsten", "Titanium"
     ];
 
+    // Clear button functions
     function clearFormFields() {
   // Clear timestamps
   document.getElementById("departureTime").value = "";
@@ -1270,9 +1301,7 @@
   // Clear start location
   document.getElementById("startLocation").value = "";
 
-  // Clear ship name and captain name
-  document.getElementById("shipName").value = "";
-  document.getElementById("captainName").value = "";
+  // Keep ship name, captain name, and crew information intact - do not clear them
 
   // Clear notes
   document.getElementById("notes").value = "";
@@ -1280,6 +1309,12 @@
   // Hide Discord section and copy button
   document.getElementById("discordSection").style.display = "none";
   hideCopyButton();
+  
+  // Show the Generate button again
+  const generateBtn = document.getElementById("generateBtn");
+  if (generateBtn) {
+    generateBtn.style.display = "inline-flex";
+  }
   
   // Reset progress bar
   calculateFormProgress();
@@ -1408,7 +1443,7 @@ window.addEventListener('resize', resizeAnnouncementsContent);
       input.addEventListener('input', (e) => {
         const searchTerm = e.target.value;
         if (searchTerm.length === 0) {
-          filteredLocations = locations; // Show all locations when no search term
+          filteredLocations = locations;
         } else {
           filteredLocations = filterLocations(searchTerm);
         }
@@ -1491,7 +1526,6 @@ window.addEventListener('resize', resizeAnnouncementsContent);
         ships = allShips;
       }
 
-      // Add "Other" option to the ships list
       const shipsWithOther = [...ships, "Other"];
 
       let selectedValue = '';
@@ -1614,7 +1648,6 @@ window.addEventListener('resize', resizeAnnouncementsContent);
       
       if (!input || !list) return;
 
-      // Add "Other" option to the captains list
       const captainsWithOther = [...captainNames, "Other"];
 
       let selectedValue = '';
@@ -1740,7 +1773,6 @@ window.addEventListener('resize', resizeAnnouncementsContent);
     }
 
     function renderManifestLines() {
-      // Save current manifest line values
       const manifestData = [];
       document.querySelectorAll('.manifest-row').forEach((row, idx) => {
         manifestData.push({
@@ -1805,9 +1837,7 @@ window.addEventListener('resize', resizeAnnouncementsContent);
         if (row) {
           row.querySelector('.manifest-scu').value = preset[idx].scu;
           row.querySelector('.manifest-material').value = preset[idx].material;
-          // Calculate UEC for this line
           var uec = Math.floor((preset[idx].scu / totalSCU) * totalUEC);
-          // For last line, assign remainder
           if (idx === preset.length - 1) {
             uec = totalUEC - uecAssigned;
           }
@@ -1819,7 +1849,6 @@ window.addEventListener('resize', resizeAnnouncementsContent);
       var totalUECInput = document.getElementById('totalUECBox');
       if (totalUECInput) totalUECInput.value = totalUEC;
       updateManifestTotals();
-      // Highlight selected preset button
       var largeBtn = document.getElementById('presetLargeBtn');
       var mediumBtn = document.getElementById('presetMediumBtn');
       var smallBtn = document.getElementById('presetSmallBtn');
@@ -1834,7 +1863,7 @@ window.addEventListener('resize', resizeAnnouncementsContent);
     function addManifestLine() {
       manifestLineCount++;
       renderManifestLines();
-      calculateFormProgress(); // Update progress when adding manifest line
+      calculateFormProgress();
     }
 
     function removeManifestLine(index) {
@@ -1856,7 +1885,6 @@ window.addEventListener('resize', resizeAnnouncementsContent);
       for (let i = 1; i <= manifestLineCount; i++) {
         manifestLines.insertAdjacentHTML('beforeend', createManifestLine(i));
       }
-      // Restore previous values except the deleted one
       document.querySelectorAll('.manifest-row').forEach((row, idx) => {
         if (manifestData[idx]) {
           row.querySelector('.manifest-scu').value = manifestData[idx].scu;
@@ -1866,7 +1894,7 @@ window.addEventListener('resize', resizeAnnouncementsContent);
       });
 
       updateManifestTotals();
-      calculateFormProgress(); // Update progress when removing manifest line
+      calculateFormProgress();
     }
 
     function updateManifestTotals() {
@@ -1889,7 +1917,6 @@ window.addEventListener('resize', resizeAnnouncementsContent);
 }
 
     window.toggleOrderTypeOther = toggleOrderTypeOther;
-    window.toggleCompanyNameOther = toggleCompanyNameOther;
     window.toggleOrderCategoryOther = toggleOrderCategoryOther;
     window.toggleShipNameOther = toggleShipNameOther;
     window.toggleCaptainNameOther = toggleCaptainNameOther;
@@ -1899,8 +1926,10 @@ window.addEventListener('resize', resizeAnnouncementsContent);
     window.updateManifestTotals = updateManifestTotals;
     window.generateOutput = generateOutput;
     window.copyDiscordOutput = copyDiscordOutput;
+    window.toggleDiscordOutput = toggleDiscordOutput;
     window.showCopyButton = showCopyButton;
     window.hideCopyButton = hideCopyButton;
+    window.showGenerateButtonOnChange = showGenerateButtonOnChange;
     window.clearFormFields = clearFormFields;
 
     // Make applyManifestPreset available globally
@@ -1910,24 +1939,22 @@ window.applyManifestPreset = applyManifestPreset;
       populateLocationDropdown("startLocation");
       populateLocationDropdown("routeStart");
       populateLocationDropdown("routeEnd");
-      populateShipDropdown(""); // Show all ships initially
-      populateCaptainDropdown(); // Initialize captain dropdown
+      populateShipDropdown("");
+      populateCaptainDropdown();
       document.getElementById("discordSection").style.display = "none";
       manifestLineCount = 1;
       renderManifestLines();
       renderHistory();
-      
-      // Initialize progress tracking
       calculateFormProgress();
       
-      // Add event listeners for progress tracking
       const formElements = document.querySelectorAll('input, select, textarea');
       formElements.forEach(element => {
         element.addEventListener('input', calculateFormProgress);
         element.addEventListener('change', calculateFormProgress);
+        element.addEventListener('input', showGenerateButtonOnChange);
+        element.addEventListener('change', showGenerateButtonOnChange);
       });
       
-      // Add manifest-specific listeners
       const manifestContainer = document.getElementById('manifestLines');
       if (manifestContainer) {
         const observer = new MutationObserver(calculateFormProgress);
@@ -1941,7 +1968,7 @@ window.applyManifestPreset = applyManifestPreset;
     });
     document.getElementById("orderType").addEventListener("change", function() {
       toggleOrderTypeOther();
-      // Show/hide Resource Drive presets
+
       const val = this.value;
       const presetsDiv = document.getElementById("resourceDrivePresets");
       if (val === "Resource Drive") {
@@ -1951,7 +1978,6 @@ window.applyManifestPreset = applyManifestPreset;
       }
     });
 
-    // Enhanced timestamp handling
     document.getElementById("departureTime").addEventListener("change", function() {
       this.classList.remove('error');
       updateOrderDuration();
@@ -1966,13 +1992,13 @@ window.applyManifestPreset = applyManifestPreset;
       if (!dtString) return "";
       const date = new Date(dtString);
       if (isNaN(date.getTime())) return "";
-      // Add 930 years
+      // Add 930 years (Updates to SC time automatically)
       const yearsToAdd = 930;
       date.setFullYear(date.getFullYear() + yearsToAdd);
       const unix = Math.floor(date.getTime() / 1000);
       return `<t:${unix}:f>`;
     }
-    // Ship Threads on Discord bh-ship-log
+    // Ship Threads on Discord bh-ship-log - Depreciated function
     const shipLinks = {
       "AACS Feder": "https://discord.com/channels/900478857436606535/1393365523407835196",
       "AACS Landsknecht": "https://discord.com/channels/900478857436606535/1392713534005186730",
@@ -2036,11 +2062,8 @@ window.applyManifestPreset = applyManifestPreset;
       `;
       document.body.appendChild(overlay);
       
-      // Messages with X buttons NEVER auto-close
-      // Only loading messages (handled separately) should auto-close
     }
 
-    // Special function for loading messages that auto-close after success
     function showLoadingMessage(message, autoCloseAfterMs = 0) {
       const overlay = document.createElement('div');
       overlay.className = 'loading-overlay';
@@ -2055,7 +2078,6 @@ window.applyManifestPreset = applyManifestPreset;
       `;
       document.body.appendChild(overlay);
       
-      // Auto-close after specified time (for successful completion)
       if (autoCloseAfterMs > 0) {
         setTimeout(() => {
           const loadingOverlay = document.getElementById('loadingMessageOverlay');
@@ -2065,10 +2087,9 @@ window.applyManifestPreset = applyManifestPreset;
         }, autoCloseAfterMs);
       }
       
-      return overlay; // Return overlay for manual control if needed
+      return overlay;
     }
 
-    // Function to hide loading messages manually
     function hideLoadingMessage() {
       const overlay = document.getElementById('loadingMessageOverlay');
       if (overlay) {
@@ -2140,21 +2161,17 @@ window.applyManifestPreset = applyManifestPreset;
       let filledFields = 0;
       let totalFields = requiredFields.length;
       
-      // Check main fields
       for (const fieldId of requiredFields) {
         const field = document.getElementById(fieldId);
         let isFieldValid = false;
         
         if (field) {
-          // Special validation for location fields
           if (fieldId === 'startLocation' || fieldId === 'routeStart' || fieldId === 'routeEnd') {
             isFieldValid = field.value && field.value.trim() !== '' && locations.includes(field.value);
           } 
-          // Special validation for ship name field
           else if (fieldId === 'shipName') {
             isFieldValid = field.value && field.value.trim() !== '' && (allShips.includes(field.value) || field.value === 'Other');
           }
-          // Special validation for captain name field
           else if (fieldId === 'captainName') {
             isFieldValid = field.value && field.value.trim() !== '' && (captainNames.includes(field.value) || field.value === 'Other');
           }
@@ -2168,10 +2185,8 @@ window.applyManifestPreset = applyManifestPreset;
         }
       }
       
-      // Check "Other" fields if applicable
       const otherFieldChecks = [
         { select: 'orderCategory', other: 'orderCategoryOther' },
-        { select: 'companyName', other: 'companyNameOther' },
         { select: 'orderType', other: 'orderTypeOther' },
         { select: 'shipName', other: 'shipNameOther' },
         { select: 'captainName', other: 'captainNameOther' }
@@ -2183,14 +2198,13 @@ window.applyManifestPreset = applyManifestPreset;
         const otherDiv = document.getElementById(check.other + 'Div');
         
         if (selectField && selectField.value === 'Other' && otherDiv && otherDiv.style.display !== 'none') {
-          totalFields++; // Add the "other" field to total count
+          totalFields++;
           if (otherField && otherField.value && otherField.value.trim() !== '') {
             filledFields++;
           }
         }
       }
       
-      // Check crew names
       const crewAmount = parseInt(document.getElementById('crewAmount')?.value || '0', 10);
       if (crewAmount > 0) {
         totalFields += crewAmount;
@@ -2202,7 +2216,6 @@ window.applyManifestPreset = applyManifestPreset;
         }
       }
       
-      // Check manifest (at least one line with material)
       const manifestRows = document.querySelectorAll('.manifest-row');
       let hasValidManifest = false;
       manifestRows.forEach(row => {
@@ -2215,11 +2228,10 @@ window.applyManifestPreset = applyManifestPreset;
       if (hasValidManifest) {
         filledFields++;
       }
-      totalFields++; // Add manifest to total count
-      
+      totalFields++; 
       const percentage = Math.round((filledFields / totalFields) * 100);
       
-      // Update progress bar
+
       const progressFill = document.getElementById('formProgressFill');
       const progressText = document.getElementById('formProgressText');
       
@@ -2231,7 +2243,7 @@ window.applyManifestPreset = applyManifestPreset;
         progressText.textContent = `Form Completion: ${percentage}%`;
       }
       
-      // Update form step states
+
       updateFormStepStates();
       
       return percentage;
@@ -2249,7 +2261,7 @@ window.applyManifestPreset = applyManifestPreset;
         },
         {
           id: 'manifestStep',
-          fields: [] // Special handling below
+          fields: []
         },
         {
           id: 'completionStep',
@@ -2264,7 +2276,6 @@ window.applyManifestPreset = applyManifestPreset;
         let completedFields = 0;
         let totalStepFields = step.fields.length;
         
-        // Handle manifest step separately
         if (step.id === 'manifestStep') {
           const manifestRows = document.querySelectorAll('.manifest-row');
           let hasValidManifest = false;
@@ -2277,13 +2288,13 @@ window.applyManifestPreset = applyManifestPreset;
           completedFields = hasValidManifest ? 1 : 0;
           totalStepFields = 1;
         } else {
-          // Handle regular fields
+          
           for (const fieldId of step.fields) {
             const field = document.getElementById(fieldId);
             let isFieldValid = false;
             
             if (field) {
-              // Special validation for location fields
+
               if (fieldId === 'startLocation' || fieldId === 'routeStart' || fieldId === 'routeEnd') {
                 isFieldValid = field.value && field.value.trim() !== '' && locations.includes(field.value);
               } else {
@@ -2296,7 +2307,6 @@ window.applyManifestPreset = applyManifestPreset;
             }
           }
           
-          // Add crew names to basic info step
           if (step.id === 'basicInfoStep') {
             const crewAmount = parseInt(document.getElementById('crewAmount')?.value || '0', 10);
             if (crewAmount > 0) {
@@ -2309,10 +2319,8 @@ window.applyManifestPreset = applyManifestPreset;
               }
             }
             
-            // Add "Other" fields if visible
             const otherFieldChecks = [
               { select: 'orderCategory', other: 'orderCategoryOther' },
-              { select: 'companyName', other: 'companyNameOther' },
               { select: 'orderType', other: 'orderTypeOther' },
               { select: 'shipName', other: 'shipNameOther' },
               { select: 'captainName', other: 'captainNameOther' }
@@ -2333,7 +2341,6 @@ window.applyManifestPreset = applyManifestPreset;
           }
         }
         
-        // Update step classes
         stepElement.classList.remove('active', 'completed');
         if (completedFields === totalStepFields && completedFields > 0) {
           stepElement.classList.add('completed');
@@ -2352,18 +2359,6 @@ window.applyManifestPreset = applyManifestPreset;
       } else {
         otherDiv.style.display = "none";
         document.getElementById("orderCategoryOther").required = false;
-      }
-    }
-
-    function toggleCompanyNameOther() {
-      const companyName = document.getElementById("companyName").value;
-      const otherDiv = document.getElementById("companyNameOtherDiv");
-      if (companyName === "Other") {
-        otherDiv.style.display = "block";
-        document.getElementById("companyNameOther").required = true;
-      } else {
-        otherDiv.style.display = "none";
-        document.getElementById("companyNameOther").required = false;
       }
     }
 
@@ -2429,20 +2424,18 @@ window.applyManifestPreset = applyManifestPreset;
           input.name = `crewName${i}`;
           input.required = true;
           input.className = "crew-input";
-          // Add event listener for progress tracking
           input.addEventListener('input', calculateFormProgress);
           input.addEventListener('change', calculateFormProgress);
           crewNamesDiv.appendChild(label);
           crewNamesDiv.appendChild(input);
         }
       }
-      calculateFormProgress(); // Update progress when crew inputs change
+      calculateFormProgress();
     }
 
     function validateRequiredFields() {
       document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
 
-      // Add event listeners to required fields to remove error class on input/change
       const requiredFields = [
         "orderCategory",
         "companyName",
@@ -2470,17 +2463,14 @@ window.applyManifestPreset = applyManifestPreset;
     }
   });
 
-  // Also handle manifest and crew fields
   document.querySelectorAll('.manifest-scu, .manifest-material, .crew-input').forEach(el => {
     el.addEventListener('input', () => el.classList.remove('error'));
     el.addEventListener('change', () => el.classList.remove('error'));
   });
 
-  // Collect all errors instead of stopping at first one
   let allErrors = [];
   let firstErrorElement = null;
 
-  // Helper function to add error
   function addError(element, message, fieldName) {
     if (element) {
       element.classList.add('error');
@@ -2489,7 +2479,6 @@ window.applyManifestPreset = applyManifestPreset;
     allErrors.push({ element, message, fieldName });
   }
 
-  // Validate basic required fields
   for (const id of requiredFields) {
     const el = document.getElementById(id);
     let isValid = false;
@@ -2497,7 +2486,6 @@ window.applyManifestPreset = applyManifestPreset;
     
     if (!el) continue;
     
-    // Special validation for location fields
     if (id === 'startLocation' || id === 'routeStart' || id === 'routeEnd') {
       if (el.value.trim() === "") {
         addError(el, `${fieldLabel} is required`, fieldLabel);
@@ -2511,10 +2499,8 @@ window.applyManifestPreset = applyManifestPreset;
     }
   }
 
-  // Validate "Other" fields
   const otherFields = [
     {select: "orderCategory", other: "orderCategoryOtherDiv", input: "orderCategoryOther", label: "Order Category (Other)"},
-    {select: "companyName", other: "companyNameOtherDiv", input: "companyNameOther", label: "Company Name (Other)"},
     {select: "orderType", other: "orderTypeOtherDiv", input: "orderTypeOther", label: "Order Type (Other)"},
     {select: "shipName", other: "shipNameOtherDiv", input: "shipNameOther", label: "Ship Name (Other)"},
     {select: "captainName", other: "captainNameOtherDiv", input: "captainNameOther", label: "Captain Name (Other)"}
@@ -2531,7 +2517,6 @@ window.applyManifestPreset = applyManifestPreset;
     }
   }
 
-  // Validate crew names
   const crewAmount = parseInt(document.getElementById("crewAmount").value, 10);
   if (!isNaN(crewAmount) && crewAmount > 0) {
     for (let i = 1; i <= crewAmount; i++) {
@@ -2542,7 +2527,6 @@ window.applyManifestPreset = applyManifestPreset;
     }
   }
 
-  // Validate manifest lines
   const manifestRows = document.querySelectorAll('.manifest-row');
   if (manifestRows.length === 0) {
     allErrors.push({ 
@@ -2566,19 +2550,16 @@ window.applyManifestPreset = applyManifestPreset;
     }
   }
 
-  // Enhanced timestamp validation
   const timestampErrors = validateTimestampsDetailed();
   if (timestampErrors.length > 0) {
     allErrors.push(...timestampErrors);
   }
 
-  // If there are errors, display them all
   if (allErrors.length > 0) {
     if (firstErrorElement) {
       firstErrorElement.scrollIntoView({behavior: "smooth", block: "center"});
     }
     
-    // Group errors by category for better organization
     const errorsByCategory = {
       'Basic Information': [],
       'Route & Timing': [],
@@ -2605,7 +2586,6 @@ window.applyManifestPreset = applyManifestPreset;
       }
     });
     
-    // Build comprehensive validation message
     let validationMessage = `Form Validation Issues<br><br><strong>Please fix the following ${allErrors.length} issue${allErrors.length === 1 ? '' : 's'}:</strong><br><br>`;
     
     Object.keys(errorsByCategory).forEach(category => {
@@ -2635,6 +2615,22 @@ window.applyManifestPreset = applyManifestPreset;
       showNotificationOverlay("Discord post copied to clipboard!", 'success');
     }
 
+    function toggleDiscordOutput() {
+      const container = document.getElementById("discordOutputContainer");
+      const icon = document.getElementById("toggleOutputIcon");
+      const text = document.getElementById("toggleOutputText");
+      
+      if (container.style.display === "none") {
+        container.style.display = "block";
+        icon.textContent = "▼";
+        text.textContent = "Hide Generated Output";
+      } else {
+        container.style.display = "none";
+        icon.textContent = "▶";
+        text.textContent = "Show Generated Output";
+      }
+    }
+
     function showCopyButton() {
       const copyBtn = document.getElementById("copyDiscordBtn");
       if (copyBtn) {
@@ -2646,6 +2642,13 @@ window.applyManifestPreset = applyManifestPreset;
       const copyBtn = document.getElementById("copyDiscordBtn");
       if (copyBtn) {
         copyBtn.style.display = "none";
+      }
+    }
+
+    function showGenerateButtonOnChange() {
+      const generateBtn = document.getElementById("generateBtn");
+      if (generateBtn && generateBtn.style.display === "none") {
+        generateBtn.style.display = "inline-flex";
       }
     }
 
@@ -2676,7 +2679,7 @@ window.applyManifestPreset = applyManifestPreset;
       durationDiv.style.color = "#9d7523";
     }
 
-    // Set current time function for timestamp buttons
+    // Set current time function
     function setCurrentTime(fieldId) {
       try {
         const now = new Date();
@@ -2692,27 +2695,22 @@ window.applyManifestPreset = applyManifestPreset;
         const field = document.getElementById(fieldId);
         if (field) {
           field.value = timeString;
-          field.classList.remove('error'); // Remove error class if present
-          updateOrderDuration(); // Update duration if both fields are filled
+          field.classList.remove('error');
+          updateOrderDuration();
           
-          // Simple success feedback without complex DOM manipulation
           console.log(`✓ Time set for ${fieldId}: ${timeString}`);
         } else {
           throw new Error(`Field with ID '${fieldId}' not found`);
         }
       } catch (error) {
         console.error('Error setting current time:', error);
-        // Use the enhanced error handler but don't call showTimestampFeedback
         handleError('Failed to set current time', error, { fieldId });
       }
     }
 
-    // Make setCurrentTime available globally
     window.setCurrentTime = setCurrentTime;
 
-    // Enhanced error handling system
     function handleError(message, error = null, context = {}) {
-      // Log detailed error information
       const errorInfo = {
         message,
         error: error ? {
@@ -2728,7 +2726,6 @@ window.applyManifestPreset = applyManifestPreset;
       
       console.error('Enhanced Error Log:', errorInfo);
       
-      // Determine user-friendly message
       let userMessage = message;
       let suggestions = [];
       
@@ -2755,7 +2752,6 @@ window.applyManifestPreset = applyManifestPreset;
         }
       }
       
-      // Show specific error messages for common issues
       if (message.includes('timestamp') || message.includes('time')) {
         suggestions.push('Ensure your system clock is set correctly.');
         suggestions.push('Try clicking the "Now" button instead of manual entry.');
@@ -2766,33 +2762,29 @@ window.applyManifestPreset = applyManifestPreset;
         suggestions.push('Look for fields highlighted in red.');
       }
       
-      // Show error to user with suggestions
       const fullMessage = suggestions.length > 0 
         ? `${userMessage}<br><br><strong>Suggestions:</strong><br>• ${suggestions.join('<br>• ')}`
         : userMessage;
       
-      // Don't pass duration for error messages - they should require manual dismissal
       showNotificationOverlay(fullMessage, 'error');
       
-      // Store error for potential debugging
       const recentErrors = JSON.parse(localStorage.getItem('bruteHaulErrors') || '[]');
       recentErrors.push(errorInfo);
       
-      // Keep only last 10 errors
-      if (recentErrors.length > 10) {
-        recentErrors.splice(0, recentErrors.length - 10);
+      if (recentErrors.length > 20) {
+        recentErrors.splice(0, recentErrors.length - 20);
       }
       
       localStorage.setItem('bruteHaulErrors', JSON.stringify(recentErrors));
     }
 
-    // Enhanced validation with better error messages
+
     function validateTimestamps() {
       const departureField = document.getElementById('departureTime');
       const completionField = document.getElementById('completionTime');
       
       if (!departureField.value || !completionField.value) {
-        return false; // Let normal validation handle empty fields
+        return false;
       }
       
       try {
@@ -2818,7 +2810,6 @@ window.applyManifestPreset = applyManifestPreset;
           return false;
         }
         
-        // Check if times are unreasonably far in the future
         const now = new Date();
         const oneYearFromNow = new Date(now.getTime() + (365 * 24 * 60 * 60 * 1000));
         
@@ -2840,14 +2831,13 @@ window.applyManifestPreset = applyManifestPreset;
       }
     }
 
-    // New function that returns detailed timestamp errors for comprehensive validation
     function validateTimestampsDetailed() {
       const errors = [];
       const departureField = document.getElementById('departureTime');
       const completionField = document.getElementById('completionTime');
       
       if (!departureField.value || !completionField.value) {
-        return errors; // Empty fields handled by normal validation
+        return errors;
       }
       
       try {
@@ -2872,7 +2862,6 @@ window.applyManifestPreset = applyManifestPreset;
           });
         }
         
-        // Only check time logic if both dates are valid
         if (!isNaN(depDate.getTime()) && !isNaN(compDate.getTime())) {
           if (compDate <= depDate) {
             const timeDiff = Math.abs(compDate - depDate) / (1000 * 60); // minutes
@@ -2884,7 +2873,6 @@ window.applyManifestPreset = applyManifestPreset;
             });
           }
           
-          // Check if times are unreasonably far in the future
           const now = new Date();
           const oneYearFromNow = new Date(now.getTime() + (365 * 24 * 60 * 60 * 1000));
           
@@ -2937,11 +2925,9 @@ window.applyManifestPreset = applyManifestPreset;
     function generateOutput() {
   if (!validateRequiredFields()) return;
 
-  // Show loading state
   showButtonLoading('generateBtn', 'Generating...');
   showLoadingOverlay('Generating Discord post...');
 
-  // Simulate processing time for better UX
   setTimeout(() => {
     try {
       const get = id => document.getElementById(id)?.value?.trim() || "";
@@ -2952,7 +2938,6 @@ window.applyManifestPreset = applyManifestPreset;
   if (orderCategoryText === "Other") orderCategoryText = get("orderCategoryOther");
 
   let companyNameText = get("companyName");
-  if (companyNameText === "Other") companyNameText = get("companyNameOther");
 
   let orderTypeText = get("orderType");
   if (orderTypeText === "Other") orderTypeText = get("orderTypeOther");
@@ -2985,7 +2970,6 @@ window.applyManifestPreset = applyManifestPreset;
   const routeEnd = get("routeEnd");
   const routeText = routeStart && routeEnd ? `${routeStart} :arrow_right: ${routeEnd}` : "";
 
-  // Gather manifest lines and totals
   let manifestLines = [];
   let totalSCU = 0;
   document.querySelectorAll('.manifest-row').forEach(row => {
@@ -3001,11 +2985,9 @@ window.applyManifestPreset = applyManifestPreset;
     });
   });
 
-  // Validate SCU before generating post
   if (totalSCU <= 0) {
     hideLoadingOverlay();
     hideButtonLoading('generateBtn');
-    // Reset button text manually
     const generateBtn = document.getElementById('generateBtn');
     if (generateBtn) {
       generateBtn.innerHTML = 'Generate Post';
@@ -3015,26 +2997,21 @@ window.applyManifestPreset = applyManifestPreset;
     return;
   }
 
-  // Format manifest table
   let manifestTable = "SCU   Material         UEC\n";
   manifestLines.forEach(line => {
     manifestTable += `${line.scu.padEnd(5)} ${line.mat.padEnd(15)} ${line.uec ? line.uec : ""}\n`;
   });
 
-  // Get total UEC from the box (manual or auto)
   const totalUECInput = document.getElementById("totalUECBox");
   let totalUEC = totalUECInput && totalUECInput.value ? parseInt(totalUECInput.value.replace(/\D/g, "")) : 0;
 
-  // Format total line
   let totalLine = `**Total: ${totalSCU.toLocaleString()} SCU`;
   if (totalUEC && !isNaN(totalUEC)) {
     totalLine += ` / ${totalUEC.toLocaleString()} UEC`;
   }
   totalLine += "**";
-  // Format total SCU
   const totalSCUText = `**Total: ${totalSCU.toLocaleString()} SCU**`;
 
-  // Deductibles
   const repairs = parseInt(get("repairs") || "0", 10);
   const restock = parseInt(get("restock") || "0", 10);
   const quantumFuel = parseInt(get("quantumFuel") || "0", 10);
@@ -3042,10 +3019,8 @@ window.applyManifestPreset = applyManifestPreset;
   const crewCosts = parseInt(get("crewCosts") || "0", 10);
   const totalDeductibles = repairs + restock + quantumFuel + hydrogenFuel + crewCosts;
 
-  // Notes
   const notesText = get("notes");
 
-  // Format ship name with link only if valid link exists
   const shipDisplayText = shipLink ? `[${shipNameText}](${shipLink})` : shipNameText;
 
   // Build Discord output
@@ -3093,7 +3068,6 @@ ${notesText}
 \`\`\`
 `;
 
-  // Store in session history (as string)
   let history = JSON.parse(sessionStorage.getItem('discordHistory') || '[]');
   history.push({ id: postCounter, content: output });
   sessionStorage.setItem('discordHistory', JSON.stringify(history));
@@ -3103,10 +3077,14 @@ ${notesText}
   document.getElementById("discordOutput").value = output;
   document.getElementById("discordSection").style.display = "block";
   
-  // Hide the copy button for new post
+  // Hide the Generate button after successful generation
+  const generateBtn = document.getElementById("generateBtn");
+  if (generateBtn) {
+    generateBtn.style.display = "none";
+  }
+  
   hideCopyButton();
   
-  // Hide loading states and show success
   hideLoadingOverlay();
   hideButtonLoading('generateBtn');
   showFeedback('success', 'Discord post generated successfully!');
@@ -3124,11 +3102,9 @@ function renderHistory() {
   const historyList = document.getElementById('historyList');
   
   if (historyList) {
-    // Get any existing history from session storage
     const history = JSON.parse(sessionStorage.getItem('discordHistory') || '[]');
     
     if (history.length === 0) {
-      // Show default message when no history
       historyList.innerHTML = `
         <div style="text-align: center; background: #fff; border: 3px solid #9d7523; border-radius: 12px; padding: 30px;">
           <img src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/BRHS-Logo.png" 
@@ -3144,7 +3120,6 @@ function renderHistory() {
         </div>
       `;
     } else {
-      // Show history posts when they exist
       let historyHTML = `
         <div style="margin-bottom: 20px; text-align: center;">
           <img src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/BRHS-Logo.png" 
@@ -3236,7 +3211,6 @@ async function sendToDiscord() {
     return;
   }
 
-  // Show loading states
   const sendBtn = Array.from(document.querySelectorAll("button"))
     .find(btn => btn.textContent.includes("Send to Discord"));
   
@@ -3262,7 +3236,6 @@ async function sendToDiscord() {
     if (orderCategoryText === "Other") orderCategoryText = get("orderCategoryOther");
     
     let companyNameText = get("companyName");
-    if (companyNameText === "Other") companyNameText = get("companyNameOther");
     
     let orderTypeText = get("orderType");
     if (orderTypeText === "Other") orderTypeText = get("orderTypeOther");
@@ -3322,7 +3295,6 @@ async function sendToDiscord() {
             hydrogenFuel: hydrogenFuel,
             crewShipCosts: crewCosts,
             notes: get("notes"),
-            // Legacy fields for Discord functionality
             resourceDriveCompany,
             shipNames: typeof allShips !== "undefined" ? allShips : []
           })
@@ -3344,7 +3316,6 @@ async function sendToDiscord() {
     }
     
     if (!response || !response.ok) {
-      // Railway should provide stable HTTPS connection
       throw new Error(lastError || "Railway server connection failed - please check server status");
     }
 
@@ -3376,12 +3347,9 @@ async function sendToDiscord() {
 
     if (response.ok) {
       hideLoadingOverlay();
-      // Use loading message that auto-closes after 2 seconds
       showLoadingMessage("✅ Successfully sent to Brute Haul Discord!<br><br>Your manifest has been posted and logged.", 2000);
       showFeedback('success', 'Successfully sent to Brute Haul');
-      // Hide the Discord output section
       document.getElementById("discordSection").style.display = "none";
-      // Clear the form fields
       clearFormFields();
     } else {
       hideLoadingOverlay();
@@ -3389,7 +3357,6 @@ async function sendToDiscord() {
       let errorMsg = data?.error || 'Unknown server error';
       let instructions = 'Please try again later. Bug Report Submitted';
       
-      // Enhanced error code handling
       switch (response.status) {
         case 400:
           errorCode = 'E400';
@@ -3525,14 +3492,12 @@ async function sendToDiscord() {
         }
       });
       
-      // Show error report link after a brief delay
       setTimeout(showErrorReportLink, 1000);
     }
   } catch (err) {
     hideLoadingOverlay();
     console.error('Send to Discord error:', err);
     
-    // Determine error type and code based on error
     let errorCode = 'E701';
     let errorMsg = 'Connection failed';
     let instructions = 'Please try again later or contact DyslexicNerd01';
@@ -3602,7 +3567,6 @@ async function sendToDiscord() {
       }
     });
     
-    // Show error report link after a brief delay
     setTimeout(showErrorReportLink, 1000);
   } finally {
     if (sendBtn) {
@@ -3636,43 +3600,35 @@ window.copyAnnouncementOutput = copyAnnouncementOutput;
 
 // GitHub Error Logging Function
 async function logErrorToGitHub(errorCode, errorMsg, fullError, stackTrace, additionalContext = {}) {
-  // Add debug logging to see if function is called
   console.log('🔧 logErrorToGitHub called with:', { errorCode, errorMsg });
   
   try {    
     function getGitHubToken() {
-      // Method 1: GitHub Actions injected token (production)
       let token = 'ERROR_REPORTER_TOKEN_PLACEHOLDER';
       if (token !== 'ERROR_REPORTER_TOKEN_PLACEHOLDER') {
         return token;
       }
       
-      // Method 1.5: For local testing - simulate deployed environment
       if (localStorage.getItem('simulate_deployed_token')) {
         return localStorage.getItem('simulate_deployed_token');
       }
       
-      // Method 2: Check for environment-specific token (if available)
       if (typeof process !== 'undefined' && process.env?.ERROR_REPORTER_TOKEN) {
         return process.env.ERROR_REPORTER_TOKEN;
       }
       
-      // Method 3: Encrypted localStorage (user must set once)
       const storedToken = localStorage.getItem('github_error_token_encrypted');
       if (storedToken) {
         try {
-          // Simple obfuscation - not true encryption but hides token from casual viewing
           return atob(storedToken.split('').reverse().join(''));
         } catch (e) {
           console.warn('Failed to decode stored token');
         }
       }
       
-      // Method 4: Prompt user to set token (one-time setup)
       if (confirm('GitHub error logging is not configured. Would you like to set it up now? (This will enable automatic error reporting)')) {
         const userToken = prompt('Enter your GitHub Personal Access Token (this will be stored locally and encrypted):');
         if (userToken && userToken.startsWith('ghp_')) {
-          // Simple obfuscation before storing
           const encrypted = btoa(userToken).split('').reverse().join('');
           localStorage.setItem('github_error_token_encrypted', encrypted);
           return userToken;
@@ -3712,7 +3668,6 @@ async function logErrorToGitHub(errorCode, errorMsg, fullError, stackTrace, addi
       ...additionalContext
     };
     
-    // Try to get form data context (if available)
     try {
       const formData = {
         orderType: document.getElementById("orderType")?.value || 'Not set',
@@ -3837,7 +3792,6 @@ A user attempted to send a cargo manifest to Discord but encountered this error.
       console.log(`✅ Error logged to GitHub Issues successfully: #${issueResult.number}`);
       console.log(`📋 Issue URL: ${issueResult.html_url}`);
       
-      // Optionally store the issue URL for user reference
       sessionStorage.setItem('lastErrorIssue', issueResult.html_url);
     } else {
       const errorText = await response.text();
@@ -3845,11 +3799,9 @@ A user attempted to send a cargo manifest to Discord but encountered this error.
     }
   } catch (logError) {
     console.error('❌ GitHub error logging failed:', logError);
-    // Don't show this error to users - it's just for logging
   }
 }
 
-// Show error report link to users
 function showErrorReportLink() {
   const lastErrorIssue = sessionStorage.getItem('lastErrorIssue');
   if (lastErrorIssue) {
@@ -3869,15 +3821,12 @@ function showErrorReportLink() {
 }
 window.copyAnnouncementOutput = copyAnnouncementOutput;
 
-// Debug function to manually set GitHub token for local testing
 window.setupGitHubErrorReporting = function() {
   const token = prompt('Enter your GitHub Personal Access Token for error reporting:');
   if (token && token.startsWith('ghp_')) {
-    // Store as if it was injected by GitHub Actions
     localStorage.setItem('simulate_deployed_token', token);
     console.log('✅ GitHub token stored (simulating deployed environment)');
     
-    // Test the token by making a simple API call
     fetch('https://api.github.com/user', {
       headers: {
         'Authorization': `token ${token}`,
@@ -3903,7 +3852,6 @@ window.setupGitHubErrorReporting = function() {
   }
 };
 
-// Debug function to test error reporting
 window.testGitHubErrorReporting = function() {
   console.log('🧪 Testing GitHub error reporting...');
   logErrorToGitHub('TEST001', 'Manual test error', 'This is a test error to verify GitHub Issues integration', null, {
@@ -3913,7 +3861,6 @@ window.testGitHubErrorReporting = function() {
   });
 };
 
-// Debug function to check token status
 window.checkGitHubTokenStatus = function() {
   const storedToken = localStorage.getItem('github_error_token_encrypted');
   if (storedToken) {
@@ -3937,7 +3884,6 @@ window.checkGitHubTokenStatus = function() {
   }
 };
 
-    // Global error handling for uncaught errors
     window.addEventListener('error', function(event) {
       handleError('Uncaught JavaScript error occurred', event.error, {
         filename: event.filename,
@@ -3947,12 +3893,11 @@ window.checkGitHubTokenStatus = function() {
       });
     });
 
-    // Handle unhandled promise rejections
     window.addEventListener('unhandledrejection', function(event) {
       handleError('Unhandled promise rejection', event.reason, {
         promise: event.promise
       });
-      event.preventDefault(); // Prevent default browser error handling with popup box 
+      event.preventDefault();
     });
 
   </script>
