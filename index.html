@@ -1998,15 +1998,19 @@ window.applyManifestPreset = applyManifestPreset;
       const unix = Math.floor(date.getTime() / 1000);
       return `<t:${unix}:f>`;
     }
-    // Ship Threads on Discord bh-ship-log - Depreciated function
+    // Ship Message Links - Adapted from Threads
     const shipLinks = {
-      "AACS Feder": "https://discord.com/channels/900478857436606535/1393365523407835196",
-      "AACS Landsknecht": "https://discord.com/channels/900478857436606535/1392713534005186730",
-      "WINC Caterpillar": "https://discord.com/channels/900478857436606535/1391904347117322322",
-      "SPRT Icarus": "https://discord.com/channels/900478857436606535/1396265862268190830",
-      "BRHS Lednik": "https://discord.com/channels/900478857436606535/1392397123907223643",
-      "BRHS Trireme": "https://discord.com/channels/900478857436606535/1391904991710806069",
-      "BRHS Seastorm": "https://discord.com/channels/900478857436606535/1392395299275800576",
+      "AACS Feder": "https://discord.com/channels/900478857436606535/1391878505905524817/1393365523407835196",
+      "AACS Landsknecht": "https://discord.com/channels/900478857436606535/1391878505905524817/1392713534005186730",
+      "WINC Caterpillar": "https://discord.com/channels/900478857436606535/1391878505905524817/1391904347117322322",
+      "SPRT Icarus": "https://discord.com/channels/900478857436606535/1391878505905524817/1396265862268190830",
+      "BRHS Lednik": "https://discord.com/channels/900478857436606535/1391878505905524817/13980457033678234613",
+      "BRHS Trireme": "https://discord.com/channels/900478857436606535/1391878505905524817/1404319148888031312",
+      "BRHS Seastorm": "https://discord.com/channels/900478857436606535/1391878505905524817/1404322180329898046",
+      "WINCO Rafto": "https://discord.com/channels/900478857436606535/1391878505905524817/1398047073097482262",
+      "AACS Dendrobium": "https://discord.com/channels/900478857436606535/1391878505905524817/1403127587567439872",
+      "BRHS Sword Of Twilight": "https://discord.com/channels/900478857436606535/1391878505905524817/1404319218261954661",
+      "BRHS Judgement's Bow": "https://discord.com/channels/900478857436606535/1391878505905524817/1404319407106293843",
     };
 
     // Loading States & Progress Indicators
@@ -3019,7 +3023,7 @@ window.applyManifestPreset = applyManifestPreset;
   const crewCosts = parseInt(get("crewCosts") || "0", 10);
   const totalDeductibles = repairs + restock + quantumFuel + hydrogenFuel + crewCosts;
 
-  const notesText = get("notes");
+  const notesText = get("notes") || "None";
 
   const shipDisplayText = shipLink ? `[${shipNameText}](${shipLink})` : shipNameText;
 
