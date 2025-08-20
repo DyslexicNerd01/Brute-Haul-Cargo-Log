@@ -1205,18 +1205,16 @@
               <div class="announcement-header" style="border-bottom:2px solid #9d7523;padding-bottom:10px;margin-bottom:15px;">
                 <h3 style="color:#781d15;margin:0;font-size:1.2em;">KNOWN ISSUES AFFECTING BRUTE HAUL OPERATIONS</h3>
                 <div style="color:#666;font-size:0.8em;margin-top:5px;">
-                  <strong>By:</strong> DyslexicNerd01<br><strong>Date:</strong> August 14, 2025
+                  <strong>By:</strong> DyslexicNerd01<br><strong>Updated:</strong> August 20, 2025
                 </div>
               </div>
               <div class="announcement-body" style="color:#230e09;line-height:1.5;font-size:0.9em;">
                 <p><strong>Below are currently known major issues affecting Brute Haul/Ad Astra Operations. Currently there are no official fixes or 100% reliable workarounds.</strong></p>
-                <p><strong>🔴 Issue:</strong> <u>Freight Elevator Overloaded</u><br>
-                <strong>Workaround:</strong> Follow this Reddit post: <a href="https://www.reddit.com/r/starcitizen/comments/1mbaxkj/elevator_overloaded_fix" target="_blank" style="color:#781d15;">Elevator Fix Reddit</a><br>
-                It does not work 100% of the time. We have found a success rate of about 25% when going to -40k. <b>This issue is fixed in PTU and expected to be fixed in 4.3.0 LIVE</b></p>
-                <p><strong>🔴 Issue:</strong> <u>Elevators not lowering/storing items</u><br>
-                <strong>Workaround:</strong> Do not use the Stormageddon Specimen facility and possibly the Shubin Mining Facility elevators. <b>This issue is fixed in PTU and expected to be fixed in 4.3.0 LIVE</b> </p>
-                <p>We will provide updates as these issues develop or if new solutions are found.</p>
-                <p>Follow this support ticket for more information: <a href="https://support.robertsspaceindustries.com/hc/en-us/articles/360056254754-Star-Citizen-Alpha-4-2-1-Known-Issues" target="_blank" style="color:#781d15;">Star Citizen Known Issues</a></p>
+                <p><strong>🟢 Issue:</strong> <u>Freight Elevator Overloaded</u><br>
+                <strong>Verified Fixed</strong> This issue is confirmed to be fixed in Live 4.3.0. Verified by Brute Haul memembers in Live 4.3.0 <br><i>*This issue still may be present at Pyro Locations*</i></p>
+                <p><strong>🟡 Issue:</strong> <u>Elevators not lowering/storing items</u><br>
+                <strong>Reported as Fixed</strong> Live 4.3.0 reports that this issue has been fixed. Brute Haul has not self verified that this issue has been resolved.</p>
+                <p>Follow this support ticket for more information on current bugs/issues: <a href="https://support.robertsspaceindustries.com/hc/en-us/articles/360056254754-Star-Citizen-Alpha-4-3-Known-Issues" target="_blank" style="color:#781d15;">Star Citizen Known Issues</a></p>
               </div>
             </div>
           </div>
@@ -1224,7 +1222,6 @@
       </div>
     </div>
   </div> <!-- End main-content-wrapper -->
-  
   <!-- Full-width Progress Bar at Bottom of Form -->
   <div class="progress-bar-container" style="width: 100%; margin: 24px 0; padding: 0 40px; box-sizing: border-box;">
     <div class="progress-bar">
@@ -1232,20 +1229,17 @@
     </div>
     <div class="progress-text" id="formProgressText">Form Completion: 0%</div>
   </div>
-  
   </div> <!-- End formTab -->
-  
   </div> <!-- End main-container -->
-
 <script type="module">
    // Locations are loaded from external locations.js file
 
     // Ship lists per category
     const transportShips = [
-      "SPRT Icarus", "BRHS Lednik", "BRHS Trireme", "WINC Caterpillar", "WINC Rafto"
+      "SPRT Icarus", "BRHS Lednik", "BRHS Trireme", "WINC Caterpillar", "WINCO Rafto"
     ];
     const securityShips = [
-      "AACS Landsknecht", "AACS Feder", "BRHS Seastorm", "BRHS Sword Of Twilight", "AACS Dendrobium", "AACS Judgement’s Bow"
+      "AACS Landsknecht", "AACS Feder", "BRHS Seastrom", "BRHS Sword of Twilight", "AACS Dendrobium", "AACS Judgement’s Bow"
     ];
     const allShips = [
       ...transportShips,
@@ -2000,17 +1994,17 @@ window.applyManifestPreset = applyManifestPreset;
     }
     // Ship Message Links - Adapted from Threads
     const shipLinks = {
+      "BRHS Seastrom": "https://discord.com/channels/900478857436606535/1391878505905524817/1404322180329898046",
+      "AACS Judgement's Bow": "https://discord.com/channels/900478857436606535/1391878505905524817/1404319407106293843",
+      "BRHS Sword of Twilight": "https://discord.com/channels/900478857436606535/1391878505905524817/1404319218261954661",
+      "BRHS Trireme": "https://discord.com/channels/900478857436606535/1391878505905524817/1404319148888031312",
+      "AACS Dendrobium": "https://discord.com/channels/900478857436606535/1391878505905524817/1403127587567439872",
+      "WINCO Rafto": "https://discord.com/channels/900478857436606535/1391878505905524817/1398047073097482262",
+      "BRHS Lednik": "https://discord.com/channels/900478857436606535/1391878505905524817/1398045703367823461",
+      "SPRT Icarus": "https://discord.com/channels/900478857436606535/1391878505905524817/1396265862268190830",
       "AACS Feder": "https://discord.com/channels/900478857436606535/1391878505905524817/1393365523407835196",
       "AACS Landsknecht": "https://discord.com/channels/900478857436606535/1391878505905524817/1392713534005186730",
-      "WINC Caterpillar": "https://discord.com/channels/900478857436606535/1391878505905524817/1391904347117322322",
-      "SPRT Icarus": "https://discord.com/channels/900478857436606535/1391878505905524817/1396265862268190830",
-      "BRHS Lednik": "https://discord.com/channels/900478857436606535/1391878505905524817/13980457033678234613",
-      "BRHS Trireme": "https://discord.com/channels/900478857436606535/1391878505905524817/1404319148888031312",
-      "BRHS Seastorm": "https://discord.com/channels/900478857436606535/1391878505905524817/1404322180329898046",
-      "WINCO Rafto": "https://discord.com/channels/900478857436606535/1391878505905524817/1398047073097482262",
-      "AACS Dendrobium": "https://discord.com/channels/900478857436606535/1391878505905524817/1403127587567439872",
-      "BRHS Sword Of Twilight": "https://discord.com/channels/900478857436606535/1391878505905524817/1404319218261954661",
-      "BRHS Judgement's Bow": "https://discord.com/channels/900478857436606535/1391878505905524817/1404319407106293843",
+      "WINC Caterpillar": "https://discord.com/channels/900478857436606535/1391878505905524817/1391904347117322322"
     };
 
     // Loading States & Progress Indicators
