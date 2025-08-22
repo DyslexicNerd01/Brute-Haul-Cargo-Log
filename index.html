@@ -587,17 +587,47 @@
       background-color: rgba(255, 255, 255, 0.3);
     }
 
-    .time-now-btn {
-      background: #9d7523;
-      color: #e2e2e2;
-      border: 1px solid #781d15;
-      padding: 8px 12px;
-      border-radius: 4px;
-      cursor: pointer;
+    /* DateTime input and button container */
+    .datetime-container {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    /* Specific styling for datetime-local inputs */
+    input[type="datetime-local"] {
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 12px 16px;
       font-size: 14px;
+      transition: all 0.2s ease;
+      background: #ffffff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      flex: 1;
+      box-sizing: border-box;
+      line-height: 1.2;
+    }
+
+    .time-now-btn {
+      background: linear-gradient(135deg, #9d7523 0%, #8a6b1f 100%);
+      color: #ffffff;
+      border: 2px solid transparent;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 15px;
       font-weight: bold;
       transition: all 0.2s ease;
       white-space: nowrap;
+      box-sizing: border-box;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      line-height: 1.2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: calc(16.8px + 20px + 4px);
+      align-self: flex-start;
+      margin-top: 3px;
     }
 
     .time-now-btn:hover {
@@ -1058,8 +1088,8 @@
       </div>
 
       <label>Departure Timestamp:</label>
-      <div style="display: flex; gap: 8px; align-items: center;">
-        <input type="datetime-local" id="departureTime" required style="flex: 1;">
+      <div class="datetime-container">
+        <input type="datetime-local" id="departureTime" required>
         <button type="button" class="time-now-btn" onclick="setCurrentTime('departureTime')" title="Set to current time">Now</button>
       </div>
 
@@ -1109,8 +1139,8 @@
       </div>
       <div class="card-content">
       <label>Order Completion Timestamp:</label>
-      <div style="display: flex; gap: 8px; align-items: center;">
-        <input type="datetime-local" id="completionTime" required style="flex: 1;">
+      <div class="datetime-container">
+        <input type="datetime-local" id="completionTime" required>
         <button type="button" class="time-now-btn" onclick="setCurrentTime('completionTime')" title="Set to current time">Now</button>
       </div>
       <div id="orderDuration" style="font-weight:bold; color:#9d7523; margin-top:8px;"></div>
