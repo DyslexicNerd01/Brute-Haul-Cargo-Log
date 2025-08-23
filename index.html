@@ -60,15 +60,13 @@
       transition: transform 0.2s ease, box-shadow 0.2s ease;
       width: 100%;
       box-sizing: border-box;
-      margin-bottom: 24px; /* Add gap between individual cards */
+      margin-bottom: 24px;
     }
 
-    /* Ensure form-step cards also get spacing */
     .card.form-step {
       margin-bottom: 24px;
     }
     
-    /* Remove navigation width constraints */
     #navigationCard {
       margin-bottom: 24px;
     }
@@ -111,7 +109,7 @@
       font-size: 24px;
       margin-right: 12px;
       display: inline-block;
-      font-style: normal; /* Prevent emojis from being italicized */
+      font-style: normal;
     }
 
     form {
@@ -406,7 +404,6 @@
       display: contents;
     }
 
-    /* Searchable dropdown styles */
     .searchable-dropdown {
       position: relative;
       width: 100%;
@@ -456,7 +453,6 @@
       border-bottom: none;
     }
     
-    /* Route row styling for searchable dropdowns */
     .route-row {
       display: flex;
       align-items: center;
@@ -466,14 +462,12 @@
       flex: 1;
     }
 
-    /* Tab Content Styling */
     #historyTab {
       padding: 20px;
       max-width: 1200px;
       margin: 0 auto;
     }
     
-    /* Two-column layout for form and announcements */
     .main-content-wrapper {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -483,7 +477,7 @@
     }
     
     .form-column {
-      min-width: 0; /* Prevents grid blowout */
+      min-width: 0;
       width: 100%;
     }
     
@@ -509,7 +503,6 @@
       min-height: 0;
     }
     
-    /* Responsive: Stack on smaller screens */
     @media (max-width: 1200px) {
       .main-content-wrapper {
         grid-template-columns: 1fr;
@@ -517,7 +510,6 @@
       }
     }
 
-    /* Loading States & Progress Indicators */
     .loading-spinner {
       display: inline-block;
       width: 16px;
@@ -587,14 +579,12 @@
       background-color: rgba(255, 255, 255, 0.3);
     }
 
-    /* DateTime input and button container */
     .datetime-container {
       display: flex;
       gap: 8px;
       align-items: center;
     }
 
-    /* Specific styling for datetime-local inputs */
     input[type="datetime-local"] {
       border: 2px solid #e0e0e0;
       border-radius: 8px;
@@ -641,7 +631,6 @@
       transform: translateY(0);
     }
 
-    /* Enhanced input styling for card layout */
     input, select, textarea {
       border: 2px solid #e0e0e0;
       border-radius: 8px;
@@ -671,7 +660,6 @@
       font-size: 14px;
     }
 
-    /* Enhanced button styling */
     button {
       background: linear-gradient(135deg, #9d7523 0%, #8a6b1f 100%);
       color: white;
@@ -696,7 +684,6 @@
       box-shadow: 0 2px 8px rgba(157, 117, 35, 0.3);
     }
 
-    /* Special styling for primary action buttons */
     .primary-btn {
       background: linear-gradient(135deg, #781d15 0%, #5a1510 100%);
       font-size: 16px;
@@ -1118,7 +1105,7 @@
       <div id="resourceDrivePresets" style="display:none; margin-bottom:10px;">
         <span style="font-size:13px; font-weight:bold; vertical-align:middle; margin-right:8px;">Resource Drive Presets:</span>
         <span style="display:inline-flex; gap:10px; vertical-align:middle;">
-          <button type="button" class="resource-preset-btn" id="presetLargeBtn" onclick="applyManifestPreset('large')">Large Haul</button>
+          <button type="button" class="resource-preset-btn" id="presetLargeBtn" onclick="applyManifestPreset('large')">Heavy Haul</button>
           <button type="button" class="resource-preset-btn" id="presetMediumBtn" onclick="applyManifestPreset('medium')">Medium Haul</button>
           <button type="button" class="resource-preset-btn" id="presetSmallBtn" onclick="applyManifestPreset('small')">Small Haul</button>
         </span>
@@ -1259,12 +1246,12 @@
     </div>
     <div class="progress-text" id="formProgressText">Form Completion: 0%</div>
   </div>
-  </div> <!-- End formTab -->
-  </div> <!-- End main-container -->
+  </div>
+  </div>
 <script type="module">
-   // Locations are loaded from external locations.js file
+   // Locations are in locations.js file
 
-    // Ship lists per category
+    // Ships
     const transportShips = [
       "SPRT Icarus", "BRHS Lednik", "BRHS Trireme", "WINC Caterpillar", "WINCO Rafto"
     ];
@@ -1276,7 +1263,7 @@
       ...securityShips,
     ];
 
-    // Captain names list
+    // Captain names
     const captainNames = [
       "DyslexicNerd", "Spartan", "Lightblade", "jjetstreamm", "Roflnomish", 
       "BenjiNotorious", "zarainia", "Astol", "Venomnom", "BigDaddyTortuga", 
@@ -1284,22 +1271,19 @@
       "sadfish", "Efazer"
     ];
 
-    // Manifest material list
+    // Manifest materials
     const materialList = [
       "Select Material", "Agricium", "Aluminium", "Aphorite", "Beryl", "Bexalite", "Borase", "Copper", "Corundum", "Diamond", "Dolivine", "Dyslexium", "Gold", "Hadanite", "Hephaestanite", "Inert materials", "Laranite", "Placeholder", "Spartanium", "Quantanium", "Quartz", "Taranite", "Tungsten", "Titanium"
     ];
 
-    // Clear button functions
+    // Clear Button
     function clearFormFields() {
-  // Clear timestamps
+
   document.getElementById("departureTime").value = "";
   document.getElementById("completionTime").value = "";
   document.getElementById("orderDuration").textContent = "";
-
-  // Reset manifest to one empty line
   manifestLineCount = 1;
   renderManifestLines();
-  // Clear values in the first manifest line
   const firstManifestRow = document.querySelector('.manifest-row');
   if (firstManifestRow) {
     firstManifestRow.querySelector('.manifest-scu').value = "";
@@ -1307,10 +1291,8 @@
     firstManifestRow.querySelector('.manifest-uec').value = "";
   }
 
-  // Reset total SCU display
   document.getElementById("totalSCUBox").textContent = "Total SCU: 0";
 
-  // Clear deductibles
   document.getElementById("repairs").value = "0";
   document.getElementById("restock").value = "0";
   document.getElementById("quantumFuel").value = "0";
@@ -1318,34 +1300,25 @@
   document.getElementById("crewCosts").value = "0";
   document.getElementById("totalUECBox").value = "";
 
-  // Clear route
   document.getElementById("routeStart").value = "";
   document.getElementById("routeEnd").value = "";
 
-  // Clear start location
   document.getElementById("startLocation").value = "";
 
-  // Keep ship name, captain name, and crew information intact - do not clear them
-
-  // Clear notes
   document.getElementById("notes").value = "";
   
-  // Hide Discord section and copy button
   document.getElementById("discordSection").style.display = "none";
   hideCopyButton();
   
-  // Show the Generate button again
   const generateBtn = document.getElementById("generateBtn");
   if (generateBtn) {
     generateBtn.style.display = "inline-flex";
   }
   
-  // Reset progress bar
   calculateFormProgress();
 }
 
 function showTab(tab) {
-  // Simple display switching
   const formTab = document.getElementById('formTab');
   const historyTab = document.getElementById('historyTab');
   
@@ -1356,12 +1329,10 @@ function showTab(tab) {
     } else if (tab === 'historyTab') {
       formTab.style.display = 'none';
       historyTab.style.display = 'block';
-      // Render history when showing history tab
       renderHistory();
     }
   }
 
-  // Tab highlighting
   const formTabBtn = document.getElementById('formTabBtn');
   const historyTabBtn = document.getElementById('historyTabBtn');
   
@@ -1372,7 +1343,6 @@ function showTab(tab) {
     formTabBtn.style.color = '#fff';
     historyTabBtn.style.color = '#fff';
 
-    // Black outline for selected tab
     formTabBtn.style.border = tab === 'formTab' ? '3px solid #000' : '3px solid transparent';
     historyTabBtn.style.border = tab === 'historyTab' ? '3px solid #000' : '3px solid transparent';
   }
@@ -1381,21 +1351,15 @@ window.showTab = showTab;
 
 window.addEventListener("DOMContentLoaded", function() {
   showTab('formTab');
-  // Ensure totalUECBox starts blank on first load
   const totalUECInput = document.getElementById("totalUECBox");
   if (totalUECInput) totalUECInput.value = "";
-  
-  // Set up dynamic announcements height
   resizeAnnouncementsContent();
 });
-
-// Function to dynamically resize announcements content
 function resizeAnnouncementsContent() {
   const announcementsContent = document.getElementById('announcementsContent');
   const formCompletionCard = document.getElementById('completionStep');
   
   if (announcementsContent && formCompletionCard) {
-    // Get the natural height of the content
     announcementsContent.style.height = 'auto';
     announcementsContent.style.maxHeight = 'none';
     announcementsContent.style.overflow = 'visible';

@@ -909,6 +909,7 @@ const locations = [
   "Rayari Kaltag Research Outpost",
   "Rayari Livengood Research Outpost",
   "Rayari McGrath Research Outpost",
+  "Rayari, Inc. Outpost",
   "Razor's Edge",
   "Reclamation & Disposal",
   "Reclamation & Disposal Orinth",
