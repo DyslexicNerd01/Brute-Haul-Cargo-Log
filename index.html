@@ -416,6 +416,7 @@
       color: #230e09;
       border-radius: 4px;
       box-sizing: border-box;
+      min-height: 36px;
     }
     .searchable-dropdown .dropdown-list {
       position: absolute;
@@ -441,6 +442,9 @@
       background: #e2e2e2;
       color: #230e09;
       font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
     .searchable-dropdown .dropdown-item:hover {
       background: #d0d0d0;
@@ -451,6 +455,121 @@
     }
     .searchable-dropdown .dropdown-item:last-child {
       border-bottom: none;
+    }
+    
+    /* Checkbox styling in dropdown items */
+    .searchable-dropdown .dropdown-item input[type="checkbox"] {
+      width: 14px;
+      height: 14px;
+      margin: 0;
+      margin-right: 6px;
+      transform: none;
+      vertical-align: middle;
+      flex-shrink: 0;
+    }
+    
+    .searchable-dropdown .dropdown-item span {
+      vertical-align: middle;
+      line-height: 14px;
+      flex-grow: 1;
+    }
+    
+    /* Checkbox dropdown styles */
+    .checkbox-dropdown {
+      position: relative;
+      width: 100%;
+    }
+    .checkbox-dropdown .dropdown-toggle {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #781d15;
+      background: #e2e2e2;
+      color: #230e09;
+      border-radius: 4px;
+      box-sizing: border-box;
+      cursor: pointer;
+      text-align: left;
+      min-height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .checkbox-dropdown .dropdown-toggle:after {
+      content: "▼";
+      font-size: 12px;
+    }
+    .checkbox-dropdown .checkbox-list {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: #e2e2e2;
+      border: 1px solid #781d15;
+      border-top: none;
+      max-height: 200px;
+      overflow-y: auto;
+      z-index: 1000;
+      display: none;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    .checkbox-dropdown .checkbox-list.show {
+      display: block;
+    }
+    .checkbox-dropdown .checkbox-item {
+      padding: 8px 12px;
+      border-bottom: 1px solid #ccc;
+      background: #e2e2e2;
+      color: #230e09;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+    }
+    .checkbox-dropdown .checkbox-item:hover {
+      background: #d0d0d0;
+    }
+    .checkbox-dropdown .checkbox-item:last-child {
+      border-bottom: none;
+    }
+    .checkbox-dropdown .checkbox-item input[type="checkbox"] {
+      margin-right: 8px;
+      width: auto;
+      height: auto;
+      pointer-events: none;
+    }
+    .checkbox-dropdown .checkbox-item label {
+      cursor: pointer;
+      margin: 0;
+      flex: 1;
+      pointer-events: none;
+    }
+    .checkbox-dropdown .dropdown-toggle.error {
+      border-color: #ed4245;
+      background: #fee;
+    }
+    
+    /* Security ship captain dropdowns */
+    .security-ship-captains {
+      margin-top: 12px;
+    }
+    .security-captain-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+      padding: 8px;
+      background: #f8f6f2;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+    }
+    .security-captain-row label {
+      font-weight: 600;
+      min-width: 150px;
+      margin: 0;
+    }
+    .security-captain-row .searchable-dropdown {
+      flex: 1;
     }
     
     .route-row {
@@ -867,16 +986,15 @@
     }
     
     #formTab {
-      display: block; /* Form tab visible by default */
+      display: block;
     }
     
     #historyTab {
-      display: none; /* History tab hidden by default */
+      display: none;
       background: #f8f9fa;
       padding: 20px;
       border-radius: 8px;
       margin-top: 20px;
-      /* Force visibility when shown */
       position: relative !important;
       visibility: visible !important;
       opacity: 1 !important;
@@ -897,7 +1015,6 @@
       min-height: 200px !important;
     }
     
-    /* Discord output toggle styles */
     #discordOutputContainer {
       transition: all 0.3s ease;
       overflow: hidden;
@@ -922,13 +1039,11 @@
 </head>
 <body>
   <div class="main-container">
-    <!-- Page Header -->
     <div class="page-header">
       <img class="logo" src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/BRHS-Logo.png" alt="BruteHaul Logo">
       <h1>Brute Haul Online Documentation System</h1>
     </div>
 
-    <!-- Navigation Tabs -->
     <div class="card" id="navigationCard">
       <div style="display: flex; gap: 12px; margin-bottom: 0;">
         <button type="button" onclick="showTab('formTab')" id="formTabBtn" style="border: 3px solid transparent;">Form</button>
@@ -940,7 +1055,6 @@
       </div>
     </div>
 
-    <!-- COMPLETELY NEW History Tab positioned right after navigation -->
     <div id="historyTab" style="display: none; width: 100%; max-width: 95%; margin: 0 auto;">
       <div style="background: linear-gradient(145deg, #ffffff 0%, #f8f8f8 100%); border-radius: 16px; padding: 28px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); border: 1px solid rgba(157, 117, 35, 0.2);">
         <div id="historyList" style="min-height: 300px; padding: 20px;">
@@ -963,11 +1077,9 @@
       </div>
     </div>
 
-    <!-- Form Tab Content -->
     <div id="formTab">
       <div class="form-grid">
   
-  <!-- Feedback Messages -->
   <div class="success-feedback" id="successFeedback">
     <span>✓</span>
     <span id="successMessage">Success!</span>
@@ -980,7 +1092,6 @@
   <div class="main-content-wrapper">
     <div class="form-column">
       <form id="haulForm">
-    <!-- Basic Information Card -->
     <div class="card">
       <div class="card-header">
         <div class="card-icon">1</div>
@@ -991,7 +1102,6 @@
       <select id="orderCategory" required>
         <option value="" selected disabled>Select category</option>
         <option value="Transport">Transport</option>
-        <option value="Security">Security</option>
         <option value="Other">Other</option>
       </select>
       <div id="orderCategoryOtherDiv" class="other-div">
@@ -1062,6 +1172,25 @@
     </div>
     </div>
 
+    <div class="card form-step" id="securityShipsStep">
+      <div class="card-header">
+        <i class="icon">🛡️</i>
+        <h2>Security Ships</h2>
+      </div>
+      <div class="card-content">
+      <label>Security Ships:</label>
+      <div class="searchable-dropdown" id="securityShipsDropdown">
+        <input type="text" id="securityShips" placeholder="Search security ships..." autocomplete="off" required>
+        <div class="dropdown-list" id="securityShipsList"></div>
+      </div>
+      <div id="securityShipsOtherDiv" class="other-div">
+        <label>Specify Other:</label>
+        <input type="text" id="securityShipsOther" required />
+      </div>
+      <div class="security-ship-captains" id="securityShipCaptains"></div>
+    </div>
+    </div>
+
     <div class="card form-step" id="locationTimeStep">
       <div class="card-header">
         <i class="icon">📍</i>
@@ -1114,7 +1243,7 @@
       <div class="manifest-total-box">
   <span id="totalSCUBox">Total SCU: 0</span>
   <span style="margin-right:6px;">Total UEC:</span>
-<input type="number" id="totalUECBox" style="color:#230e09; font-weight:bold; vertical-align:middle; width:120px;" value="" />
+<input type="number" id="totalUECBox" style="color:#230e09; font-weight:bold; vertical-align:middle; width:120px;" value="0" />
 </div>
     </div>
     </div>
@@ -1163,23 +1292,22 @@
 
   <div class="section" id="discordSection" style="display:none;">
     
-    <!-- Border line -->
     <div style="border-bottom: 1px solid #9d7523; margin-bottom: 16px;"></div>
     
-    <!-- Button Row: Send to Discord and Show Output Toggle -->
     <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
-      <button type="button" onclick="sendToDiscord()" style="background:#43b581;color:#fff;border:none;padding:8px 16px;border-radius:5px;font-weight:bold;display:inline-flex;align-items:center;gap:8px;">
-        <img src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/DiscordLogo.png" alt="Discord Logo" style="height:1.6em;width:auto;filter:brightness(0) invert(1);" />
+      <button type="button" onclick="sendToDiscord()" style="background:#43b581;color:#fff;border:none;padding:12px 24px;border-radius:8px;font-weight:bold;font-size:16px;display:inline-flex;align-items:center;gap:10px;">
+        <img src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/DiscordLogo.png" alt="Discord Logo" style="height:1.8em;width:auto;filter:brightness(0) invert(1);" />
         Send to Discord
       </button>
-      
+    </div>
+    
+    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
       <button type="button" onclick="toggleDiscordOutput()" id="toggleOutputBtn" style="background:#9d7523;color:#fff;border:none;padding:8px 16px;border-radius:5px;font-weight:bold;display:inline-flex;align-items:center;gap:8px;">
         <span id="toggleOutputIcon">▶</span>
         <span id="toggleOutputText">Show Generated Output</span>
       </button>
     </div>
     
-    <!-- Collapsible Output Container -->
     <div id="discordOutputContainer" style="display:none;">
       <textarea id="discordOutput" readonly></textarea>
       <button type="button" onclick="copyDiscordOutput()" id="copyDiscordBtn" style="background:#5865F2;color:#fff;border:none;padding:8px 16px;border-radius:5px;font-weight:bold;display:none;align-items:center;gap:8px;">
@@ -1189,10 +1317,9 @@
     </div>
   </div>
     </div>
-    <!-- End form-column -->
 
     <!-- THIS IS A JUMPPOINT FOR ANNOUCEMENTS BECAUSE I'M LAZY AND I DON'T WANT TO SCROLL TO FIND THIS SECTION-->
-    <!-- Announcements Sidebar -->
+    <!-- I really should make annoucements a seperate file but that would be smart of me-->
     <div class="announcements-sidebar">
       <div class="card" id="announcementsSection">
         <div class="card-header">
@@ -1220,26 +1347,76 @@
             <!-- Announcement Post 2 -->
             <div class="announcement-post" style="background:#fff;border-radius:8px;padding:20px;margin-bottom:20px;border:1px solid #9d7523;box-shadow:0 2px 4px rgba(0,0,0,0.1);">
               <div class="announcement-header" style="border-bottom:2px solid #9d7523;padding-bottom:10px;margin-bottom:15px;">
-                <h3 style="color:#781d15;margin:0;font-size:1.2em;">KNOWN ISSUES AFFECTING BRUTE HAUL OPERATIONS</h3>
+                <h3 style="color:#781d15;margin:0;font-size:1.2em;">Known Issues Affecting Brute Haul Operations</h3>
                 <div style="color:#666;font-size:0.8em;margin-top:5px;">
-                  <strong>By:</strong> DyslexicNerd01<br><strong>Updated:</strong> August 20, 2025
+                  <strong>By:</strong> DyslexicNerd01<br><strong>Updated:</strong> August 25, 2025
                 </div>
               </div>
               <div class="announcement-body" style="color:#230e09;line-height:1.5;font-size:0.9em;">
-                <p><strong>Below are currently known major issues affecting Brute Haul/Ad Astra Operations. Currently there are no official fixes or 100% reliable workarounds.</strong></p>
-                <p><strong>🟢 Issue:</strong> <u>Freight Elevator Overloaded</u><br>
-                <strong>Verified Fixed:</strong> This issue is confirmed to be fixed in Live 4.3.0. Verified by Brute Haul memembers in Live 4.3.0 <br><i>*This issue still may be present at Pyro Locations*</i></p>
-                <p><strong>🟡 Issue:</strong> <u>Elevators not lowering/storing items</u><br>
-                <strong>Reported as Fixed:</strong> Live 4.3.0 reports that this issue has been fixed. Brute Haul has not self verified that this issue has been resolved.</p>
-                <p>Follow this support ticket for more information on current bugs/issues: <a href="https://support.robertsspaceindustries.com/hc/en-us/articles/360056254754-Star-Citizen-Alpha-4-3-Known-Issues" target="_blank" style="color:#781d15;">Star Citizen Known Issues</a></p>
+                <p><strong>✅</strong> <u>No Issues Currently Affecting Brute Haul Operations!</u><br>
+                  There are currently no known issues majorly affecting Brute Haul Operations or Ad Astra Operations!</p>
+                <p><strong>Follow this support ticket for more information on current bugs/issues or other issues within the game:<br> <a href="https://support.robertsspaceindustries.com/hc/en-us/articles/360056254754-Star-Citizen-Alpha-4-3-Known-Issues" target="_blank" style="color:#781d15;">Star Citizen Known Issues</a></strong></p>
+              </div>
+            </div>
+            
+            <!-- Announcement Post 3 -->
+            <div class="announcement-post" style="background:#fff;border-radius:8px;padding:20px;margin-bottom:20px;border:1px solid #9d7523;box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+              <div class="announcement-header" style="border-bottom:2px solid #9d7523;padding-bottom:10px;margin-bottom:15px;">
+                <h3 style="color:#781d15;margin:0;font-size:1.2em;">📋 How to Use the Manifest Generator</h3>
+                <div style="color:#666;font-size:0.8em;margin-top:5px;">
+                  <strong>By:</strong> DyslexicNerd01<br><strong>Date:</strong> August 24, 2025
+                </div>
+              </div>
+              <div class="announcement-body" style="color:#230e09;line-height:1.5;font-size:0.9em;">
+                <p><strong>Complete guide to using the Brute Haul Cargo Manifest Generator:</strong></p>
+                
+                <p><strong>📝 Step 1: Basic Information</strong><br>
+                • Fill in Order Category, Company Name, Order Type<br>
+                • Select your Transport Ship and Captain<br>
+                • If you don't see your ship or name on the list, use the "Other" option<br>
+                • Add crew members (if any)</p>
+                
+                <p><strong>🛡️ Step 2: Security Ships</strong><br>
+                • Select security escort ships from the dropdown (If any)<br>
+                • Assign captains to each security ship<br>
+                • Add crew members (if any)<br>
+                • Use "Other" if your ship isn't listed</p>
+                
+                <p><strong>📍 Step 3: Locations & Timeline</strong><br>
+                • Set departure location and time<br>
+                • Choose route start (Collection Point) and end points (Delivery Point)<br>
+                • Set order completion time<br>
+                • Duration is calculated automatically</p>
+                
+                <p><strong>📦 Step 4: Manifest</strong><br>
+                • Add cargo lines with SCU amounts and materials<br>
+                • UEC values are optional but recommended<br>
+                • Use presets for common cargo types in the Resource Drive<br>
+                • Total SCU and UEC calculated automatically</p>
+                
+                <p><strong>💰 Step 5: Completion & Costs</strong><br>
+                • Enter repair costs, restocking, fuel costs<br>
+                • Add crew/ship costs and any notes<br>
+                • Review your manifest before generating</p>
+                
+                <p><strong>🚀 Final Steps:</strong><br>
+                • Click "Generate Discord Post" to create formatted output<br>
+                • Click "Send to Discord" to post automatically<br>
+                • Your manifest is logged to the Discord Channel!</p>
+                
+                <p><strong>💡 Pro Tips:</strong><br>
+                • Green progress bars show completed sections<br>
+                • Use "Clear Form" to start over while keeping basic information<br>
+                • Form validation prevents common errors<br>
+                • History tab saves your previous manifests<br>
+                • The announcement section displays important information regarding Brute Haul</p>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div> <!-- End main-content-wrapper -->
-  <!-- Full-width Progress Bar at Bottom of Form -->
+  </div>
   <div class="progress-bar-container" style="width: 100%; margin: 24px 0; padding: 0 40px; box-sizing: border-box;">
     <div class="progress-bar">
       <div class="progress-fill" id="formProgressFill"></div>
@@ -1249,14 +1426,14 @@
   </div>
   </div>
 <script type="module">
-   // Locations are in locations.js file
+   // Locations in locations.js
 
-    // Ships
+    // Ship names
     const transportShips = [
-      "SPRT Icarus", "BRHS Lednik", "BRHS Trireme", "WINC Caterpillar", "WINCO Rafto"
+      "SPRT Icarus", "BRHS Lednik", "BRHS Trireme", "WINC Caterpillar", "WINCO Rafto", "BRHS Ledokol",
     ];
     const securityShips = [
-      "AACS Landsknecht", "AACS Feder", "BRHS Seastrom", "BRHS Sword of Twilight", "AACS Dendrobium", "AACS Judgement’s Bow", "BRHS Knight",
+      "AACS Landsknecht", "AACS Feder", "BRHS Seastrom", "BRHS Sword of Twilight", "AACS Dendrobium", "AACS Judgements Bow", "BRHS Knight",
     ];
     const allShips = [
       ...transportShips,
@@ -1276,7 +1453,6 @@
       "Select Material", "Agricium", "Aluminium", "Aphorite", "Beryl", "Bexalite", "Borase", "Copper", "Corundum", "Diamond", "Dolivine", "Dyslexium", "Gold", "Hadanite", "Hephaestanite", "Inert materials", "Laranite", "Placeholder", "Spartanium", "Quantanium", "Quartz", "Taranite", "Tungsten", "Titanium"
     ];
 
-    // Clear Button
     function clearFormFields() {
 
   document.getElementById("departureTime").value = "";
@@ -1298,7 +1474,7 @@
   document.getElementById("quantumFuel").value = "0";
   document.getElementById("hydrogenFuel").value = "0";
   document.getElementById("crewCosts").value = "0";
-  document.getElementById("totalUECBox").value = "";
+  document.getElementById("totalUECBox").value = "0";
 
   document.getElementById("routeStart").value = "";
   document.getElementById("routeEnd").value = "";
@@ -1352,7 +1528,7 @@ window.showTab = showTab;
 window.addEventListener("DOMContentLoaded", function() {
   showTab('formTab');
   const totalUECInput = document.getElementById("totalUECBox");
-  if (totalUECInput) totalUECInput.value = "";
+  if (totalUECInput) totalUECInput.value = "0";
   resizeAnnouncementsContent();
 });
 function resizeAnnouncementsContent() {
@@ -1367,9 +1543,8 @@ function resizeAnnouncementsContent() {
     const contentRect = announcementsContent.getBoundingClientRect();
     const completionRect = formCompletionCard.getBoundingClientRect();
     
-    // If announcements content goes below the completion card, add scroll
     if (contentRect.bottom > completionRect.bottom) {
-      const maxHeight = completionRect.bottom - contentRect.top - 20; // 20px buffer
+      const maxHeight = completionRect.bottom - contentRect.top - 20; // 20px
       announcementsContent.style.height = maxHeight + 'px';
       announcementsContent.style.maxHeight = maxHeight + 'px';
       announcementsContent.style.overflow = 'auto';
@@ -1377,7 +1552,6 @@ function resizeAnnouncementsContent() {
   }
 }
 
-// Resize on window resize
 window.addEventListener('resize', resizeAnnouncementsContent);
 
     function populateLocationDropdown(id) {
@@ -1405,7 +1579,7 @@ window.addEventListener('resize', resizeAnnouncementsContent);
         const term = searchTerm.toLowerCase();
         return locations.filter(location => 
           location.toLowerCase().includes(term)
-        ); // Show all matching results
+        );
       }
 
       function renderDropdownItems(locationsToShow) {
@@ -1419,15 +1593,13 @@ window.addEventListener('resize', resizeAnnouncementsContent);
             selectedValue = location;
             hideDropdown();
             input.classList.remove('error');
+            showGenerateButtonOnChange();
           });
           list.appendChild(item);
         });
       }
 
-      // Initialize with all locations
       renderDropdownItems(locations);
-
-      // Handle input events
       input.addEventListener('input', (e) => {
         const searchTerm = e.target.value;
         if (searchTerm.length === 0) {
@@ -1438,6 +1610,7 @@ window.addEventListener('resize', resizeAnnouncementsContent);
         renderDropdownItems(filteredLocations);
         showDropdown();
         selectedValue = '';
+        showGenerateButtonOnChange();
       });
 
       input.addEventListener('focus', () => {
@@ -1448,7 +1621,6 @@ window.addEventListener('resize', resizeAnnouncementsContent);
         hideDropdown();
       });
 
-      // Handle keyboard navigation
       input.addEventListener('keydown', (e) => {
         const items = list.querySelectorAll('.dropdown-item');
         let selectedIndex = Array.from(items).findIndex(item => item.classList.contains('selected'));
@@ -1476,19 +1648,18 @@ window.addEventListener('resize', resizeAnnouncementsContent);
             selectedValue = items[selectedIndex].textContent;
             hideDropdown();
             input.classList.remove('error');
+            showGenerateButtonOnChange();
           }
         } else if (e.key === 'Escape') {
           hideDropdown();
         }
       });
 
-      // Custom validation function
       input.validateValue = function() {
         return locations.includes(input.value);
       };
     }
 
-    // Close all dropdowns when clicking outside
     document.addEventListener('click', (e) => {
       if (!e.target.closest('.searchable-dropdown')) {
         document.querySelectorAll('.dropdown-list').forEach(list => {
@@ -1508,10 +1679,8 @@ window.addEventListener('resize', resizeAnnouncementsContent);
       let ships = [];
       if (category === "Transport") {
         ships = transportShips;
-      } else if (category === "Security") {
-        ships = securityShips;
       } else {
-        ships = allShips;
+        ships = transportShips;
       }
 
       const shipsWithOther = [...ships, "Other"];
@@ -1553,16 +1722,13 @@ window.addEventListener('resize', resizeAnnouncementsContent);
         });
       }
 
-      // Initialize with ships for category
       renderDropdownItems(shipsWithOther);
 
-      // Remove existing event listeners
       input.removeEventListener('input', input._shipInputHandler);
       input.removeEventListener('focus', input._shipFocusHandler);
       input.removeEventListener('blur', input._shipBlurHandler);
       input.removeEventListener('keydown', input._shipKeydownHandler);
 
-      // Handle input events
       input._shipInputHandler = (e) => {
         const searchTerm = e.target.value;
         if (searchTerm.length === 0) {
@@ -1586,7 +1752,6 @@ window.addEventListener('resize', resizeAnnouncementsContent);
       };
       input.addEventListener('blur', input._shipBlurHandler);
 
-      // Handle keyboard navigation
       input._shipKeydownHandler = (e) => {
         const items = list.querySelectorAll('.dropdown-item');
         let selectedIndex = Array.from(items).findIndex(item => item.classList.contains('selected'));
@@ -1622,15 +1787,13 @@ window.addEventListener('resize', resizeAnnouncementsContent);
       };
       input.addEventListener('keydown', input._shipKeydownHandler);
 
-      // Custom validation function
       input.validateValue = function() {
         return shipsWithOther.includes(input.value);
       };
     }
 
-    function populateCaptainDropdown() {
-      const inputId = 'captainName';
-      const listId = 'captainNameList';
+    function populateCaptainDropdown(inputId = 'captainName') {
+      const listId = inputId + 'List';
       const input = document.getElementById(inputId);
       const list = document.getElementById(listId);
       
@@ -1669,16 +1832,22 @@ window.addEventListener('resize', resizeAnnouncementsContent);
             selectedValue = captain;
             hideDropdown();
             input.classList.remove('error');
-            toggleCaptainNameOther();
+            if (inputId === 'captainName') {
+              toggleCaptainNameOther();
+            }
+            calculateFormProgress();
           });
           list.appendChild(item);
         });
       }
 
-      // Initialize with all captains
       renderDropdownItems(captainsWithOther);
 
-      // Handle input events
+      if (input.dataset.initialized === 'true') {
+        return;
+      }
+      input.dataset.initialized = 'true';
+
       input.addEventListener('input', (e) => {
         const searchTerm = e.target.value;
         if (searchTerm.length === 0) {
@@ -1692,6 +1861,12 @@ window.addEventListener('resize', resizeAnnouncementsContent);
       });
 
       input.addEventListener('focus', () => {
+        renderDropdownItems(filteredCaptains);
+        showDropdown();
+      });
+
+      input.addEventListener('click', () => {
+        renderDropdownItems(filteredCaptains);
         showDropdown();
       });
 
@@ -1699,7 +1874,6 @@ window.addEventListener('resize', resizeAnnouncementsContent);
         hideDropdown();
       });
 
-      // Handle keyboard navigation
       input.addEventListener('keydown', (e) => {
         const items = list.querySelectorAll('.dropdown-item');
         let selectedIndex = Array.from(items).findIndex(item => item.classList.contains('selected'));
@@ -1727,17 +1901,186 @@ window.addEventListener('resize', resizeAnnouncementsContent);
             selectedValue = items[selectedIndex].textContent;
             hideDropdown();
             input.classList.remove('error');
-            toggleCaptainNameOther();
+            if (inputId === 'captainName') {
+              toggleCaptainNameOther();
+            }
+            calculateFormProgress();
           }
         } else if (e.key === 'Escape') {
           hideDropdown();
         }
       });
 
-      // Custom validation function
       input.validateValue = function() {
         return captainsWithOther.includes(input.value);
       };
+    }
+
+    function populateSecurityShipsDropdown() {
+      const inputId = 'securityShips';
+      const listId = 'securityShipsList';
+      const input = document.getElementById(inputId);
+      const list = document.getElementById(listId);
+      
+      if (!input || !list) return;
+
+      const securityShipsWithOther = ["None", ...securityShips, "Other"];
+      let selectedShips = ['None']; // Default to "None" selected
+
+      function showDropdown() {
+        list.classList.add('show');
+      }
+
+      function hideDropdown() {
+        setTimeout(() => {
+          list.classList.remove('show');
+        }, 200);
+      }
+
+      function updateInputDisplay() {
+        if (selectedShips.length === 0) {
+          input.value = '';
+          input.placeholder = 'Select security ships...';
+        } else if (selectedShips.length === 1) {
+          input.value = selectedShips[0];
+        } else {
+          input.value = `${selectedShips.length} ships selected`;
+        }
+      }
+
+      function renderDropdownItems(shipsToShow) {
+        list.innerHTML = '';
+        renderShipItems(shipsToShow);
+      }
+
+      function renderShipItems(shipsToShow) {
+        list.innerHTML = '';
+
+        shipsToShow.forEach(ship => {
+          const item = document.createElement('div');
+          item.className = 'dropdown-item';
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.checked = selectedShips.includes(ship);
+          checkbox.addEventListener('click', (e) => e.stopPropagation());
+          
+          const label = document.createElement('span');
+          label.textContent = ship;
+          
+          item.appendChild(checkbox);
+          item.appendChild(label);
+          
+          item.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            if (ship === 'None') {
+              if (selectedShips.includes('None')) {
+                selectedShips = [];
+              } else {
+                selectedShips = ['None'];
+              }
+            } else {
+              if (selectedShips.includes('None')) {
+                selectedShips = selectedShips.filter(s => s !== 'None');
+              }
+              
+              if (selectedShips.includes(ship)) {
+                selectedShips = selectedShips.filter(s => s !== ship);
+              } else {
+                selectedShips.push(ship);
+              }
+            }
+            
+            updateInputDisplay();
+            renderShipItems(shipsToShow);
+            input.classList.remove('error');
+            toggleSecurityShipsOther();
+            
+            const validShips = selectedShips.filter(s => s !== 'None' && s !== 'Other');
+            updateSecurityCaptainDropdowns(validShips);
+            calculateFormProgress();
+          });
+          
+          item.addEventListener('mouseenter', () => {
+            if (!item.style.backgroundColor || item.style.backgroundColor === '') {
+              item.style.backgroundColor = '#d0d0d0';
+            }
+          });
+          
+          item.addEventListener('mouseleave', () => {
+            if (item.style.backgroundColor === 'rgb(208, 208, 208)') {
+              item.style.backgroundColor = '';
+            }
+          });
+          
+          list.appendChild(item);
+        });
+      }
+
+      renderDropdownItems(securityShipsWithOther);
+      updateInputDisplay();
+
+      if (input.dataset.initialized === 'true') {
+        return;
+      }
+      input.dataset.initialized = 'true';
+
+      input.addEventListener('focus', () => {
+        renderDropdownItems(securityShipsWithOther);
+        showDropdown();
+      });
+
+      input.addEventListener('click', (e) => {
+        e.stopPropagation();
+        renderDropdownItems(securityShipsWithOther);
+        showDropdown();
+      });
+
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          hideDropdown();
+        } else if (e.key === 'Backspace' || e.key === 'Delete') {
+          if (selectedShips.length > 0) {
+            selectedShips = [];
+            updateInputDisplay();
+            updateSecurityCaptainDropdowns([]);
+            calculateFormProgress();
+          }
+        } else {
+          e.preventDefault();
+        }
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!input.contains(e.target) && !list.contains(e.target)) {
+          hideDropdown();
+        }
+      });
+
+      input.validateValue = function() {
+        return selectedShips.length > 0;
+      };
+
+      input.getSelectedShips = function() {
+        return [...selectedShips];
+      };
+    }
+
+    function toggleSecurityShipsOther() {
+      const securityShipsInput = document.getElementById("securityShips");
+      const otherDiv = document.getElementById("securityShipsOtherDiv");
+      
+      if (!securityShipsInput || !otherDiv) return;
+      
+      const selectedShips = securityShipsInput.getSelectedShips ? securityShipsInput.getSelectedShips() : [];
+      const hasOther = selectedShips.includes("Other");
+      
+      if (hasOther) {
+        otherDiv.style.display = "block";
+      } else {
+        otherDiv.style.display = "none";
+      }
     }
 
     let manifestLineCount = 1;
@@ -1776,7 +2119,6 @@ window.addEventListener('resize', resizeAnnouncementsContent);
         manifestLines.insertAdjacentHTML('beforeend', createManifestLine(i));
       }
 
-      // Restore previous values
       document.querySelectorAll('.manifest-row').forEach((row, idx) => {
         if (manifestData[idx]) {
           row.querySelector('.manifest-scu').value = manifestData[idx].scu;
@@ -1787,7 +2129,6 @@ window.addEventListener('resize', resizeAnnouncementsContent);
 
       updateManifestTotals();
     }
-    // Resource Drive manifest presets
     function applyManifestPreset(type) {
       var preset = [];
       var totalUEC = 0;
@@ -1815,9 +2156,7 @@ window.addEventListener('resize', resizeAnnouncementsContent);
       }
       manifestLineCount = preset.length;
       renderManifestLines();
-      // Calculate total SCU
       var totalSCU = preset.reduce(function(sum, item) { return sum + item.scu; }, 0);
-      // Distribute UEC by SCU per material
       var rows = document.querySelectorAll('.manifest-row');
       var uecAssigned = 0;
       for (var idx = 0; idx < preset.length; idx++) {
@@ -1833,7 +2172,6 @@ window.addEventListener('resize', resizeAnnouncementsContent);
           uecAssigned += uec;
         }
       }
-      // Set total UEC box
       var totalUECInput = document.getElementById('totalUECBox');
       if (totalUECInput) totalUECInput.value = totalUEC;
       updateManifestTotals();
@@ -1897,31 +2235,327 @@ window.addEventListener('resize', resizeAnnouncementsContent);
 
   document.getElementById("totalSCUBox").textContent = `Total SCU: ${totalSCU.toLocaleString()}`;
 
-  // Set totalUECBox to the sum unless the user is editing it
   const totalUECInput = document.getElementById("totalUECBox");
   if (document.activeElement !== totalUECInput) {
-    totalUECInput.value = totalUEC > 0 ? totalUEC : "";
+    totalUECInput.value = totalUEC;
   }
+  
+  showGenerateButtonOnChange();
 }
 
-    window.toggleOrderTypeOther = toggleOrderTypeOther;
-    window.toggleOrderCategoryOther = toggleOrderCategoryOther;
-    window.toggleShipNameOther = toggleShipNameOther;
-    window.toggleCaptainNameOther = toggleCaptainNameOther;
-    window.generateCrewInputs = generateCrewInputs;
-    window.addManifestLine = addManifestLine;
-    window.removeManifestLine = removeManifestLine;
-    window.updateManifestTotals = updateManifestTotals;
-    window.generateOutput = generateOutput;
-    window.copyDiscordOutput = copyDiscordOutput;
-    window.toggleDiscordOutput = toggleDiscordOutput;
-    window.showCopyButton = showCopyButton;
-    window.hideCopyButton = hideCopyButton;
-    window.showGenerateButtonOnChange = showGenerateButtonOnChange;
-    window.clearFormFields = clearFormFields;
-
-    // Make applyManifestPreset available globally
-window.applyManifestPreset = applyManifestPreset;
+    function updateSecurityCaptainDropdowns(selectedShips) {
+      const container = document.getElementById('securityShipCaptains');
+      if (!container) return;
+      
+      container.innerHTML = '';
+      
+      const shipsArray = Array.isArray(selectedShips) ? selectedShips : [selectedShips];
+      const validShips = shipsArray.filter(ship => ship && ship !== 'None' && ship.trim() !== '');
+      
+      validShips.forEach(ship => {
+        let displayShipName = ship;
+        let shipId = ship.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '');
+        
+        if (ship === 'Other') {
+          const otherInput = document.getElementById('securityShipsOther');
+          const otherValue = otherInput ? otherInput.value.trim() : '';
+          if (otherValue === '') {
+            return;
+          }
+          displayShipName = otherValue;
+          shipId = `Other_${otherValue.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '')}`;
+        }
+        
+        const row = document.createElement('div');
+        row.className = 'security-captain-row';
+        row.style.border = '2px solid #781d15';
+        row.style.background = '#f9f9f9';
+        row.style.padding = '15px';
+        row.style.borderRadius = '8px';
+        row.style.marginBottom = '15px';
+        row.style.display = 'block';
+        row.style.width = '100%';
+        row.style.boxSizing = 'border-box';
+        
+        const shipHeader = document.createElement('h3');
+        shipHeader.textContent = displayShipName;
+        shipHeader.style.margin = '0 0 15px 0';
+        shipHeader.style.padding = '0 0 5px 0';
+        shipHeader.style.fontSize = '16px';
+        shipHeader.style.fontWeight = 'bold';
+        shipHeader.style.color = '#781d15';
+        shipHeader.style.borderBottom = '1px solid #781d15';
+        shipHeader.style.display = 'block';
+        shipHeader.style.width = '100%';
+        
+        const captainSection = document.createElement('div');
+        captainSection.style.marginLeft = '20px';
+        captainSection.style.marginBottom = '15px';
+        captainSection.style.display = 'block';
+        captainSection.style.width = '100%';
+        
+        const label = document.createElement('label');
+        label.textContent = 'Captain:';
+        label.style.display = 'block';
+        label.style.marginBottom = '5px';
+        label.style.fontWeight = 'bold';
+        label.style.fontSize = '14px';
+        label.style.width = '100%';
+        
+        const dropdownDiv = document.createElement('div');
+        dropdownDiv.className = 'searchable-dropdown';
+        dropdownDiv.style.position = 'relative';
+        dropdownDiv.style.width = '100%';
+        dropdownDiv.style.marginBottom = '10px';
+        dropdownDiv.style.display = 'block';
+        
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.id = `securityCaptain_${shipId}`;
+        input.placeholder = 'Click to select captain...';
+        input.autocomplete = 'off';
+        input.required = true;
+        input.style.width = 'calc(100% - 10px)';
+        input.style.padding = '8px';
+        input.style.border = '1px solid #781d15';
+        input.style.background = '#e2e2e2';
+        input.style.color = '#230e09';
+        input.style.borderRadius = '4px';
+        input.style.boxSizing = 'border-box';
+        
+        const list = document.createElement('div');
+        list.className = 'dropdown-list';
+        list.id = `securityCaptain_${shipId}_List`;
+        list.style.position = 'absolute';
+        list.style.top = '100%';
+        list.style.left = '0';
+        list.style.right = '0';
+        list.style.background = '#e2e2e2';
+        list.style.border = '1px solid #781d15';
+        list.style.borderTop = 'none';
+        list.style.maxHeight = '150px';
+        list.style.overflowY = 'auto';
+        list.style.zIndex = '1000';
+        list.style.display = 'none';
+        list.style.boxShadow = '0 2px 4px rgba(0,0,0,0.2)';
+        
+        dropdownDiv.appendChild(input);
+        dropdownDiv.appendChild(list);
+        captainSection.appendChild(label);
+        captainSection.appendChild(dropdownDiv);
+        
+        const crewSection = document.createElement('div');
+        crewSection.style.marginLeft = '20px';
+        crewSection.style.marginBottom = '15px';
+        crewSection.style.display = 'block';
+        crewSection.style.width = '100%';
+        crewSection.style.clear = 'both';
+        
+        const crewLabel = document.createElement('label');
+        crewLabel.textContent = 'Crew Amount:';
+        crewLabel.style.display = 'block';
+        crewLabel.style.marginBottom = '5px';
+        crewLabel.style.fontWeight = 'bold';
+        crewLabel.style.fontSize = '14px';
+        crewLabel.style.width = '100%';
+        
+        const crewInput = document.createElement('input');
+        crewInput.type = 'number';
+        crewInput.id = `securityCrew_${shipId}`;
+        crewInput.min = '0';
+        crewInput.max = '20';
+        crewInput.step = '1';
+        crewInput.value = '0';
+        crewInput.style.width = '100px';
+        crewInput.style.padding = '8px';
+        crewInput.style.border = '1px solid #781d15';
+        crewInput.style.background = '#e2e2e2';
+        crewInput.style.color = '#230e09';
+        crewInput.style.borderRadius = '4px';
+        crewInput.style.boxSizing = 'border-box';
+        crewInput.style.fontSize = '14px';
+        
+        crewInput.addEventListener('input', function() {
+          generateSecurityCrewInputs(shipId, displayShipName, parseInt(this.value, 10) || 0);
+          calculateFormProgress();
+          showGenerateButtonOnChange();
+          updateSecurityShipSectionStyling(shipId);
+        });
+        
+        crewSection.appendChild(crewLabel);
+        crewSection.appendChild(crewInput);
+        
+        const crewNamesContainer = document.createElement('div');
+        crewNamesContainer.className = 'security-crew-names';
+        crewNamesContainer.id = `securityCrewNames_${shipId}`;
+        crewNamesContainer.style.marginLeft = '20px';
+        crewNamesContainer.style.display = 'block';
+        crewNamesContainer.style.width = '100%';
+        crewNamesContainer.style.clear = 'both';
+        
+        row.appendChild(shipHeader);
+        row.appendChild(captainSection);
+        row.appendChild(crewSection);
+        row.appendChild(crewNamesContainer);
+        container.appendChild(row);
+        
+        input.addEventListener('input', () => {
+          updateSecurityShipSectionStyling(shipId);
+        });
+        input.addEventListener('change', () => {
+          updateSecurityShipSectionStyling(shipId);
+        });
+        
+        initializeCaptainDropdown(input, list, ship);
+      });
+      
+      setTimeout(() => {
+        updateAllSecurityShipStylings();
+      }, 100);
+    }
+    
+    function createSecurityShipElement(ship, shipId, container) {
+      let displayShipName = ship;
+      
+      if (ship === 'Other') {
+        const otherInput = document.getElementById('securityShipsOther');
+        const otherValue = otherInput ? otherInput.value.trim() : '';
+        if (otherValue === '') {
+          return;
+        }
+        displayShipName = otherValue;
+      }
+    }
+    
+    function initializeCaptainDropdown(input, list, shipName) {
+      const captainsArray = typeof captainNames !== 'undefined' ? captainNames : [
+        "DyslexicNerd", "Spartan", "Lightblade", "jjetstreamm", "Roflnomish", 
+        "BenjiNotorious", "zarainia", "Astol", "Venomnom", "BigDaddyTortuga", 
+        "ItzProto", "Newt", "Xolion", "Bakes Kamuari", "LockEmUpJas", 
+        "sadfish", "Efazer"
+      ];
+      const captainsWithOther = [...captainsArray, "Other"];
+      
+      function renderItems(captains) {
+        list.innerHTML = '';
+        captains.forEach(captain => {
+          const item = document.createElement('div');
+          item.className = 'dropdown-item';
+          item.style.padding = '6px 12px';
+          item.style.cursor = 'pointer';
+          item.style.borderBottom = '1px solid #ccc';
+          item.style.background = '#e2e2e2';
+          item.style.color = '#230e09';
+          item.style.fontSize = '14px';
+          item.textContent = captain;
+          
+          item.addEventListener('mouseenter', () => {
+            item.style.background = '#d0d0d0';
+          });
+          
+          item.addEventListener('mouseleave', () => {
+            item.style.background = '#e2e2e2';
+          });
+          
+          item.addEventListener('click', () => {
+            if (captain === "Other") {
+              const customName = prompt(`Enter captain name for ${shipName}:`);
+              if (customName && customName.trim()) {
+                input.value = customName.trim();
+              } else {
+                input.value = "";
+              }
+            } else {
+              input.value = captain;
+            }
+            list.style.display = 'none';
+            input.classList.remove('error');
+            calculateFormProgress();
+            showGenerateButtonOnChange();
+            
+            const shipId = input.id.replace('securityCaptain_', '');
+            updateSecurityShipSectionStyling(shipId);
+          });
+          
+          list.appendChild(item);
+        });
+      }
+      
+      function showDropdown() {
+        renderItems(captainsWithOther);
+        list.style.display = 'block';
+      }
+      
+      function hideDropdown() {
+        setTimeout(() => {
+          list.style.display = 'none';
+        }, 200);
+      }
+      
+      function filterCaptains(searchTerm) {
+        const term = searchTerm.toLowerCase();
+        return captainsWithOther.filter(captain => 
+          captain.toLowerCase().includes(term)
+        );
+      }
+      
+      input.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showDropdown();
+      });
+      
+      input.addEventListener('focus', () => {
+        showDropdown();
+      });
+      
+      input.addEventListener('input', (e) => {
+        const searchTerm = e.target.value;
+        const filtered = searchTerm.length === 0 ? captainsWithOther : filterCaptains(searchTerm);
+        renderItems(filtered);
+        list.style.display = 'block';
+        calculateFormProgress();
+        showGenerateButtonOnChange();
+      });
+      
+      input.addEventListener('blur', () => {
+        hideDropdown();
+      });
+      
+      document.addEventListener('click', (e) => {
+        if (!input.contains(e.target) && !list.contains(e.target)) {
+          list.style.display = 'none';
+        }
+      });
+      
+      renderItems(captainsWithOther);
+    }
+    
+    function getSelectedSecurityShips() {
+      const securityShipsInput = document.getElementById('securityShips');
+      if (!securityShipsInput) return [];
+      
+      if (securityShipsInput.getSelectedShips) {
+        return securityShipsInput.getSelectedShips();
+      }
+      
+      const value = securityShipsInput.value.trim();
+      if (value === '') return [];
+      
+      return [value];
+    }
+    
+    function validateSecurityShips() {
+      const securityShipsInput = document.getElementById('securityShips');
+      if (!securityShipsInput) return false;
+      
+      if (securityShipsInput.getSelectedShips) {
+        const selectedShips = securityShipsInput.getSelectedShips();
+        return selectedShips.length > 0;
+      }
+      
+      const value = securityShipsInput.value.trim();
+      return value !== '';
+    }
 
     window.addEventListener("DOMContentLoaded", function() {
       populateLocationDropdown("startLocation");
@@ -1929,6 +2563,21 @@ window.applyManifestPreset = applyManifestPreset;
       populateLocationDropdown("routeEnd");
       populateShipDropdown("");
       populateCaptainDropdown();
+      populateSecurityShipsDropdown();
+      
+      const securityShipsOtherInput = document.getElementById('securityShipsOther');
+      if (securityShipsOtherInput) {
+        securityShipsOtherInput.addEventListener('input', function() {
+          const securityShipsInput = document.getElementById('securityShips');
+          if (securityShipsInput && securityShipsInput.getSelectedShips) {
+            const selectedShips = securityShipsInput.getSelectedShips();
+            if (selectedShips.includes('Other')) {
+              updateSecurityCaptainDropdowns(selectedShips);
+            }
+          }
+        });
+      }
+      
       document.getElementById("discordSection").style.display = "none";
       manifestLineCount = 1;
       renderManifestLines();
@@ -1969,11 +2618,13 @@ window.applyManifestPreset = applyManifestPreset;
     document.getElementById("departureTime").addEventListener("change", function() {
       this.classList.remove('error');
       updateOrderDuration();
+      showGenerateButtonOnChange();
     });
     
     document.getElementById("completionTime").addEventListener("change", function() {
       this.classList.remove('error');
       updateOrderDuration();
+      showGenerateButtonOnChange();
     });
 
     function toDiscordTimestamp(dtString) {
@@ -1989,7 +2640,7 @@ window.applyManifestPreset = applyManifestPreset;
     // Ship Message Links - Adapted from Threads
     const shipLinks = {
       "BRHS Seastrom": "https://discord.com/channels/900478857436606535/1391878505905524817/1404322180329898046",
-      "AACS Judgement's Bow": "https://discord.com/channels/900478857436606535/1391878505905524817/1404319407106293843",
+      "AACS Judgements Bow": "https://discord.com/channels/900478857436606535/1391878505905524817/1404319407106293843",
       "BRHS Sword of Twilight": "https://discord.com/channels/900478857436606535/1391878505905524817/1404319218261954661",
       "BRHS Trireme": "https://discord.com/channels/900478857436606535/1391878505905524817/1404319148888031312",
       "AACS Dendrobium": "https://discord.com/channels/900478857436606535/1391878505905524817/1403127587567439872",
@@ -2000,9 +2651,9 @@ window.applyManifestPreset = applyManifestPreset;
       "AACS Landsknecht": "https://discord.com/channels/900478857436606535/1391878505905524817/1392713534005186730",
       "WINC Caterpillar": "https://discord.com/channels/900478857436606535/1391878505905524817/1391904347117322322",
       "BRHS Knight": "https://discord.com/channels/900478857436606535/1391878505905524817/1408243741508108501",
+      "BRHS Ledokol": "https://discord.com/channels/900478857436606535/1391878505905524817/1409173959382925514",
     };
 
-    // Loading States & Progress Indicators
     function showLoadingOverlay(message = "Processing...") {
       const overlay = document.createElement('div');
       overlay.className = 'loading-overlay';
@@ -2209,6 +2860,37 @@ window.applyManifestPreset = applyManifestPreset;
         }
       }
       
+      // Only count security ships towards progress if it's not "None"
+      const selectedSecurityShips = getSelectedSecurityShips();
+      const hasNonNoneSecurityShips = selectedSecurityShips.some(ship => ship && ship !== 'None');
+      
+      if (hasNonNoneSecurityShips) {
+        totalFields++;
+        if (validateSecurityShips()) {
+          filledFields++;
+        }
+      }
+      
+      const validSecurityShips = selectedSecurityShips.filter(ship => ship && ship !== 'None' && ship !== 'Other' && ship.trim() !== '');
+      totalFields += validSecurityShips.length;
+      validSecurityShips.forEach(ship => {
+        const shipId = ship.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '');
+        const captainInput = document.getElementById(`securityCaptain_${shipId}`);
+        if (captainInput && captainInput.value && captainInput.value.trim() !== '') {
+          filledFields++;
+        }
+      });
+
+      const securityShipsInput = document.getElementById('securityShips');
+      const securityShipsOtherDiv = document.getElementById('securityShipsOtherDiv');
+      const securityShipsOtherInput = document.getElementById('securityShipsOther');
+      if (securityShipsInput && securityShipsInput.value === "Other" && securityShipsOtherDiv && securityShipsOtherDiv.style.display !== 'none') {
+        totalFields++;
+        if (securityShipsOtherInput && securityShipsOtherInput.value && securityShipsOtherInput.value.trim() !== '') {
+          filledFields++;
+        }
+      }
+      
       const manifestRows = document.querySelectorAll('.manifest-row');
       let hasValidManifest = false;
       manifestRows.forEach(row => {
@@ -2249,6 +2931,10 @@ window.applyManifestPreset = applyManifestPreset;
           fields: ['orderCategory', 'companyName', 'orderType', 'shipName', 'captainName', 'crewAmount']
         },
         {
+          id: 'securityShipsStep',
+          fields: []
+        },
+        {
           id: 'locationTimeStep',
           fields: ['startLocation', 'departureTime', 'routeStart', 'routeEnd']
         },
@@ -2280,6 +2966,53 @@ window.applyManifestPreset = applyManifestPreset;
           });
           completedFields = hasValidManifest ? 1 : 0;
           totalStepFields = 1;
+        } else if (step.id === 'securityShipsStep') {
+          if (validateSecurityShips()) {
+            completedFields = 1;
+            
+            const selectedSecurityShips = getSelectedSecurityShips();
+            const validSecurityShips = selectedSecurityShips.filter(ship => ship && ship !== 'None' && ship.trim() !== '');
+            
+            let securityShipFieldsCompleted = 0;
+            let totalSecurityFields = 0;
+            
+            validSecurityShips.forEach(ship => {
+              let shipId = ship.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '');
+              
+              if (ship === 'Other') {
+                const otherInput = document.getElementById('securityShipsOther');
+                const otherValue = otherInput ? otherInput.value.trim() : '';
+                if (otherValue === '') return;
+                shipId = `Other_${otherValue.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '')}`;
+              }
+              
+              totalSecurityFields++;
+              const captainInput = document.getElementById(`securityCaptain_${shipId}`);
+              if (captainInput && captainInput.value.trim()) {
+                securityShipFieldsCompleted++;
+              }
+              
+              const crewAmountInput = document.getElementById(`securityCrew_${shipId}`);
+              if (crewAmountInput) {
+                const securityCrewAmount = parseInt(crewAmountInput.value, 10);
+                if (!isNaN(securityCrewAmount) && securityCrewAmount > 0) {
+                  totalSecurityFields += securityCrewAmount;
+                  for (let i = 1; i <= securityCrewAmount; i++) {
+                    const crewInput = document.getElementById(`securityCrew_${shipId}_${i}`);
+                    if (crewInput && crewInput.value.trim()) {
+                      securityShipFieldsCompleted++;
+                    }
+                  }
+                }
+              }
+            });
+            
+            completedFields = securityShipFieldsCompleted;
+            totalStepFields = Math.max(totalSecurityFields, 1);
+          } else {
+            completedFields = 0;
+            totalStepFields = 1;
+          }
         } else {
           
           for (const fieldId of step.fields) {
@@ -2289,7 +3022,7 @@ window.applyManifestPreset = applyManifestPreset;
             if (field) {
 
               if (fieldId === 'startLocation' || fieldId === 'routeStart' || fieldId === 'routeEnd') {
-                isFieldValid = field.value && field.value.trim() !== '' && locations.includes(field.value);
+                isFieldValid = field.value && field.value.trim() !== '';
               } else {
                 isFieldValid = field.value && field.value.trim() !== '';
               }
@@ -2426,6 +3159,140 @@ window.applyManifestPreset = applyManifestPreset;
       calculateFormProgress();
     }
 
+    function generateSecurityCrewInputs(shipId, shipName, crewAmount) {
+      const crewNamesContainer = document.getElementById(`securityCrewNames_${shipId}`);
+      if (!crewNamesContainer) return;
+      
+      crewNamesContainer.innerHTML = "";
+      
+      if (!isNaN(crewAmount) && crewAmount > 0) {
+        const crewNamesHeader = document.createElement("label");
+        crewNamesHeader.textContent = "Crew Names:";
+        crewNamesHeader.style.display = 'block';
+        crewNamesHeader.style.marginBottom = '10px';
+        crewNamesHeader.style.fontWeight = 'bold';
+        crewNamesHeader.style.fontSize = '14px';
+        crewNamesContainer.appendChild(crewNamesHeader);
+        
+        for (let i = 1; i <= crewAmount; i++) {
+          const label = document.createElement("label");
+          label.textContent = `Crew ${i} Name:`;
+          label.htmlFor = `securityCrew_${shipId}_${i}`;
+          label.className = "crew-label";
+          label.style.fontSize = '14px';
+          label.style.marginTop = '8px';
+          label.style.display = 'block';
+          label.style.marginLeft = '20px';
+          
+          const input = document.createElement("input");
+          input.type = "text";
+          input.id = `securityCrew_${shipId}_${i}`;
+          input.name = `securityCrew_${shipId}_${i}`;
+          input.required = true;
+          input.className = "crew-input";
+          input.style.width = 'calc(100% - 40px)';
+          input.style.marginLeft = '20px';
+          input.style.padding = '8px';
+          input.style.border = '1px solid #781d15';
+          input.style.background = '#e2e2e2';
+          input.style.color = '#230e09';
+          input.style.borderRadius = '4px';
+          input.style.boxSizing = 'border-box';
+          input.style.marginBottom = '5px';
+          input.style.fontSize = '14px';
+          
+          input.addEventListener('input', calculateFormProgress);
+          input.addEventListener('change', calculateFormProgress);
+          input.addEventListener('input', showGenerateButtonOnChange);
+          input.addEventListener('change', showGenerateButtonOnChange);
+          input.addEventListener('input', () => {
+            const shipIdFromInput = input.id.split('_').slice(1, -1).join('_');
+            updateSecurityShipSectionStyling(shipIdFromInput);
+          });
+          input.addEventListener('change', () => {
+            const shipIdFromInput = input.id.split('_').slice(1, -1).join('_');
+            updateSecurityShipSectionStyling(shipIdFromInput);
+          });
+          
+          crewNamesContainer.appendChild(label);
+          crewNamesContainer.appendChild(input);
+        }
+      }
+      calculateFormProgress();
+      updateSecurityShipSectionStyling(shipId);
+    }
+
+    function checkSecurityShipCompletion(shipId) {
+      const captainInput = document.getElementById(`securityCaptain_${shipId}`);
+      const crewAmountInput = document.getElementById(`securityCrew_${shipId}`);
+      
+      if (!captainInput || !crewAmountInput) return false;
+      
+      const hasCaptain = captainInput.value.trim() !== '';
+      
+      const crewAmount = parseInt(crewAmountInput.value, 10) || 0;
+      const hasCrewAmount = crewAmount >= 0;
+      
+      let allCrewNamesFilled = true;
+      if (crewAmount > 0) {
+        for (let i = 1; i <= crewAmount; i++) {
+          const crewInput = document.getElementById(`securityCrew_${shipId}_${i}`);
+          if (!crewInput || crewInput.value.trim() === '') {
+            allCrewNamesFilled = false;
+            break;
+          }
+        }
+      }
+      
+      return hasCaptain && hasCrewAmount && allCrewNamesFilled;
+    }
+    
+    function updateSecurityShipSectionStyling(shipId) {
+      const allRows = document.querySelectorAll('#securityShipCaptains .security-captain-row');
+      for (let row of allRows) {
+        if (row.querySelector(`#securityCaptain_${shipId}`)) {
+          const isComplete = checkSecurityShipCompletion(shipId);
+          if (isComplete) {
+            row.style.border = '2px solid #22c55e';
+          } else {
+            row.style.border = '2px solid #781d15';
+          }
+          return;
+        }
+      }
+    }
+    
+    function updateAllSecurityShipStylings() {
+      const allCaptainInputs = document.querySelectorAll('[id^="securityCaptain_"]');
+      allCaptainInputs.forEach(input => {
+        const shipId = input.id.replace('securityCaptain_', '');
+        updateSecurityShipSectionStyling(shipId);
+      });
+    }
+
+    window.toggleOrderTypeOther = toggleOrderTypeOther;
+    window.toggleOrderCategoryOther = toggleOrderCategoryOther;
+    window.toggleShipNameOther = toggleShipNameOther;
+    window.toggleCaptainNameOther = toggleCaptainNameOther;
+    window.generateCrewInputs = generateCrewInputs;
+    window.generateSecurityCrewInputs = generateSecurityCrewInputs;
+    window.checkSecurityShipCompletion = checkSecurityShipCompletion;
+    window.updateSecurityShipSectionStyling = updateSecurityShipSectionStyling;
+    window.updateAllSecurityShipStylings = updateAllSecurityShipStylings;
+    window.updateSecurityCaptainDropdowns = updateSecurityCaptainDropdowns;
+    window.initializeCaptainDropdown = initializeCaptainDropdown;
+    window.addManifestLine = addManifestLine;
+    window.removeManifestLine = removeManifestLine;
+    window.updateManifestTotals = updateManifestTotals;
+    window.generateOutput = generateOutput;
+    window.copyDiscordOutput = copyDiscordOutput;
+    window.toggleDiscordOutput = toggleDiscordOutput;
+    window.showCopyButton = showCopyButton;
+    window.hideCopyButton = hideCopyButton;
+    window.showGenerateButtonOnChange = showGenerateButtonOnChange;
+    window.clearFormFields = clearFormFields;
+    window.applyManifestPreset = applyManifestPreset;
+
     function validateRequiredFields() {
       document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
 
@@ -2477,6 +3344,11 @@ window.applyManifestPreset = applyManifestPreset;
     let isValid = false;
     let fieldLabel = id.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
     
+    // Special case for UEC field to prevent spacing within the acronym
+    if (id === 'totalUECBox') {
+      fieldLabel = 'Total UEC Box';
+    }
+    
     if (!el) continue;
     
     if (id === 'startLocation' || id === 'routeStart' || id === 'routeEnd') {
@@ -2489,6 +3361,16 @@ window.applyManifestPreset = applyManifestPreset;
       if (el.value === "" || el.value === null) {
         addError(el, `${fieldLabel} is required`, fieldLabel);
       }
+    }
+  }
+
+  const routeStartEl = document.getElementById('routeStart');
+  const routeEndEl = document.getElementById('routeEnd');
+  if (routeStartEl && routeEndEl && routeStartEl.value && routeEndEl.value) {
+    if (routeStartEl.value === routeEndEl.value) {
+      routeStartEl.classList.add('error');
+      routeEndEl.classList.add('error');
+      addError(routeStartEl, 'Route Start and Route End cannot be the same location', 'Route Validation');
     }
   }
 
@@ -2520,6 +3402,56 @@ window.applyManifestPreset = applyManifestPreset;
     }
   }
 
+  const selectedSecurityShips = getSelectedSecurityShips();
+  const validSecurityShips = selectedSecurityShips.filter(ship => ship && ship !== 'None' && ship.trim() !== '');
+  
+  validSecurityShips.forEach(ship => {
+    let shipId = ship.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '');
+    let displayShipName = ship;
+    
+    if (ship === 'Other') {
+      const otherInput = document.getElementById('securityShipsOther');
+      const otherValue = otherInput ? otherInput.value.trim() : '';
+      if (otherValue === '') {
+        return;
+      }
+      displayShipName = otherValue;
+      shipId = `Other_${otherValue.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '')}`;
+    }
+    
+    const captainInput = document.getElementById(`securityCaptain_${shipId}`);
+    if (!captainInput || !captainInput.value.trim()) {
+      addError(captainInput, `Captain name is required for ${displayShipName}`, `${displayShipName} Captain`);
+    }
+    
+    const crewAmountInput = document.getElementById(`securityCrew_${shipId}`);
+    if (crewAmountInput) {
+      const securityCrewAmount = parseInt(crewAmountInput.value, 10);
+      if (!isNaN(securityCrewAmount) && securityCrewAmount > 0) {
+        for (let i = 1; i <= securityCrewAmount; i++) {
+          const crewInput = document.getElementById(`securityCrew_${shipId}_${i}`);
+          if (!crewInput || !crewInput.value.trim()) {
+            addError(crewInput, `${displayShipName} Crew ${i} Name is required`, `${displayShipName} Crew ${i} Name`);
+          }
+        }
+      }
+    }
+  });
+
+  if (!validateSecurityShips()) {
+    const securityShipsInput = document.getElementById('securityShips');
+    addError(securityShipsInput, "Security ships selection is required", "Security Ships");
+  }
+
+  const securityShipsOtherDiv = document.getElementById('securityShipsOtherDiv');
+  const securityShipsOtherInput = document.getElementById('securityShipsOther');
+  
+  if (selectedSecurityShips.includes("Other") && securityShipsOtherDiv && securityShipsOtherDiv.style.display === "block") {
+    if (!securityShipsOtherInput || !securityShipsOtherInput.value.trim()) {
+      addError(securityShipsOtherInput, "Security Ships (Other) is required when 'Other' is selected", "Security Ships (Other)");
+    }
+  }
+
   const manifestRows = document.querySelectorAll('.manifest-row');
   if (manifestRows.length === 0) {
     allErrors.push({ 
@@ -2536,7 +3468,7 @@ window.applyManifestPreset = applyManifestPreset;
       if (!scu || !scu.value.trim()) {
         addError(scu, `Manifest Line ${manifestIndex}: SCU is required`, `Manifest Line ${manifestIndex} SCU`);
       }
-      if (!mat || !mat.value.trim()) {
+      if (!mat || !mat.value.trim() || mat.value === 'Select Material') {
         addError(mat, `Manifest Line ${manifestIndex}: Material is required`, `Manifest Line ${manifestIndex} Material`);
       }
       manifestIndex++;
@@ -2555,6 +3487,7 @@ window.applyManifestPreset = applyManifestPreset;
     
     const errorsByCategory = {
       'Basic Information': [],
+      'Security Ships': [],
       'Route & Timing': [],
       'Crew Information': [],
       'Manifest': [],
@@ -2564,8 +3497,10 @@ window.applyManifestPreset = applyManifestPreset;
     
     allErrors.forEach(error => {
       const fieldName = error.fieldName.toLowerCase();
-      if (fieldName.includes('category') || fieldName.includes('company') || fieldName.includes('type') || fieldName.includes('ship') || fieldName.includes('captain')) {
+      if (fieldName.includes('category') || fieldName.includes('company') || fieldName.includes('type') || fieldName.includes('ship name') || fieldName.includes('captain name')) {
         errorsByCategory['Basic Information'].push(error.message);
+      } else if (fieldName.includes('security')) {
+        errorsByCategory['Security Ships'].push(error.message);
       } else if (fieldName.includes('location') || fieldName.includes('route') || fieldName.includes('time') || fieldName.includes('timestamp')) {
         errorsByCategory['Route & Timing'].push(error.message);
       } else if (fieldName.includes('crew')) {
@@ -2672,11 +3607,9 @@ window.applyManifestPreset = applyManifestPreset;
       durationDiv.style.color = "#9d7523";
     }
 
-    // Set current time function
     function setCurrentTime(fieldId) {
       try {
         const now = new Date();
-        // Format for datetime-local input (YYYY-MM-DDTHH:MM)
         const year = now.getFullYear();
         const month = String(now.getMonth() + 1).padStart(2, '0');
         const day = String(now.getDate()).padStart(2, '0');
@@ -2959,6 +3892,79 @@ window.applyManifestPreset = applyManifestPreset;
   let postCounter = parseInt(sessionStorage.getItem('discordHistoryCounter') || '1', 10);
   const crewNamesText = crewNamesList.length > 0 ? crewNamesList.join(", ") : "0";
 
+  const selectedSecurityShips = getSelectedSecurityShips();
+  let securityShipsText = "";
+  let securityShipsHeader = "Security Ships";
+  
+  if (selectedSecurityShips.length === 0 || (selectedSecurityShips.length === 1 && selectedSecurityShips[0] === '')) {
+    securityShipsText = "None";
+  } else if (selectedSecurityShips.includes('None')) {
+    securityShipsText = "None";
+  } else {
+    const securityShipDetails = [];
+    let shipCounter = 1;
+    
+    selectedSecurityShips.forEach(ship => {
+      if (ship === 'Other') {
+        const otherInput = document.getElementById('securityShipsOther');
+        const otherValue = otherInput ? otherInput.value.trim() : '';
+        if (otherValue) {
+          const shipId = `Other_${otherValue.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '')}`;
+          const captainInput = document.getElementById(`securityCaptain_${shipId}`);
+          const captainName = captainInput ? captainInput.value.trim() : '';
+          
+          const crewAmountInput = document.getElementById(`securityCrew_${shipId}`);
+          const crewAmount = crewAmountInput ? parseInt(crewAmountInput.value, 10) || 0 : 0;
+          let crewNames = [];
+          if (crewAmount > 0) {
+            for (let i = 1; i <= crewAmount; i++) {
+              const crewInput = document.getElementById(`securityCrew_${shipId}_${i}`);
+              if (crewInput && crewInput.value.trim()) {
+                crewNames.push(crewInput.value.trim());
+              }
+            }
+          }
+          
+          let shipText = `${otherValue}`;
+          if (captainName) shipText += `\n**Captain:** ${captainName}`;
+          if (crewNames.length > 0) shipText += `\n**Crew:** ${crewNames.join(", ")}`;
+          
+          securityShipDetails.push(shipText);
+          shipCounter++;
+        }
+      } else if (ship && ship.trim() !== '' && ship !== 'None') {
+        const shipId = ship.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '');
+        const captainInput = document.getElementById(`securityCaptain_${shipId}`);
+        const captainName = captainInput ? captainInput.value.trim() : '';
+        
+        const crewAmountInput = document.getElementById(`securityCrew_${shipId}`);
+        const crewAmount = crewAmountInput ? parseInt(crewAmountInput.value, 10) || 0 : 0;
+        let crewNames = [];
+        if (crewAmount > 0) {
+          for (let i = 1; i <= crewAmount; i++) {
+            const crewInput = document.getElementById(`securityCrew_${shipId}_${i}`);
+            if (crewInput && crewInput.value.trim()) {
+              crewNames.push(crewInput.value.trim());
+            }
+          }
+        }
+        
+        const shipLink = shipLinks[ship];
+        const shipDisplayText = shipLink ? `[${ship}](${shipLink})` : ship;
+        
+        let shipText = `${shipDisplayText}`;
+        if (captainName) shipText += `\n**Captain:** ${captainName}`;
+        if (crewNames.length > 0) shipText += `\n**Crew:** ${crewNames.join(", ")}`;
+        
+        securityShipDetails.push(shipText);
+        shipCounter++;
+      }
+    });
+    
+    securityShipsText = securityShipDetails.length > 0 ? "\n" + securityShipDetails.join("\n—\n") : "None";
+    securityShipsHeader = securityShipDetails.length === 1 ? "Security Ship" : "Security Ships";
+  }
+
   const routeStart = get("routeStart");
   const routeEnd = get("routeEnd");
   const routeText = routeStart && routeEnd ? `${routeStart} :arrow_right: ${routeEnd}` : "";
@@ -3016,14 +4022,20 @@ window.applyManifestPreset = applyManifestPreset;
 
   const shipDisplayText = shipLink ? `[${shipNameText}](${shipLink})` : shipNameText;
 
-  // Build Discord output
-    let output = `**${orderCategoryText}**
-${companyNameText} ${orderTypeText === "Resource Drive" ? "Resource Drive" : orderTypeText}
+    let output = `**${orderCategoryText} Order**
+${companyNameText} : ${orderTypeText === "Resource Drive" ? "Resource Drive" : orderTypeText}
 ${resourceDriveCompanyText ? `Resource Drive Company: ${resourceDriveCompanyText}` : ""}
 
-**Ship:** ${shipDisplayText}
+———
+
+**Transport Ship:** ${shipDisplayText}
 **Captain:** ${captainNameText}
 **Crew:** ${crewNamesText}
+
+———
+
+**${securityShipsHeader}:**
+${securityShipsText}
 
 ———
 
@@ -3070,7 +4082,6 @@ ${notesText}
   document.getElementById("discordOutput").value = output;
   document.getElementById("discordSection").style.display = "block";
   
-  // Hide the Generate button after successful generation
   const generateBtn = document.getElementById("generateBtn");
   if (generateBtn) {
     generateBtn.style.display = "none";
@@ -3086,7 +4097,20 @@ ${notesText}
       console.error('Error generating output:', error);
       hideLoadingOverlay();
       hideButtonLoading('generateBtn');
-      showFeedback('error', 'Failed to generate Discord post. Please try again.');
+      
+      logErrorToGitHub('G100', 'Discord generation failed', error.message, error.stack, {
+        errorType: error.name || 'Unknown',
+        generationError: true,
+        formData: {
+          hasManifest: document.querySelectorAll('.manifest-row').length > 0,
+          hasSecurityShips: getSelectedSecurityShips().length > 0,
+          totalSCU: parseInt(document.getElementById("totalSCUBox")?.textContent?.replace(/\D/g, "") || "0"),
+          orderType: document.getElementById("orderType")?.value || "Unknown"
+        }
+      });
+      
+      showNotificationOverlay(`❌ Generation Failed<br><br><strong>Error G100:</strong> Failed to generate Discord post<br><br>A technical error occurred during generation. Please try again or refresh the page if the problem persists.`, 'error');
+      showFeedback('error', 'Failed to generate Discord post (G100). Please try again.');
     }
   }, 500);
 }
@@ -3154,7 +4178,7 @@ function copyHistoryPost(idx) {
   let history = JSON.parse(sessionStorage.getItem('discordHistory') || '[]');
   if (history[idx]) {
     const temp = document.createElement('textarea');
-    temp.value = history[idx].content; // Use only the discord output string
+    temp.value = history[idx].content;
     document.body.appendChild(temp);
     temp.select();
     document.execCommand('copy');
@@ -3217,12 +4241,10 @@ async function sendToDiscord() {
 
  
   const endpoints = [
-    // Railway production endpoint
     "https://brutehaulrailway-production.up.railway.app/send-discord"
   ];
 
   try {
-    // Collect all additional fields for Google Sheets
     const get = id => document.getElementById(id)?.value?.trim() || "";
     
     let orderCategoryText = get("orderCategory");
@@ -3274,6 +4296,15 @@ async function sendToDiscord() {
             shipName: shipName,
             captainName: captainNameText,
             crewAmount: crewAmountWithNames,
+            securityShips: securityShipsText,
+            securityShipsData: selectedSecurityShips.filter(ship => ship && ship !== 'None' && ship !== 'Other' && ship.trim() !== '').map(ship => {
+              const shipId = ship.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '');
+              const captainInput = document.getElementById(`securityCaptain_${shipId}`);
+              return {
+                ship: ship,
+                captain: captainInput ? captainInput.value.trim() : ''
+              };
+            }),
             startLocation: get("startLocation"),
             departureTimestamp: get("departureTime"),
             routeStart: get("routeStart"),
@@ -3319,9 +4350,8 @@ async function sendToDiscord() {
       hideLoadingOverlay();
       showNotificationOverlay("Server Restarting<br><br>The Brute Haul System is currently restarting.<br><br><strong>Error E005:</strong> Please try again in 30 seconds.", 'warning');
       showFeedback('warning', 'Server restarting (E005) - Please try again shortly');
-      showCopyButton(); // Show copy button when Discord posting fails
+      showCopyButton();
       
-      // Log server restart error to GitHub Issues
       logErrorToGitHub('E005', 'Server restarting', 'JSON parsing failed - server likely restarting', null, {
         responseStatus: response?.status || 'Unknown',
         responseOk: response?.ok || false,
@@ -3467,9 +4497,8 @@ async function sendToDiscord() {
       
       showNotificationOverlay(`❌ Failed to send to Discord<br><br><strong>Error ${errorCode}:</strong> ${errorMsg}<br><br>${instructions}`, 'error');
       showFeedback('error', `Error sending to Brute Haul (${errorCode}): ${errorMsg}`);
-      showCopyButton(); // Show copy button when Discord posting fails
+      showCopyButton();
       
-      // Log server errors to GitHub Issues
       logErrorToGitHub(errorCode, errorMsg, `HTTP ${response.status}: ${data?.error || 'Unknown server error'}`, null, {
         httpStatus: response.status,
         httpStatusText: response.statusText,
@@ -3539,9 +4568,8 @@ async function sendToDiscord() {
     
     showNotificationOverlay(`❌ Connection Failed<br><br><strong>Error ${errorCode}:</strong> ${errorMsg}<br><br>${instructions}`, 'error');
     showFeedback('error', `The Brute Haul System is currently offline (${errorCode}). Please try again later.`);
-    showCopyButton(); // Show copy button when Discord posting fails
+    showCopyButton();
     
-    // Log error to GitHub Issues for developer visibility with enhanced context
     logErrorToGitHub(errorCode, errorMsg, err.message, err.stack, {
       errorType: err.name || 'Unknown',
       networkError: true,
@@ -3591,7 +4619,6 @@ function copyAnnouncementOutput() {
 window.generateAnnouncement = generateAnnouncement;
 window.copyAnnouncementOutput = copyAnnouncementOutput;
 
-// GitHub Error Logging Function
 async function logErrorToGitHub(errorCode, errorMsg, fullError, stackTrace, additionalContext = {}) {
   console.log('🔧 logErrorToGitHub called with:', { errorCode, errorMsg });
   
@@ -3643,7 +4670,6 @@ async function logErrorToGitHub(errorCode, errorMsg, fullError, stackTrace, addi
     
     console.log('🔧 Proceeding with GitHub issue creation...');
     
-    // Collect comprehensive error context
     const errorContext = {
       timestamp: new Date().toISOString(),
       errorCode: errorCode,
@@ -3675,7 +4701,6 @@ async function logErrorToGitHub(errorCode, errorMsg, fullError, stackTrace, addi
       errorContext.formDataError = 'Could not collect form data';
     }
     
-    // Create detailed GitHub issue
     const issueData = {
       title: `🚨 Brute Haul Bot Send Failure - ${errorCode}: ${errorMsg}`,
       body: `## 🚨 Automatic Error Report Generation
