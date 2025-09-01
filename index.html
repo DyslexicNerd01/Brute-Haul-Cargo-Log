@@ -4203,6 +4203,25 @@ async function sendToDiscord() {
     shipName = document.getElementById("shipNameOther").value;
   }
 
+  // Always define securityShipsText and selectedSecurityShips at function scope
+  let selectedSecurityShips = [];
+  let securityShipsText = "None";
+  
+  try {
+    if (typeof getSelectedSecurityShips === 'function') {
+      selectedSecurityShips = getSelectedSecurityShips();
+    }
+  } catch (e) {
+    console.warn('Error getting selected security ships:', e);
+    selectedSecurityShips = [];
+  }
+  
+  if (!selectedSecurityShips || selectedSecurityShips.length === 0 || (selectedSecurityShips.length === 1 && (!selectedSecurityShips[0] || selectedSecurityShips[0] === "None"))) {
+    securityShipsText = "None";
+  } else {
+    securityShipsText = selectedSecurityShips.join("\n");
+  }
+
   // Warning: No message generated
   if (!message) {
     showNotificationOverlay("Missing Discord Post<br><br><strong>No message to send</strong><br><br>Please generate a Discord post first by clicking the 'Generate Discord Post' button.", 'warning');
@@ -4688,17 +4707,87 @@ async function logErrorToGitHub(errorCode, errorMsg, fullError, stackTrace, addi
     };
     
     try {
+      const get = id => document.getElementById(id)?.value?.trim() || "";
+      
       const formData = {
-        orderType: document.getElementById("orderType")?.value || 'Not set',
-        captainName: document.getElementById("captainName")?.value || 'Not set',
-        shipName: document.getElementById("shipName")?.value || 'Not set',
-        companyName: document.getElementById("companyName")?.value || 'Not set',
+        orderType: get("orderType"),
+        orderCategory: get("orderCategory"),
+        orderCategoryOther: get("orderCategoryOther"),
+        orderTypeOther: get("orderTypeOther"),
+        companyName: get("companyName"),
+        resourceDriveCompany: get("resourceDriveCompany"),
+        shipName: get("shipName"),
+        shipNameOther: get("shipNameOther"),
+        captainName: get("captainName"),
+        captainNameOther: get("captainNameOther"),
+        crewAmount: get("crewAmount"),
+        startLocation: get("startLocation"),
+        routeStart: get("routeStart"),
+        routeEnd: get("routeEnd"),
+        departureTime: get("departureTime"),
+        completionTime: get("completionTime"),
         totalSCU: document.getElementById("totalSCUBox")?.textContent || '0',
+        totalUEC: get("totalUECBox"),
+        repairs: get("repairs"),
+        restock: get("restock"),
+        quantumFuel: get("quantumFuel"),
+        hydrogenFuel: get("hydrogenFuel"),
+        crewCosts: get("crewCosts"),
+        notes: get("notes"),
+        discordMessage: document.getElementById("discordOutput")?.value || 'No message generated',
         messageLength: document.getElementById("discordOutput")?.value?.length || 0
       };
+      
+      // Get crew names
+      const crewAmount = parseInt(get("crewAmount"), 10);
+      const crewNames = [];
+      for (let i = 1; i <= crewAmount; i++) {
+        const crewName = get(`crewName${i}`);
+        if (crewName) crewNames.push(crewName);
+      }
+      formData.crewNames = crewNames;
+      
+      // Get security ships data
+      if (typeof getSelectedSecurityShips === 'function') {
+        try {
+          const selectedSecurityShips = getSelectedSecurityShips();
+          formData.securityShips = selectedSecurityShips;
+          
+          const securityShipsData = [];
+          selectedSecurityShips.forEach(ship => {
+            if (ship && ship !== 'None') {
+              const shipId = ship.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '');
+              const captainInput = document.getElementById(`securityCaptain_${shipId}`);
+              const crewInput = document.getElementById(`securityCrew_${shipId}`);
+              securityShipsData.push({
+                ship: ship,
+                captain: captainInput ? captainInput.value.trim() : '',
+                crewAmount: crewInput ? crewInput.value : '0'
+              });
+            }
+          });
+          formData.securityShipsData = securityShipsData;
+        } catch (e) {
+          formData.securityShipsError = e.message;
+        }
+      }
+      
+      // Get manifest data
+      const manifestRows = document.querySelectorAll('.manifest-row');
+      const manifestData = [];
+      manifestRows.forEach(row => {
+        const scu = row.querySelector('.manifest-scu')?.value || '';
+        const material = row.querySelector('.manifest-material')?.value || '';
+        const uec = row.querySelector('.manifest-uec')?.value || '';
+        if (scu || material || uec) {
+          manifestData.push({ scu, material, uec });
+        }
+      });
+      formData.manifestData = manifestData;
+      
       errorContext.formData = formData;
     } catch (formError) {
-      errorContext.formDataError = 'Could not collect form data';
+      errorContext.formDataError = `Could not collect form data: ${formError.message}`;
     }
     
     const issueData = {
@@ -4748,13 +4837,83 @@ ${stackTrace || 'No stack trace available'}
 ${errorContext.formData ? `
 | Field | Value |
 |-------|-------|
-| **Order Type** | ${errorContext.formData.orderType} |
-| **Captain Name** | ${errorContext.formData.captainName} |
-| **Ship Name** | ${errorContext.formData.shipName} |
-| **Company Name** | ${errorContext.formData.companyName} |
-| **Total SCU** | ${errorContext.formData.totalSCU} |
+| **Order Type** | ${errorContext.formData.orderType || 'Not set'} |
+| **Captain Name** | ${errorContext.formData.captainName || 'Not set'} |
+| **Ship Name** | ${errorContext.formData.shipName || 'Not set'} |
+| **Company Name** | ${errorContext.formData.companyName || 'Not set'} |
+| **Total SCU** | ${errorContext.formData.totalSCU || '0'} |
+| **Total UEC** | ${errorContext.formData.totalUEC || '0'} |
 | **Message Length** | ${errorContext.formData.messageLength} characters |
+| **Manifest Items** | ${errorContext.formData.manifestData ? errorContext.formData.manifestData.length : 0} items |
+| **Security Ships** | ${errorContext.formData.securityShips ? errorContext.formData.securityShips.join(', ') : 'None'} |
+| **Crew Amount** | ${errorContext.formData.crewAmount || '0'} |
 ` : `Form data unavailable: ${errorContext.formDataError || 'Unknown reason'}`}
+
+<details>
+<summary><strong>📋 Complete Form Data Copy-Paste</strong> (Click to expand)</summary>
+
+### User's Complete Form Submission
+
+${errorContext.formData ? `
+**🏢 Order Information**
+- **Order Category:** ${errorContext.formData.orderCategory || 'Not set'}${errorContext.formData.orderCategoryOther ? ` (Other: ${errorContext.formData.orderCategoryOther})` : ''}
+- **Order Type:** ${errorContext.formData.orderType || 'Not set'}${errorContext.formData.orderTypeOther ? ` (Other: ${errorContext.formData.orderTypeOther})` : ''}
+- **Company Name:** ${errorContext.formData.companyName || 'Not set'}
+- **Resource Drive Company:** ${errorContext.formData.resourceDriveCompany || 'Not applicable'}
+
+**🚢 Transport Ship Information**
+- **Ship Name:** ${errorContext.formData.shipName || 'Not set'}${errorContext.formData.shipNameOther ? ` (Other: ${errorContext.formData.shipNameOther})` : ''}
+- **Captain Name:** ${errorContext.formData.captainName || 'Not set'}${errorContext.formData.captainNameOther ? ` (Other: ${errorContext.formData.captainNameOther})` : ''}
+- **Crew Amount:** ${errorContext.formData.crewAmount || '0'}
+${errorContext.formData.crewNames && errorContext.formData.crewNames.length > 0 ? `- **Crew Names:** ${errorContext.formData.crewNames.join(', ')}` : ''}
+
+**🛡️ Security Ships**
+${errorContext.formData.securityShips && errorContext.formData.securityShips.length > 0 ? 
+  errorContext.formData.securityShips.map(ship => ship === 'None' ? '- None' : `- ${ship}`).join('\n') : 
+  '- None'
+}
+${errorContext.formData.securityShipsData && errorContext.formData.securityShipsData.length > 0 ? 
+  errorContext.formData.securityShipsData.map(ship => 
+    `  - **${ship.ship}:** Captain: ${ship.captain || 'Not set'}, Crew: ${ship.crewAmount || '0'}`
+  ).join('\n') : ''
+}
+
+**📍 Route Information**
+- **Start Location:** ${errorContext.formData.startLocation || 'Not set'}
+- **Route Start:** ${errorContext.formData.routeStart || 'Not set'}
+- **Route End:** ${errorContext.formData.routeEnd || 'Not set'}
+- **Departure Time:** ${errorContext.formData.departureTime || 'Not set'}
+- **Completion Time:** ${errorContext.formData.completionTime || 'Not set'}
+
+**📦 Manifest Data**
+- **Total SCU:** ${errorContext.formData.totalSCU || '0'}
+- **Total UEC:** ${errorContext.formData.totalUEC || '0'}
+${errorContext.formData.manifestData && errorContext.formData.manifestData.length > 0 ? 
+  '\n**Manifest Items:**\n' + errorContext.formData.manifestData.map((item, index) => 
+    `${index + 1}. ${item.scu || '0'} SCU - ${item.material || 'Not set'} - ${item.uec || '0'} UEC`
+  ).join('\n') : 
+  '\n**No manifest items found**'
+}
+
+**💰 Deductibles**
+- **Repairs:** ${errorContext.formData.repairs || '0'} UEC
+- **Restock:** ${errorContext.formData.restock || '0'} UEC
+- **Quantum Fuel:** ${errorContext.formData.quantumFuel || '0'} UEC
+- **Hydrogen Fuel:** ${errorContext.formData.hydrogenFuel || '0'} UEC
+- **Crew/Ship Costs:** ${errorContext.formData.crewCosts || '0'} UEC
+
+**📝 Notes**
+\`\`\`
+${errorContext.formData.notes || 'No notes provided'}
+\`\`\`
+
+**📤 Generated Discord Message**
+\`\`\`
+${errorContext.formData.discordMessage || 'No message was generated'}
+\`\`\`
+` : 'Form data could not be collected'}
+
+</details>
 
 ---
 
@@ -4919,4 +5078,5 @@ window.checkGitHubTokenStatus = function() {
     });
 
   </script>
+
 </div>
