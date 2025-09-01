@@ -457,7 +457,6 @@
       border-bottom: none;
     }
     
-    /* Checkbox styling in dropdown items */
     .searchable-dropdown .dropdown-item input[type="checkbox"] {
       width: 14px;
       height: 14px;
@@ -474,7 +473,6 @@
       flex-grow: 1;
     }
     
-    /* Checkbox dropdown styles */
     .checkbox-dropdown {
       position: relative;
       width: 100%;
@@ -549,7 +547,6 @@
       background: #fee;
     }
     
-    /* Security ship captain dropdowns */
     .security-ship-captains {
       margin-top: 12px;
     }
@@ -912,7 +909,6 @@
       padding-left: 16px;
     }
 
-    /* Responsive Design */
     @media (max-width: 1200px) {
       .form-grid {
         grid-template-columns: 1fr;
@@ -976,7 +972,6 @@
         font-size: 1.2em;
       }
     }
-    /* Tab content styling */
     .tab-content {
       display: none;
     }
@@ -1140,7 +1135,7 @@
           <option value="" selected disabled>Select company</option>
           <option value="Hurston Dynamics">Hurston Dynamics</option>
           <option value="Arccorp">Arccorp</option>
-          <option value="🏆 Crusader Industries 🏆">🏆 Crusader Industries 🏆</option>
+          <option value="🏆 Crusader Industries">🏆 Crusader Industries</option>
           <option value="Microtech">Microtech</option>
         </select>
       </div>
@@ -1319,7 +1314,7 @@
     </div>
 
     <!-- THIS IS A JUMPPOINT FOR ANNOUCEMENTS BECAUSE I'M LAZY AND I DON'T WANT TO SCROLL TO FIND THIS SECTION-->
-    <!-- I really should make annoucements a seperate file but that would be smart of me-->
+    <!-- I really should make annoucements a seperate file but that would be too smart of me-->
     <div class="announcements-sidebar">
       <div class="card" id="announcementsSection">
         <div class="card-header">
@@ -1370,43 +1365,44 @@
               <div class="announcement-body" style="color:#230e09;line-height:1.5;font-size:0.9em;">
                 <p><strong>Complete guide to using the Brute Haul Cargo Manifest Generator:</strong></p>
                 
-                <p><strong>📝 Step 1: Basic Information</strong><br>
+                <p><strong>Step 1: Basic Information</strong><br>
                 • Fill in Order Category, Company Name, Order Type<br>
                 • Select your Transport Ship and Captain<br>
                 • If you don't see your ship or name on the list, use the "Other" option<br>
                 • Add crew members (if any)</p>
                 
-                <p><strong>🛡️ Step 2: Security Ships</strong><br>
+                <p><strong>Step 2: Security Ships</strong><br>
                 • Select security escort ships from the dropdown (If any)<br>
                 • Assign captains to each security ship<br>
                 • Add crew members (if any)<br>
                 • Use "Other" if your ship isn't listed</p>
                 
-                <p><strong>📍 Step 3: Locations & Timeline</strong><br>
+                <p><strong>Step 3: Locations & Timeline</strong><br>
                 • Set departure location and time<br>
                 • Choose route start (Collection Point) and end points (Delivery Point)<br>
                 • Set order completion time<br>
                 • Duration is calculated automatically</p>
                 
-                <p><strong>📦 Step 4: Manifest</strong><br>
+                <p><strong>Step 4: Manifest</strong><br>
                 • Add cargo lines with SCU amounts and materials<br>
                 • UEC values are optional but recommended<br>
                 • Use presets for common cargo types in the Resource Drive<br>
                 • Total SCU and UEC calculated automatically</p>
                 
-                <p><strong>💰 Step 5: Completion & Costs</strong><br>
+                <p><strong>Step 5: Completion & Costs</strong><br>
                 • Enter repair costs, restocking, fuel costs<br>
-                • Add crew/ship costs and any notes<br>
+                • Add crew/ship ie. Food/Drinks, Repairs, Fuel, etc.<br>
+                • Add any notes from the mission. Not required<br>
                 • Review your manifest before generating</p>
                 
-                <p><strong>🚀 Final Steps:</strong><br>
+                <p><strong>Final Steps:</strong><br>
                 • Click "Generate Discord Post" to create formatted output<br>
                 • Click "Send to Discord" to post automatically<br>
                 • Your manifest is logged to the Discord Channel!</p>
                 
-                <p><strong>💡 Pro Tips:</strong><br>
+                <p><strong>Tips:</strong><br>
                 • Green progress bars show completed sections<br>
-                • Use "Clear Form" to start over while keeping basic information<br>
+                • Use "Clear Form" to start over while keeping basic information. This is automatically done when hitting "Send to Discord"<br>
                 • Form validation prevents common errors<br>
                 • History tab saves your previous manifests<br>
                 • The announcement section displays important information regarding Brute Haul</p>
@@ -1428,7 +1424,7 @@
 <script type="module">
    // Locations in locations.js
 
-    // Ship names
+    // Ships
     const transportShips = [
       "SPRT Icarus", "BRHS Lednik", "BRHS Trireme", "WINC Caterpillar", "WINCO Rafto", "BRHS Ledokol",
     ];
@@ -1440,7 +1436,7 @@
       ...securityShips,
     ];
 
-    // Captain names
+    // Captains
     const captainNames = [
       "DyslexicNerd", "Spartan", "Lightblade", "jjetstreamm", "Roflnomish", 
       "BenjiNotorious", "zarainia", "Astol", "Venomnom", "BigDaddyTortuga", 
@@ -1544,7 +1540,7 @@ function resizeAnnouncementsContent() {
     const completionRect = formCompletionCard.getBoundingClientRect();
     
     if (contentRect.bottom > completionRect.bottom) {
-      const maxHeight = completionRect.bottom - contentRect.top - 20; // 20px
+      const maxHeight = completionRect.bottom - contentRect.top - 20;
       announcementsContent.style.height = maxHeight + 'px';
       announcementsContent.style.maxHeight = maxHeight + 'px';
       announcementsContent.style.overflow = 'auto';
@@ -1925,7 +1921,7 @@ window.addEventListener('resize', resizeAnnouncementsContent);
       if (!input || !list) return;
 
       const securityShipsWithOther = ["None", ...securityShips, "Other"];
-      let selectedShips = ['None']; // Default to "None" selected
+      let selectedShips = ['None'];
 
       function showDropdown() {
         list.classList.add('show');
@@ -2860,7 +2856,6 @@ window.addEventListener('resize', resizeAnnouncementsContent);
         }
       }
       
-      // Only count security ships towards progress if it's not "None"
       const selectedSecurityShips = getSelectedSecurityShips();
       const hasNonNoneSecurityShips = selectedSecurityShips.some(ship => ship && ship !== 'None');
       
@@ -3344,7 +3339,6 @@ window.addEventListener('resize', resizeAnnouncementsContent);
     let isValid = false;
     let fieldLabel = id.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
     
-    // Special case for UEC field to prevent spacing within the acronym
     if (id === 'totalUECBox') {
       fieldLabel = 'Total UEC Box';
     }
@@ -4203,7 +4197,6 @@ async function sendToDiscord() {
     shipName = document.getElementById("shipNameOther").value;
   }
 
-  // Always define securityShipsText and selectedSecurityShips at function scope
   let selectedSecurityShips = [];
   let securityShipsText = "None";
   
@@ -4226,6 +4219,7 @@ async function sendToDiscord() {
   if (!message) {
     showNotificationOverlay("Missing Discord Post<br><br><strong>No message to send</strong><br><br>Please generate a Discord post first by clicking the 'Generate Discord Post' button.", 'warning');
     showFeedback('warning', 'No message to send. Please generate a Discord post first.');
+    showCopyButton();
     logErrorToGitHub('V004', 'No message generated', 'User attempted to send without generating Discord post first', null, {
       validationStep: 'Message check',
       formCompleted: false
@@ -4237,6 +4231,7 @@ async function sendToDiscord() {
   if (!orderType || !captainName) {
     showNotificationOverlay("Required Information Missing<br><br><strong>Order Type and Captain Name are required</strong><br><br>Please fill in these fields to send to Discord.", 'warning');
     showFeedback('warning', 'Order Type and Captain Name are required to send to Discord.');
+    showCopyButton();
     logErrorToGitHub('V005', 'Required fields missing', `Missing fields - Order Type: ${orderType ? 'Present' : 'Missing'}, Captain Name: ${captainName ? 'Present' : 'Missing'}`, null, {
       validationStep: 'Required fields check',
       missingFields: [
@@ -4738,7 +4733,7 @@ async function logErrorToGitHub(errorCode, errorMsg, fullError, stackTrace, addi
         messageLength: document.getElementById("discordOutput")?.value?.length || 0
       };
       
-      // Get crew names
+      // crew names
       const crewAmount = parseInt(get("crewAmount"), 10);
       const crewNames = [];
       for (let i = 1; i <= crewAmount; i++) {
@@ -4747,7 +4742,7 @@ async function logErrorToGitHub(errorCode, errorMsg, fullError, stackTrace, addi
       }
       formData.crewNames = crewNames;
       
-      // Get security ships data
+      // security ships data
       if (typeof getSelectedSecurityShips === 'function') {
         try {
           const selectedSecurityShips = getSelectedSecurityShips();
@@ -4772,7 +4767,7 @@ async function logErrorToGitHub(errorCode, errorMsg, fullError, stackTrace, addi
         }
       }
       
-      // Get manifest data
+      // manifest data
       const manifestRows = document.querySelectorAll('.manifest-row');
       const manifestData = [];
       manifestRows.forEach(row => {
@@ -4791,17 +4786,16 @@ async function logErrorToGitHub(errorCode, errorMsg, fullError, stackTrace, addi
     }
     
     const issueData = {
-      title: `🚨 Brute Haul Bot Send Failure - ${errorCode}: ${errorMsg}`,
-      body: `## 🚨 Automatic Error Report Generation
+      title: `Brute Haul Bot Send Failure - ${errorCode}: ${errorMsg}`,
+      body: `## Automatic Error Report Generation
 
 **Error Code:** \`${errorCode}\`  
 **Error Message:** ${errorMsg}  
 **Timestamp:** ${errorContext.timestamp}  
-**Status:** 🔴 Needs Investigation
 
 ---
 
-## 📊 Error Details
+## Error Details
 
 | Field | Value |
 |-------|-------|
@@ -4818,7 +4812,7 @@ async function logErrorToGitHub(errorCode, errorMsg, fullError, stackTrace, addi
 
 ---
 
-## 🔍 Technical Details
+## Technical Details
 
 ### Full Error Message
 \`\`\`
@@ -4832,7 +4826,7 @@ ${stackTrace || 'No stack trace available'}
 
 ---
 
-## 📝 Form Data Context
+## Form Data Context
 
 ${errorContext.formData ? `
 | Field | Value |
@@ -4850,24 +4844,24 @@ ${errorContext.formData ? `
 ` : `Form data unavailable: ${errorContext.formDataError || 'Unknown reason'}`}
 
 <details>
-<summary><strong>📋 Complete Form Data Copy-Paste</strong> (Click to expand)</summary>
+<summary><strong>Complete Form Data Copy-Paste</strong> (Click to expand)</summary>
 
 ### User's Complete Form Submission
 
 ${errorContext.formData ? `
-**🏢 Order Information**
+**Order Information**
 - **Order Category:** ${errorContext.formData.orderCategory || 'Not set'}${errorContext.formData.orderCategoryOther ? ` (Other: ${errorContext.formData.orderCategoryOther})` : ''}
 - **Order Type:** ${errorContext.formData.orderType || 'Not set'}${errorContext.formData.orderTypeOther ? ` (Other: ${errorContext.formData.orderTypeOther})` : ''}
 - **Company Name:** ${errorContext.formData.companyName || 'Not set'}
 - **Resource Drive Company:** ${errorContext.formData.resourceDriveCompany || 'Not applicable'}
 
-**🚢 Transport Ship Information**
+**Transport Ship Information**
 - **Ship Name:** ${errorContext.formData.shipName || 'Not set'}${errorContext.formData.shipNameOther ? ` (Other: ${errorContext.formData.shipNameOther})` : ''}
 - **Captain Name:** ${errorContext.formData.captainName || 'Not set'}${errorContext.formData.captainNameOther ? ` (Other: ${errorContext.formData.captainNameOther})` : ''}
 - **Crew Amount:** ${errorContext.formData.crewAmount || '0'}
 ${errorContext.formData.crewNames && errorContext.formData.crewNames.length > 0 ? `- **Crew Names:** ${errorContext.formData.crewNames.join(', ')}` : ''}
 
-**🛡️ Security Ships**
+**Security Ships**
 ${errorContext.formData.securityShips && errorContext.formData.securityShips.length > 0 ? 
   errorContext.formData.securityShips.map(ship => ship === 'None' ? '- None' : `- ${ship}`).join('\n') : 
   '- None'
@@ -4878,14 +4872,14 @@ ${errorContext.formData.securityShipsData && errorContext.formData.securityShips
   ).join('\n') : ''
 }
 
-**📍 Route Information**
+**Route Information**
 - **Start Location:** ${errorContext.formData.startLocation || 'Not set'}
 - **Route Start:** ${errorContext.formData.routeStart || 'Not set'}
 - **Route End:** ${errorContext.formData.routeEnd || 'Not set'}
 - **Departure Time:** ${errorContext.formData.departureTime || 'Not set'}
 - **Completion Time:** ${errorContext.formData.completionTime || 'Not set'}
 
-**📦 Manifest Data**
+**Manifest Data**
 - **Total SCU:** ${errorContext.formData.totalSCU || '0'}
 - **Total UEC:** ${errorContext.formData.totalUEC || '0'}
 ${errorContext.formData.manifestData && errorContext.formData.manifestData.length > 0 ? 
@@ -4895,19 +4889,19 @@ ${errorContext.formData.manifestData && errorContext.formData.manifestData.lengt
   '\n**No manifest items found**'
 }
 
-**💰 Deductibles**
+**Deductibles**
 - **Repairs:** ${errorContext.formData.repairs || '0'} UEC
 - **Restock:** ${errorContext.formData.restock || '0'} UEC
 - **Quantum Fuel:** ${errorContext.formData.quantumFuel || '0'} UEC
 - **Hydrogen Fuel:** ${errorContext.formData.hydrogenFuel || '0'} UEC
 - **Crew/Ship Costs:** ${errorContext.formData.crewCosts || '0'} UEC
 
-**📝 Notes**
+**Notes**
 \`\`\`
 ${errorContext.formData.notes || 'No notes provided'}
 \`\`\`
 
-**📤 Generated Discord Message**
+**Generated Discord Message**
 \`\`\`
 ${errorContext.formData.discordMessage || 'No message was generated'}
 \`\`\`
@@ -4917,7 +4911,7 @@ ${errorContext.formData.discordMessage || 'No message was generated'}
 
 ---
 
-## 🎯 User Impact
+## User Impact
 
 A user attempted to send a cargo manifest to Discord but encountered this error. The error was displayed to the user with appropriate instructions for resolution.
 
@@ -4929,7 +4923,7 @@ A user attempted to send a cargo manifest to Discord but encountered this error.
 
 ---
 
-## 📊 Related Information
+## Related Information
 
 **Error Category:** ${errorCode.startsWith('E') ? 'Network/Server Error' : errorCode.startsWith('D') ? 'Discord API Error' : errorCode.startsWith('G') ? 'Google Sheets Error' : errorCode.startsWith('B') ? 'Bot Error' : errorCode.startsWith('V') ? 'Validation Error' : 'Other'}
 
@@ -4937,7 +4931,7 @@ A user attempted to send a cargo manifest to Discord but encountered this error.
 
 ---
 
-*🤖 This issue was automatically created by the Brute Haul Cargo Log error reporting system at ${errorContext.timestamp}*`,
+*This issue was automatically created by the Brute Haul Cargo Log error reporting system at ${errorContext.timestamp}*`,
       labels: [
         'bug', 
         'discord-failure', 
