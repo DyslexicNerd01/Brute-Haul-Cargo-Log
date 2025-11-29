@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Brute Haul Cargo Manifest Form</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Brute Haul Online Documentation System</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -313,6 +313,14 @@
       width: auto;
       margin-bottom: 0;
     }
+    .manifest-row .manifest-scu {
+      width: 60px;
+      min-width: 50px;
+    }
+    .manifest-row .manifest-uec {
+      width: 70px;
+      min-width: 60px;
+    }
     .manifest-btn {
       font-size: 1em;
       font-weight: bold;
@@ -455,42 +463,6 @@
     }
     .searchable-dropdown .dropdown-item:last-child {
       border-bottom: none;
-    }
-    
-    .searchable-dropdown .dropdown-item input[type="checkbox"] {
-      width: 14px;
-      height: 14px;
-      margin: 0;
-      margin-right: 6px;
-      transform: none;
-      vertical-align: middle;
-      flex-shrink: 0;
-    }
-    
-    .searchable-dropdown .dropdown-item span {
-      vertical-align: middle;
-      line-height: 14px;
-      flex-grow: 1;
-    }
-    
-    .checkbox-dropdown {
-      position: relative;
-      width: 100%;
-    }
-    .checkbox-dropdown .dropdown-toggle {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid #781d15;
-      background: #e2e2e2;
-      color: #230e09;
-      border-radius: 4px;
-      box-sizing: border-box;
-      cursor: pointer;
-      text-align: left;
-      min-height: 36px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
     }
     .checkbox-dropdown .dropdown-toggle:after {
       content: "▼";
@@ -677,10 +649,11 @@
       font-weight: bold;
       cursor: pointer;
       padding: 0;
-      width: 30px;
-      height: 30px;
-      display: flex;
-      align-items: center;
+  width: 22px;
+  height: 22px;
+  margin-left: 4px;
+  margin-right: 1px;
+  font-size: 0.95em;
       justify-content: center;
       border-radius: 50%;
       transition: background-color 0.2s, color 0.2s;
@@ -747,14 +720,30 @@
       transform: translateY(0);
     }
 
+    /* Transport request cargo details: read-only and responsive sizing for non-mobile */
+    @media (min-width: 481px) {
+      #tr_cargoDetails {
+        height: min(50vh, 420px);
+        resize: none;
+        overflow: auto;
+      }
+    }
+    @media (max-width: 480px) {
+      #tr_cargoDetails {
+        height: 90px; /* keep previous small size for mobile */
+        resize: vertical;
+      }
+    }
+
     input, select, textarea {
-      border: 2px solid #e0e0e0;
+      border: 2px solid #781d15;
       border-radius: 8px;
       padding: 12px 16px;
       font-size: 14px;
-      transition: all 0.2s ease;
-      background: #ffffff;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      transition: all 0.12s ease;
+      background: #e2e2e2;
+      color: #230e09;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
     }
 
     input:focus, select:focus, textarea:focus {
@@ -1040,11 +1029,26 @@
     </div>
 
     <div class="card" id="navigationCard">
-      <div style="display: flex; gap: 12px; margin-bottom: 0;">
-        <button type="button" onclick="showTab('formTab')" id="formTabBtn" style="border: 3px solid transparent;">Form</button>
-        <button type="button" onclick="showTab('historyTab')" id="historyTabBtn" style="border: 3px solid transparent;">History</button>
+        <div style="display: flex; gap: 12px; margin-bottom: 0;">
+      <button type="button" onclick="showTab('formTab')" id="formTabBtn" style="border: 3px solid transparent;">Manifest Form</button>
+      <button type="button" onclick="showTab('transportTab')" id="transportTabBtn" style="border: 3px solid transparent;">Transport Request</button>
+      <button type="button" onclick="showTab('viewerTab')" id="viewerTabBtn" style="border: 3px solid transparent;">Viewer</button>
+      <button type="button" onclick="showTab('historyTab')" id="historyTabBtn" style="border: 3px solid transparent;">History</button>
+        <a href="https://discord.gg/Ejpr5ZagvV" target="_blank" title="Join BRHS Discord" id="discordButton"
+           style="margin-left:auto; display:inline-flex; align-items:center; justify-content:center; width:60px; height:60px; background:#5865F2; border-radius:8px; text-decoration:none; border:0px solid #9d7523; margin-right:12px;">
+          <svg width="38" height="38" viewBox="0 0 71 55" fill="white">
+            <g clip-path="url(#clip0)">
+              <path d="M60.1045 4.8978C55.5792 2.8214 50.7265 1.2916 45.6527 0.41542C45.5603 0.39851 45.468 0.440769 45.4204 0.525289C44.7963 1.6353 44.105 3.0834 43.6209 4.2216C38.1637 3.4046 32.7345 3.4046 27.3892 4.2216C26.905 3.0581 26.1886 1.6353 25.5617 0.525289C25.5141 0.443589 25.4218 0.40133 25.3294 0.41542C20.2584 1.2888 15.4057 2.8186 10.8776 4.8978C10.8384 4.9147 10.8048 4.9429 10.7825 4.9795C1.57795 18.7309 -0.943561 32.1443 0.293408 45.3914C0.299005 45.4562 0.335386 45.5182 0.385761 45.5576C6.45866 50.0174 12.3413 52.7249 18.1147 54.5195C18.2071 54.5477 18.305 54.5139 18.3638 54.4378C19.7295 52.5728 20.9469 50.6063 21.9907 48.5383C22.0523 48.4172 21.9935 48.2735 21.8676 48.2256C19.9366 47.4931 18.0979 46.6 16.3292 45.5858C16.1893 45.5041 16.1781 45.304 16.3068 45.2082C16.679 44.9293 17.0513 44.6391 17.4067 44.3461C17.471 44.2926 17.5606 44.2813 17.6362 44.3151C29.2558 49.6202 41.8354 49.6202 53.3179 44.3151C53.3935 44.2785 53.4831 44.2898 53.5502 44.3433C53.9057 44.6363 54.2779 44.9293 54.6529 45.2082C54.7816 45.304 54.7732 45.5041 54.6333 45.5858C52.8646 46.6197 51.0259 47.4931 49.0921 48.2228C48.9662 48.2707 48.9102 48.4172 48.9718 48.5383C50.038 50.6034 51.2554 52.5699 52.5959 54.435C52.6519 54.5139 52.7526 54.5477 52.845 54.5195C58.6464 52.7249 64.529 50.0174 70.6019 45.5576C70.6551 45.5182 70.6887 45.459 70.6943 45.3942C72.1747 30.0791 68.2147 16.7757 60.1968 4.9823C60.1772 4.9429 60.1437 4.9147 60.1045 4.8978ZM23.7259 37.3253C20.2276 37.3253 17.3451 34.1136 17.3451 30.1693C17.3451 26.225 20.1717 23.0133 23.7259 23.0133C27.308 23.0133 30.1626 26.2532 30.1066 30.1693C30.1066 34.1136 27.28 37.3253 23.7259 37.3253ZM47.3178 37.3253C43.8196 37.3253 40.9371 34.1136 40.9371 30.1693C40.9371 26.225 43.7636 23.0133 47.3178 23.0133C50.9 23.0133 53.7545 26.2532 53.6986 30.1693C53.6986 34.1136 50.9 37.3253 47.3178 37.3253Z"/>
+            </g>
+            <defs>
+              <clipPath id="clip0">
+                <rect width="71" height="55"/>
+              </clipPath>
+            </defs>
+          </svg>
+        </a>
         <a href="https://robertsspaceindustries.com/en/orgs/BRHS" target="_blank" title="Join BRHS"
-           style="margin-left:auto; display:inline-flex; align-items:center; justify-content:center; width:60px; height:60px; background:#222; border-radius:8px; text-decoration:none; border:0px solid #9d7523;">
+           style="display:inline-flex; align-items:center; justify-content:center; width:60px; height:60px; background:#222; border-radius:8px; text-decoration:none; border:0px solid #9d7523;">
           <img src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/starcitizenwhite.png" alt="Star Citizen" style="width:82px; height:82px; object-fit:contain; filter:invert(1);">
         </a>
       </div>
@@ -1072,7 +1076,88 @@
       </div>
     </div>
 
-    <div id="formTab">
+      <div id="transportTab" style="display: none; width: 100%; max-width: 95%; margin: 0 auto;">
+        <div style="background: linear-gradient(145deg, #ffffff 0%, #f8f8f8 100%); border-radius: 16px; padding: 24px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); border: 1px solid rgba(157, 117, 35, 0.12);">
+          <h2 style="color:#9d7523;margin-top:0;">Transport Request</h2>
+          <p style="color:#333;margin-bottom:18px;">Use this form to request a transport setup from another organisation. Fill in the details below and click Submit Request.</p>
+          <form id="transportRequestForm">
+            <div style="display:flex;gap:12px;flex-wrap:wrap;">
+              <div style="flex:1;min-width:220px;">
+                <label>Organization:</label>
+                <select id="tr_orgName" required style="width:100%;">
+                  <option value="" selected disabled>Select organization</option>
+                  <option value="Brute Haul">Brute Haul</option>
+                  <option value="Space Rats">Space Rats</option>
+                  <option value="The Benjineering Project">The Benjineering Project</option>
+                </select>
+              </div>
+              <div style="flex:1;min-width:220px;">
+                <label>Requester Name:</label>
+                <select id="tr_requester" required style="width:100%;" aria-required="true">
+                  <option value="" selected disabled>Select requester</option>
+                </select>
+              </div>
+              <div style="flex:1;min-width:220px;">
+                <label>Security Ships needed?</label>
+                <select id="tr_securityNeeded" required style="width:100%;" aria-required="true">
+                  <option value="" selected disabled>Select</option>
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
+              <div style="flex:1;min-width:220px;">
+                <label>Start Destination:</label>
+                <div class="searchable-dropdown">
+                  <input type="text" id="tr_pickup" placeholder="Start location" autocomplete="off" required />
+                  <div class="dropdown-list" id="tr_pickupList"></div>
+                </div>
+              </div>
+              <div style="flex:1;min-width:220px;">
+                <label>End Destination:</label>
+                <div class="searchable-dropdown">
+                  <input type="text" id="tr_destination" placeholder="End location" autocomplete="off" required />
+                  <div class="dropdown-list" id="tr_destinationList"></div>
+                </div>
+              </div>
+              <div style="flex:1 1 100%;min-width:220px;">
+                <label>Cargo Details:</label>
+                <textarea id="tr_cargoDetails" required readonly placeholder="Cargo details" style="width:100%;height:90px;resize:none;" aria-required="true"></textarea>
+              </div>
+              <div style="flex:0 0 140px;">
+                <label>SCU Total:</label>
+                <input type="number" id="tr_requiredSCU" required min="0" step="1" style="width:100%;" aria-required="true" />
+              </div>
+              <!-- Priority moved to its own line to avoid being pushed against SCU Total -->
+              <div style="flex:1 1 100%;min-width:220px;margin-top:8px;">
+                <label>Priority:</label>
+                <select id="tr_priority" required style="width:100%;" aria-required="true">
+                  <option value="" selected disabled>Select priority</option>
+                  <option value="Emergency">Emergency</option>
+                  <option value="High">High</option>
+                  <option value="Medium">Medium</option>
+                  <option value="Low">Low</option>
+                </select>
+              </div>
+            </div>
+            <div style="margin-top:12px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+              <button type="button" onclick="submitTransportRequest()" style="background:#9d7523;color:#fff;border:none;padding:10px 14px;border-radius:6px;">Submit Request</button>
+              <button type="button" onclick="sendTransportRequestToDiscord()" style="background:#5865F2;color:#fff;border:none;padding:10px 14px;border-radius:6px;">Send to Discord</button>
+              <button type="button" onclick="clearTransportRequestForm()" style="background:#eee;color:#333;border:1px solid #ccc;padding:8px 12px;border-radius:6px;">Clear</button>
+              <div id="tr_status" style="margin-left:12px;color:#2a7a2a;font-weight:bold;display:none;">Request submitted</div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+        <div id="viewerTab" style="display:none; width:100%; max-width:95%; margin:0 auto;">
+          <div style="background: linear-gradient(145deg, #ffffff 0%, #f8f8f8 100%); border-radius: 16px; padding: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.08); border: 1px solid rgba(157, 117, 35, 0.12);">
+            <h2 style="color:#9d7523;margin-top:0;">Transport Viewer</h2>
+            <div id="viewerStatus" style="margin-bottom:12px;color:#333;font-weight:bold;display:none;">Viewer status</div>
+            <div id="viewerContent" style="min-height:200px; padding:8px;"></div>
+          </div>
+        </div>
+
+        <div id="formTab">
       <div class="form-grid">
   
   <div class="success-feedback" id="successFeedback">
@@ -1108,7 +1193,6 @@
       <select id="companyName" required>
         <option value="" selected disabled>Select company</option>
         <option value="Brute Haul">Brute Haul</option>
-        <option value="Wildcard Inc.">Wildcard Inc.</option>
         <option value="Space Rats">Space Rats</option>
         <option value="The Benjineering Project">The Benjineering Project</option>
       </select>
@@ -1238,7 +1322,7 @@
       <div class="manifest-total-box">
   <span id="totalSCUBox">Total SCU: 0</span>
   <span style="margin-right:6px;">Total UEC:</span>
-<input type="number" id="totalUECBox" style="color:#230e09; font-weight:bold; vertical-align:middle; width:120px;" value="0" />
+<input type="number" id="totalUECBox" style="color:#230e09; font-weight:bold; vertical-align:middle; width:80px;" value="0" />
 </div>
     </div>
     </div>
@@ -1438,13 +1522,13 @@
 
     // Captains
     const captainNames = [
-      "DyslexicNerd", "Spartan", "Lightblade", "jjetstreamm", "Roflnomish", 
+      "DyslexicNerd", "Spartan", "Lightblade", "Roflnomish", 
       "BenjiNotorious", "zarainia", "Astol", "Venomnom", "BigDaddyTortuga", 
       "ItzProto", "Newt", "Xolion", "Bakes Kamuari", "LockEmUpJas", 
       "sadfish", "Efazer"
     ];
 
-    // Manifest materials
+    // materials
     const materialList = [
       "Select Material", "Agricium", "Aluminium", "Aphorite", "Beryl", "Bexalite", "Borase", "Copper", "Corundum", "Diamond", "Dolivine", "Dyslexium", "Gold", "Hadanite", "Hephaestanite", "Inert materials", "Laranite", "Placeholder", "Spartanium", "Quantanium", "Quartz", "Taranite", "Tungsten", "Titanium"
     ];
@@ -1493,30 +1577,49 @@
 function showTab(tab) {
   const formTab = document.getElementById('formTab');
   const historyTab = document.getElementById('historyTab');
-  
-  if (formTab && historyTab) {
+  const transportTab = document.getElementById('transportTab');
+  const viewerTab = document.getElementById('viewerTab');
+
+    if (formTab && historyTab && transportTab && viewerTab) {
+    // default: hide all then show selected
+    formTab.style.display = 'none';
+    historyTab.style.display = 'none';
+    transportTab.style.display = 'none';
+    viewerTab.style.display = 'none';
+
     if (tab === 'formTab') {
       formTab.style.display = 'block';
-      historyTab.style.display = 'none';
     } else if (tab === 'historyTab') {
-      formTab.style.display = 'none';
       historyTab.style.display = 'block';
       renderHistory();
+    } else if (tab === 'transportTab') {
+      transportTab.style.display = 'block';
+    } else if (tab === 'viewerTab') {
+      viewerTab.style.display = 'block';
+      if (typeof renderViewer === 'function') renderViewer();
     }
   }
 
   const formTabBtn = document.getElementById('formTabBtn');
   const historyTabBtn = document.getElementById('historyTabBtn');
-  
-  if (formTabBtn && historyTabBtn) {
+  const transportTabBtn = document.getElementById('transportTabBtn');
+  const viewerTabBtn = document.getElementById('viewerTabBtn');
+
+  if (formTabBtn && historyTabBtn && transportTabBtn && viewerTabBtn) {
     formTabBtn.style.background = tab === 'formTab' ? '#9d7523' : '#781d15';
     historyTabBtn.style.background = tab === 'historyTab' ? '#9d7523' : '#781d15';
+    transportTabBtn.style.background = tab === 'transportTab' ? '#9d7523' : '#781d15';
+    viewerTabBtn.style.background = tab === 'viewerTab' ? '#9d7523' : '#781d15';
 
     formTabBtn.style.color = '#fff';
     historyTabBtn.style.color = '#fff';
+    transportTabBtn.style.color = '#fff';
+    viewerTabBtn.style.color = '#fff';
 
     formTabBtn.style.border = tab === 'formTab' ? '3px solid #000' : '3px solid transparent';
     historyTabBtn.style.border = tab === 'historyTab' ? '3px solid #000' : '3px solid transparent';
+    transportTabBtn.style.border = tab === 'transportTab' ? '3px solid #000' : '3px solid transparent';
+    viewerTabBtn.style.border = tab === 'viewerTab' ? '3px solid #000' : '3px solid transparent';
   }
 }
 window.showTab = showTab;
@@ -1549,6 +1652,564 @@ function resizeAnnouncementsContent() {
 }
 
 window.addEventListener('resize', resizeAnnouncementsContent);
+
+    function submitTransportRequest() {
+      const orgName = document.getElementById('tr_orgName')?.value?.trim();
+      const requester = document.getElementById('tr_requester')?.value?.trim();
+      const securityNeeded = document.getElementById('tr_securityNeeded')?.value;
+      const pickup = document.getElementById('tr_pickup')?.value?.trim();
+      const destination = document.getElementById('tr_destination')?.value?.trim();
+      const cargoDetails = document.getElementById('tr_cargoDetails')?.value?.trim();
+      const requiredSCU = document.getElementById('tr_requiredSCU')?.value;
+      const priority = document.getElementById('tr_priority')?.value;
+
+      const statusDiv = document.getElementById('tr_status');
+
+      // validate using shared transport request validator (highlights fields and shows overlay)
+      if (!validateTransportRequest()) {
+        return;
+      }
+
+      const req = {
+        id: 'TR-' + Date.now(),
+        timestamp: new Date().toISOString(),
+        orgName,
+        requester,
+        securityNeeded: securityNeeded || 'No',
+        start: pickup,
+        end: destination,
+        cargoDetails,
+        requiredSCU: requiredSCU ? Number(requiredSCU) : 0,
+        priority: priority
+      };
+
+      try {
+        const existing = JSON.parse(localStorage.getItem('transportRequests') || '[]');
+        existing.unshift(req);
+        localStorage.setItem('transportRequests', JSON.stringify(existing));
+        if (statusDiv) {
+          statusDiv.style.display = 'inline-block';
+          statusDiv.style.color = '#2a7a2a';
+          statusDiv.textContent = 'Request submitted ✓';
+        }
+        // Clear the form shortly after submit so the user sees confirmation first
+        setTimeout(() => {
+          clearTransportRequestForm();
+        }, 900);
+        // hide the status message a bit later
+        setTimeout(() => {
+          if (statusDiv) statusDiv.style.display = 'none';
+        }, 3000);
+      } catch (e) {
+        if (statusDiv) {
+          statusDiv.style.display = 'inline-block';
+          statusDiv.style.color = '#a33';
+          statusDiv.textContent = 'Error saving request';
+        }
+        console.error('Failed to save transport request', e);
+      }
+    }
+
+    function clearTransportRequestForm() {
+      ['tr_orgName','tr_requester','tr_securityNeeded','tr_pickup','tr_destination','tr_cargoDetails','tr_requiredSCU','tr_priority'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+        if (el) el.classList.remove('error');
+      });
+      const statusDiv = document.getElementById('tr_status');
+      if (statusDiv) { statusDiv.style.display = 'none'; }
+      const notif = document.getElementById('notificationOverlay');
+      if (notif) notif.remove();
+    }
+
+    function validateTransportRequest() {
+      // Remove previous error states
+      ['tr_orgName','tr_requester','tr_securityNeeded','tr_pickup','tr_destination','tr_cargoDetails','tr_requiredSCU','tr_priority'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.remove('error');
+      });
+
+      const errors = [];
+      let firstEl = null;
+
+      const requiredIds = [
+        {id: 'tr_orgName', label: 'Organization'},
+        {id: 'tr_requester', label: 'Requester Name'},
+        {id: 'tr_securityNeeded', label: 'Security Ships needed?'},
+        {id: 'tr_pickup', label: 'Start Destination'},
+        {id: 'tr_destination', label: 'End Destination'},
+        {id: 'tr_cargoDetails', label: 'Cargo Details'},
+        {id: 'tr_requiredSCU', label: 'SCU Total'},
+        {id: 'tr_priority', label: 'Priority'}
+      ];
+
+      requiredIds.forEach(item => {
+        const el = document.getElementById(item.id);
+        const val = el ? (el.value || '').toString().trim() : '';
+        let invalid = false;
+        if (!val) invalid = true;
+        if (invalid) {
+          if (el) el.classList.add('error');
+          errors.push(item.label + ' is required');
+          if (!firstEl && el) firstEl = el;
+        }
+      });
+
+      // Validate pickup/destination are in locations list when available
+      const pickupEl = document.getElementById('tr_pickup');
+      const destEl = document.getElementById('tr_destination');
+      if (typeof locations !== 'undefined') {
+        if (pickupEl && pickupEl.value && !locations.includes(pickupEl.value)) {
+          pickupEl.classList.add('error');
+          errors.push('Start Destination must be selected from the locations list');
+          if (!firstEl) firstEl = pickupEl;
+        }
+        if (destEl && destEl.value && !locations.includes(destEl.value)) {
+          destEl.classList.add('error');
+          errors.push('End Destination must be selected from the locations list');
+          if (!firstEl) firstEl = destEl;
+        }
+      }
+
+      // Validate SCU is a number >= 0
+      const scuEl = document.getElementById('tr_requiredSCU');
+      if (scuEl) {
+        const n = Number(scuEl.value);
+        if (!Number.isFinite(n) || n < 0) {
+          scuEl.classList.add('error');
+          errors.push('SCU Total must be a number >= 0');
+          if (!firstEl) firstEl = scuEl;
+        }
+      }
+
+      if (errors.length > 0) {
+        // Build message
+  const msgHtml = '<strong>Please fix the following issues:</strong><br/><br/>' + errors.map(e => '• ' + e).join('<br/>');
+  // Show a prominent warning overlay similar to other overlays (HTML allowed)
+  showNotificationOverlay(msgHtml, 'warning');
+        // Focus first error field and scroll into view
+        if (firstEl) {
+          try { firstEl.focus(); firstEl.scrollIntoView({behavior: 'smooth', block: 'center'}); } catch (e) {}
+        }
+        return false;
+      }
+
+      return true;
+    }
+
+    function sendTransportRequestToDiscord() {
+      // Get the most recent transport request from localStorage
+      const allRequests = JSON.parse(localStorage.getItem('transportRequests') || '[]');
+      if (!allRequests || allRequests.length === 0) {
+        showNotificationOverlay('<strong>No transport request found!</strong><br/><br/>Please submit a request first before sending to Discord.', 'warning');
+        return;
+      }
+
+      const transportData = allRequests[0]; // Get the most recent one
+      
+      // Show loading state
+      const statusDiv = document.getElementById('tr_status');
+      if (statusDiv) {
+        statusDiv.style.display = 'inline-block';
+        statusDiv.style.color = '#555';
+        statusDiv.textContent = 'Sending to Discord...';
+      }
+
+      // Prepare the payload
+      const payload = {
+        transportData: transportData,
+        channelId: 1391877534215438398  // Use the default manifest channel
+      };
+
+      // Send to Discord backend
+      fetch('/send-transport-request', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+      })
+      .then(response => {
+        if (!response.ok) {
+          return response.json().then(errorData => {
+            throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+          });
+        }
+        return response.json();
+      })
+      .then(data => {
+        if (statusDiv) {
+          statusDiv.style.display = 'inline-block';
+          statusDiv.style.color = '#2a7a2a';
+          statusDiv.textContent = 'Sent to Discord ✓';
+        }
+        console.log('✅ Transport request sent to Discord:', data);
+        // Hide status message after 3 seconds
+        setTimeout(() => {
+          if (statusDiv) statusDiv.style.display = 'none';
+        }, 3000);
+      })
+      .catch(error => {
+        if (statusDiv) {
+          statusDiv.style.display = 'inline-block';
+          statusDiv.style.color = '#d9534f';
+          statusDiv.textContent = 'Error sending to Discord: ' + error.message;
+        }
+        console.error('❌ Error sending to Discord:', error);
+        showNotificationOverlay('<strong>Error sending to Discord:</strong><br/><br/>' + error.message, 'error');
+      });
+    }
+
+    window.submitTransportRequest = submitTransportRequest;
+    window.clearTransportRequestForm = clearTransportRequestForm;
+    window.sendTransportRequestToDiscord = sendTransportRequestToDiscord;
+
+    // Viewer functions
+    function renderViewer() {
+      const container = document.getElementById('viewerContent');
+      const status = document.getElementById('viewerStatus');
+      if (status) { status.style.display = 'none'; }
+      if (!container) return;
+
+      const transport = JSON.parse(localStorage.getItem('transportRequests') || '[]');
+      const history = JSON.parse(localStorage.getItem('discordHistory') || '[]');
+
+      container.innerHTML = '<div style="margin-bottom:12px;color:#333;font-weight:bold;">Transport Requests: ' + transport.length + ' &nbsp;|&nbsp; History Items: ' + history.length + '</div>';
+
+      const listDiv = document.createElement('div');
+      listDiv.style.display = 'grid';
+      listDiv.style.gridTemplateColumns = '1fr';
+      listDiv.style.gap = '10px';
+
+      if (!transport || transport.length === 0) {
+        listDiv.innerHTML = '<div style="padding:12px;background:#fff;border:1px solid #ccc;border-radius:6px;">No transport requests found.</div>';
+      } else {
+        transport.forEach(req => {
+          const card = document.createElement('div');
+          card.style.padding = '12px';
+          card.style.border = '1px solid #9d7523';
+          card.style.borderRadius = '8px';
+          card.style.background = '#fff';
+          card.style.display = 'flex';
+          card.style.justifyContent = 'space-between';
+          card.style.alignItems = 'center';
+
+          const left = document.createElement('div');
+          left.style.flex = '1';
+          left.innerHTML = '<div style="font-weight:700;color:#781d15;">' + (req.orgName || 'Unknown Org') + ' — ' + (req.contactName || '') + '</div>' +
+            '<div style="font-size:0.95em;color:#333;">' + (req.pickup || '') + ' → ' + (req.destination || '') + '</div>' +
+            '<div style="font-size:0.85em;color:#666;margin-top:6px;">' + (req.cargoDetails ? req.cargoDetails : '<em>No details</em>') + '</div>';
+          if (req.assigned) {
+            left.innerHTML += '<div style="margin-top:8px;font-size:0.85em;color:#155724;background:#e6f4ea;padding:8px;border-radius:6px;">' +
+              '<strong>Assigned:</strong> ' + (req.assigned.ships ? req.assigned.ships.join(', ') : '') + '<br/>' +
+              '<strong>Captains:</strong> ' + (req.assigned.captains ? req.assigned.captains.join(', ') : '') +
+            '</div>';
+          }
+
+          // show simplified transport request fields (compatible with new format)
+          left.innerHTML += '<div style="margin-top:8px;font-size:0.9em;color:#333;">' +
+            '<strong>Org:</strong> ' + (req.orgName || '-') + ' &nbsp;|&nbsp; ' +
+            '<strong>Requester:</strong> ' + (req.requester || '-') + ' &nbsp;|&nbsp; ' +
+            '<strong>Security:</strong> ' + (req.securityNeeded || 'No') + '<br/>' +
+            '<strong>Route:</strong> ' + (req.start || '') + ' → ' + (req.end || '') + '<br/>' +
+            '<strong>SCU:</strong> ' + (req.requiredSCU ? req.requiredSCU.toLocaleString() : '0') + ' &nbsp;|&nbsp; ' +
+            '<strong>Priority:</strong> ' + (req.priority || 'Medium') +
+          '</div>';
+
+          const right = document.createElement('div');
+          right.style.display = 'flex';
+          right.style.gap = '8px';
+          right.style.alignItems = 'center';
+
+          const ts = document.createElement('div');
+          ts.style.fontSize = '0.8em';
+          ts.style.color = '#666';
+          ts.textContent = new Date(req.timestamp).toLocaleString();
+
+          // Status display
+          const statusBadge = document.createElement('div');
+          statusBadge.style.fontSize = '0.85em';
+          statusBadge.style.padding = '6px 8px';
+          statusBadge.style.borderRadius = '6px';
+          statusBadge.style.background = req.status === 'Assigned' ? '#fff3cd' : (req.status === 'Completed' ? '#d4edda' : (req.status === 'Declined' ? '#f8d7da' : '#e9ecef'));
+          statusBadge.style.color = '#333';
+          statusBadge.textContent = req.status || 'New';
+
+          // Action buttons: Declined, Assigned, Completed
+          const declinedBtn = document.createElement('button');
+          declinedBtn.textContent = 'Declined';
+          declinedBtn.style.background = '#f0ad4e';
+          declinedBtn.style.color = '#fff';
+          declinedBtn.style.border = 'none';
+          declinedBtn.style.padding = '6px 10px';
+          declinedBtn.style.borderRadius = '6px';
+          declinedBtn.style.cursor = 'pointer';
+          declinedBtn.onclick = function() { updateTransportStatus(req.id, 'Declined'); };
+
+          const assignedBtn = document.createElement('button');
+          assignedBtn.textContent = 'Assigned';
+          assignedBtn.style.background = '#17a2b8';
+          assignedBtn.style.color = '#fff';
+          assignedBtn.style.border = 'none';
+          assignedBtn.style.padding = '6px 10px';
+          assignedBtn.style.borderRadius = '6px';
+          assignedBtn.style.cursor = 'pointer';
+          assignedBtn.onclick = function() { showAssignUI(req, card); };
+
+          const completedBtn = document.createElement('button');
+          completedBtn.textContent = 'Completed';
+          completedBtn.style.background = '#28a745';
+          completedBtn.style.color = '#fff';
+          completedBtn.style.border = 'none';
+          completedBtn.style.padding = '6px 10px';
+          completedBtn.style.borderRadius = '6px';
+          completedBtn.style.cursor = 'pointer';
+          completedBtn.onclick = function() { updateTransportStatus(req.id, 'Completed'); };
+
+          right.appendChild(ts);
+          right.appendChild(statusBadge);
+          right.appendChild(declinedBtn);
+          right.appendChild(assignedBtn);
+          right.appendChild(completedBtn);
+
+          card.appendChild(left);
+          card.appendChild(right);
+
+          listDiv.appendChild(card);
+        });
+      }
+
+      container.appendChild(listDiv);
+    }
+
+    // deletion of transport requests is disabled — use Declined status instead
+
+    // clearAllTransportRequests removed to prevent deletion of requests via the UI.
+    window.renderViewer = renderViewer;
+
+    function updateTransportStatus(id, status, assignedData) {
+      try {
+        let transport = JSON.parse(localStorage.getItem('transportRequests') || '[]');
+        transport = transport.map(t => {
+          if (t.id === id) {
+            t.status = status;
+            if (assignedData) {
+              t.assigned = assignedData;
+            }
+          }
+          return t;
+        });
+        localStorage.setItem('transportRequests', JSON.stringify(transport));
+        renderViewer();
+      } catch (e) {
+        console.error('Failed to update transport status', e);
+      }
+    }
+
+    function showAssignUI(req, card) {
+      // prevent multiple assign UIs
+      if (card._assigning) return;
+      card._assigning = true;
+
+      const assignDiv = document.createElement('div');
+      assignDiv.style.marginTop = '8px';
+      assignDiv.style.padding = '8px';
+      assignDiv.style.borderTop = '1px dashed #ccc';
+
+      // Ships multi-select (searchable)
+      const shipLabel = document.createElement('label');
+      shipLabel.textContent = 'Assign Ships (type to filter, click to add):';
+      shipLabel.style.display = 'block';
+      shipLabel.style.fontSize = '0.9em';
+      shipLabel.style.marginBottom = '4px';
+
+      const shipInputId = 'assign_ship_input_' + req.id;
+      const shipListId = shipInputId + 'List';
+      const shipWrapper = document.createElement('div');
+      shipWrapper.className = 'searchable-dropdown';
+      const shipInput = document.createElement('input');
+      shipInput.type = 'text';
+      shipInput.id = shipInputId;
+      shipInput.placeholder = 'Type or click to add ships';
+      shipInput.autocomplete = 'off';
+      shipWrapper.appendChild(shipInput);
+      const shipList = document.createElement('div');
+      shipList.className = 'dropdown-list';
+      shipList.id = shipListId;
+      shipWrapper.appendChild(shipList);
+
+      // initialize multi-searchable for ships
+      createMultiSearchableDropdown(shipInputId, shipListId, transportShips);
+  // ensure clicking shows the dropdown (defensive)
+  shipInput.addEventListener('click', () => { if (shipInput.showDropdown) shipInput.showDropdown(); });
+
+      // Captains multi-select (searchable)
+      const capLabel = document.createElement('label');
+      capLabel.textContent = 'Assign Captains (type to filter, click to add):';
+      capLabel.style.display = 'block';
+      capLabel.style.fontSize = '0.9em';
+      capLabel.style.margin = '8px 0 4px 0';
+
+      const capInputId = 'assign_cap_input_' + req.id;
+      const capListId = capInputId + 'List';
+      const capWrapper = document.createElement('div');
+      capWrapper.className = 'searchable-dropdown';
+      const capInput = document.createElement('input');
+      capInput.type = 'text';
+      capInput.id = capInputId;
+      capInput.placeholder = 'Type or click to add captains';
+      capInput.autocomplete = 'off';
+      capWrapper.appendChild(capInput);
+      const capList = document.createElement('div');
+      capList.className = 'dropdown-list';
+      capList.id = capListId;
+      capWrapper.appendChild(capList);
+
+      // initialize multi-searchable for captains
+      createMultiSearchableDropdown(capInputId, capListId, captainNames);
+  // ensure clicking shows the dropdown (defensive)
+  capInput.addEventListener('click', () => { if (capInput.showDropdown) capInput.showDropdown(); });
+
+      const actionRow = document.createElement('div');
+      actionRow.style.marginTop = '8px';
+      actionRow.style.display = 'flex';
+      actionRow.style.gap = '8px';
+
+      const confirmBtn = document.createElement('button');
+      confirmBtn.textContent = 'Confirm Assign';
+      confirmBtn.style.background = '#17a2b8'; confirmBtn.style.color = '#fff'; confirmBtn.style.border='none'; confirmBtn.style.padding='6px 10px'; confirmBtn.style.borderRadius='6px';
+
+      const cancelBtn = document.createElement('button');
+      cancelBtn.textContent = 'Cancel';
+      cancelBtn.style.background = '#eee'; cancelBtn.style.color = '#333'; cancelBtn.style.border='1px solid #ccc'; cancelBtn.style.padding='6px 10px'; cancelBtn.style.borderRadius='6px';
+
+      confirmBtn.onclick = function() {
+        const selectedShips = shipInput.selectedItems ? Array.from(shipInput.selectedItems) : [];
+        const selectedCaps = capInput.selectedItems ? Array.from(capInput.selectedItems) : [];
+        updateTransportStatus(req.id, 'Assigned', { ships: selectedShips, captains: selectedCaps, assignedAt: new Date().toISOString() });
+        // remove the assign UI and refresh viewer
+        assignDiv.remove();
+        card._assigning = false;
+      };
+      cancelBtn.onclick = function() { assignDiv.remove(); card._assigning = false; };
+
+  actionRow.appendChild(confirmBtn);
+  actionRow.appendChild(cancelBtn);
+
+  assignDiv.appendChild(shipLabel);
+  assignDiv.appendChild(shipWrapper);
+  assignDiv.appendChild(capLabel);
+  assignDiv.appendChild(capWrapper);
+  assignDiv.appendChild(actionRow);
+
+  card.appendChild(assignDiv);
+    }
+
+    // Multi-select searchable dropdown helper: stores selected items on input.selectedItems (array)
+    function createMultiSearchableDropdown(inputId, listId, items) {
+      const input = document.getElementById(inputId);
+      const list = document.getElementById(listId);
+      if (!input || !list) return;
+
+      // Create a chips container to display selected items visually
+      let chips = document.getElementById(inputId + '_chips');
+      if (!chips) {
+        chips = document.createElement('div');
+        chips.id = inputId + '_chips';
+        chips.className = 'chips-container';
+        chips.style.display = 'flex';
+        chips.style.flexWrap = 'wrap';
+        chips.style.gap = '6px';
+        chips.style.marginBottom = '6px';
+        input.parentNode.insertBefore(chips, input);
+      }
+
+      let filtered = items.slice();
+      input.selectedItems = input.selectedItems || [];
+
+      function show() { list.classList.add('show'); }
+      function hide() { setTimeout(()=>list.classList.remove('show'), 150); }
+
+      function renderList() {
+        list.innerHTML = '';
+        filtered.forEach(it => {
+          const item = document.createElement('div');
+          item.className = 'dropdown-item';
+          const selected = input.selectedItems.includes(it);
+          item.innerHTML = '<span style="flex:1;">' + it + '</span>' + (selected ? ' <strong style="color:#155724">✓</strong>' : '');
+          item.addEventListener('click', () => {
+            if (!input.selectedItems.includes(it)) {
+              input.selectedItems.push(it);
+            } else {
+              input.selectedItems = input.selectedItems.filter(x=>x!==it);
+            }
+            updateChips();
+            renderList();
+            input.value = '';
+            input.focus();
+            show();
+          });
+          list.appendChild(item);
+        });
+      }
+
+      function updateChips() {
+        chips.innerHTML = '';
+        input.selectedItems.forEach(val => {
+          const chip = document.createElement('span');
+          chip.className = 'chip';
+          chip.textContent = val;
+          chip.style.background = '#e6f4ea';
+          chip.style.border = '1px solid #9d7523';
+          chip.style.padding = '4px 8px';
+          chip.style.borderRadius = '999px';
+          chip.style.fontSize = '0.85em';
+          chip.style.cursor = 'pointer';
+          chip.addEventListener('click', () => {
+            input.selectedItems = input.selectedItems.filter(x=>x!==val);
+            updateChips();
+            renderList();
+          });
+          chips.appendChild(chip);
+        });
+        // update input placeholder to hint
+        if (input.selectedItems.length === 0) {
+          input.placeholder = input.getAttribute('data-default-placeholder') || '';
+        } else {
+          input.placeholder = '';
+        }
+      }
+
+      input.setAttribute('data-default-placeholder', input.placeholder || '');
+
+      input.addEventListener('input', (e) => {
+        const term = e.target.value.toLowerCase();
+        if (!term) filtered = items.filter(i=>!input.selectedItems.includes(i));
+        else filtered = items.filter(i=>i.toLowerCase().includes(term) && !input.selectedItems.includes(i));
+        renderList();
+        show();
+      });
+
+      input.addEventListener('focus', () => { filtered = items.filter(i=>!input.selectedItems.includes(i)); renderList(); show(); });
+  // also show on click to support clicking (not only typing/focus)
+  input.addEventListener('click', (e) => { e.stopPropagation(); filtered = items.filter(i=>!input.selectedItems.includes(i)); renderList(); show(); input.focus(); });
+      input.addEventListener('blur', () => { hide(); });
+
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && input.value === '') {
+          // remove last selected
+          input.selectedItems.pop();
+          updateChips();
+          renderList();
+        }
+      });
+
+      // initial render
+      renderList();
+      updateChips();
+      // expose a small helper to show the dropdown externally
+      input.showDropdown = function() { filtered = items.filter(i=>!input.selectedItems.includes(i)); renderList(); show(); };
+    }
 
     function populateLocationDropdown(id) {
       const inputId = id;
@@ -1660,6 +2321,19 @@ window.addEventListener('resize', resizeAnnouncementsContent);
       if (!e.target.closest('.searchable-dropdown')) {
         document.querySelectorAll('.dropdown-list').forEach(list => {
           list.classList.remove('show');
+        });
+      }
+    });
+
+    // Populate requester select in transport form with captain names
+    window.addEventListener('DOMContentLoaded', function() {
+      const trRequester = document.getElementById('tr_requester');
+      if (trRequester && typeof captainNames !== 'undefined') {
+        captainNames.forEach(c => {
+          const opt = document.createElement('option');
+          opt.value = c;
+          opt.textContent = c;
+          trRequester.appendChild(opt);
         });
       }
     });
@@ -1940,7 +2614,7 @@ window.addEventListener('resize', resizeAnnouncementsContent);
         } else if (selectedShips.length === 1) {
           input.value = selectedShips[0];
         } else {
-          input.value = `${selectedShips.length} ships selected`;
+          input.value = selectedShips.length + ' ships selected';
         }
       }
 
@@ -2083,20 +2757,18 @@ window.addEventListener('resize', resizeAnnouncementsContent);
 
     function createManifestLine(index) {
       const isLast = index === manifestLineCount;
-      return `
-        <div class="manifest-row" id="manifestRow${index}">
-          <label>SCU:</label>
-          <input type="number" min="0" step="1" class="manifest-scu" id="manifestSCU${index}" style="width:70px;" oninput="updateManifestTotals()">
-          <label>Material:</label>
-          <select class="manifest-material" id="manifestMaterial${index}" style="width:160px;">
-            ${materialList.map(m => `<option value="${m}">${m}</option>`).join("")}
-          </select>
-          <label>UEC:</label>
-          <input type="number" min="0" step="1" class="manifest-uec" id="manifestUEC${index}" style="width:90px;" oninput="updateManifestTotals()">
-          <button type="button" onclick="removeManifestLine(${index})" class="manifest-btn remove" title="Remove line">－</button>
-          ${isLast ? `<button type="button" onclick="addManifestLine()" class="manifest-btn add" title="Add line">＋</button>` : ""}
-        </div>
-      `;
+      return '<div class="manifest-row" id="manifestRow' + index + '">' +
+        '<label>SCU:</label>' +
+        '<input type="number" min="0" step="1" class="manifest-scu" id="manifestSCU' + index + '">' +
+        '<label>UEC:</label>' +
+        '<input type="number" min="0" step="1" class="manifest-uec" id="manifestUEC' + index + '">' +
+        '<label style="margin-left:6px;">Material:</label>' +
+        '<select class="manifest-material" id="manifestMaterial' + index + '" style="width:auto;min-width:140px;max-width:220px;">' +
+          materialList.map(function(m) { return '<option value="' + m + '">' + m + '</option>'; }).join("") +
+        '</select>' +
+        '<button type="button" onclick="removeManifestLine(' + index + ')" class="manifest-btn remove" title="Remove line">－</button>' +
+        (isLast ? '<button type="button" onclick="addManifestLine()" class="manifest-btn add" title="Add line">＋</button>' : "") +
+        '</div>';
     }
 
     function renderManifestLines() {
@@ -2123,6 +2795,10 @@ window.addEventListener('resize', resizeAnnouncementsContent);
         }
       });
 
+      // Add input listeners to update totals automatically
+      document.querySelectorAll('.manifest-scu, .manifest-uec').forEach(input => {
+        input.addEventListener('input', updateManifestTotals);
+      });
       updateManifestTotals();
     }
     function applyManifestPreset(type) {
@@ -2229,7 +2905,7 @@ window.addEventListener('resize', resizeAnnouncementsContent);
     if (!isNaN(uec)) totalUEC += uec;
   });
 
-  document.getElementById("totalSCUBox").textContent = `Total SCU: ${totalSCU.toLocaleString()}`;
+  document.getElementById("totalSCUBox").textContent = "Total SCU: " + totalSCU.toLocaleString();
 
   const totalUECInput = document.getElementById("totalUECBox");
   if (document.activeElement !== totalUECInput) {
@@ -2259,7 +2935,7 @@ window.addEventListener('resize', resizeAnnouncementsContent);
             return;
           }
           displayShipName = otherValue;
-          shipId = `Other_${otherValue.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '')}`;
+          shipId = 'Other_' + otherValue.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '');
         }
         
         const row = document.createElement('div');
@@ -2307,7 +2983,7 @@ window.addEventListener('resize', resizeAnnouncementsContent);
         
         const input = document.createElement('input');
         input.type = 'text';
-        input.id = `securityCaptain_${shipId}`;
+        input.id = 'securityCaptain_' + shipId;
         input.placeholder = 'Click to select captain...';
         input.autocomplete = 'off';
         input.required = true;
@@ -2321,7 +2997,7 @@ window.addEventListener('resize', resizeAnnouncementsContent);
         
         const list = document.createElement('div');
         list.className = 'dropdown-list';
-        list.id = `securityCaptain_${shipId}_List`;
+        list.id = 'securityCaptain_' + shipId + '_List';
         list.style.position = 'absolute';
         list.style.top = '100%';
         list.style.left = '0';
@@ -2357,7 +3033,7 @@ window.addEventListener('resize', resizeAnnouncementsContent);
         
         const crewInput = document.createElement('input');
         crewInput.type = 'number';
-        crewInput.id = `securityCrew_${shipId}`;
+        crewInput.id = 'securityCrew_' + shipId;
         crewInput.min = '0';
         crewInput.max = '20';
         crewInput.step = '1';
@@ -2383,7 +3059,7 @@ window.addEventListener('resize', resizeAnnouncementsContent);
         
         const crewNamesContainer = document.createElement('div');
         crewNamesContainer.className = 'security-crew-names';
-        crewNamesContainer.id = `securityCrewNames_${shipId}`;
+        crewNamesContainer.id = 'securityCrewNames_' + shipId;
         crewNamesContainer.style.marginLeft = '20px';
         crewNamesContainer.style.display = 'block';
         crewNamesContainer.style.width = '100%';
@@ -2425,7 +3101,7 @@ window.addEventListener('resize', resizeAnnouncementsContent);
     
     function initializeCaptainDropdown(input, list, shipName) {
       const captainsArray = typeof captainNames !== 'undefined' ? captainNames : [
-        "DyslexicNerd", "Spartan", "Lightblade", "jjetstreamm", "Roflnomish", 
+        "DyslexicNerd", "Spartan", "Lightblade", "Roflnomish", 
         "BenjiNotorious", "zarainia", "Astol", "Venomnom", "BigDaddyTortuga", 
         "ItzProto", "Newt", "Xolion", "Bakes Kamuari", "LockEmUpJas", 
         "sadfish", "Efazer"
@@ -2455,7 +3131,7 @@ window.addEventListener('resize', resizeAnnouncementsContent);
           
           item.addEventListener('click', () => {
             if (captain === "Other") {
-              const customName = prompt(`Enter captain name for ${shipName}:`);
+              const customName = prompt('Enter captain name for ' + shipName + ':');
               if (customName && customName.trim()) {
                 input.value = customName.trim();
               } else {
@@ -2554,9 +3230,11 @@ window.addEventListener('resize', resizeAnnouncementsContent);
     }
 
     window.addEventListener("DOMContentLoaded", function() {
-      populateLocationDropdown("startLocation");
-      populateLocationDropdown("routeStart");
-      populateLocationDropdown("routeEnd");
+  populateLocationDropdown("startLocation");
+  populateLocationDropdown("routeStart");
+  populateLocationDropdown("routeEnd");
+  populateLocationDropdown("tr_pickup");
+  populateLocationDropdown("tr_destination");
       populateShipDropdown("");
       populateCaptainDropdown();
       populateSecurityShipsDropdown();
@@ -2631,9 +3309,9 @@ window.addEventListener('resize', resizeAnnouncementsContent);
       const yearsToAdd = 930;
       date.setFullYear(date.getFullYear() + yearsToAdd);
       const unix = Math.floor(date.getTime() / 1000);
-      return `<t:${unix}:f>`;
+      return '<t:' + unix + ':f>';
     }
-    // Ship Message Links - Adapted from Threads
+    // Ship Message Links no longer using threads cause spartan is lazy
     const shipLinks = {
       "BRHS Seastrom": "https://discord.com/channels/900478857436606535/1391878505905524817/1404322180329898046",
       "AACS Judgements Bow": "https://discord.com/channels/900478857436606535/1391878505905524817/1404319407106293843",
@@ -2654,13 +3332,12 @@ window.addEventListener('resize', resizeAnnouncementsContent);
       const overlay = document.createElement('div');
       overlay.className = 'loading-overlay';
       overlay.id = 'loadingOverlay';
-      overlay.innerHTML = `
-        <div class="loading-content">
-          <div class="loading-spinner-large"></div>
-          <div style="font-size: 16px; font-weight: bold; margin-bottom: 8px;">${message}</div>
-          <div style="font-size: 14px; opacity: 0.8;">Please wait...</div>
-        </div>
-      `;
+      overlay.innerHTML = 
+        '<div class="loading-content">' +
+          '<div class="loading-spinner-large"></div>' +
+          '<div style="font-size: 16px; font-weight: bold; margin-bottom: 8px;">' + message + '</div>' +
+          '<div style="font-size: 14px; opacity: 0.8;">Please wait...</div>' +
+        '</div>';
       document.body.appendChild(overlay);
     }
 
@@ -2693,15 +3370,43 @@ window.addEventListener('resize', resizeAnnouncementsContent);
           icon = '<div style="font-size: 32px; margin-bottom: 16px;">ℹ</div>';
       }
       
-      overlay.innerHTML = `
-        <div class="loading-content" style="background: ${bgColor}; border-color: ${borderColor};">
-          <button class="close-button" onclick="document.getElementById('notificationOverlay').remove()">×</button>
-          ${icon}
-          <div style="font-size: 16px; font-weight: bold; text-align: center; line-height: 1.4;">${message}</div>
-        </div>
-      `;
+      overlay.innerHTML = 
+        '<div class="loading-content" style="background: ' + bgColor + '; border-color: ' + borderColor + ';">' +
+          '<button class="close-button" onclick="document.getElementById(\'notificationOverlay\').remove()">×</button>' +
+          icon +
+          '<div style="font-size: 16px; font-weight: bold; text-align: center; line-height: 1.4;">' + message + '</div>' +
+        '</div>';
       document.body.appendChild(overlay);
       
+    }
+
+    function showConfirmationOverlay(message, onConfirm, onCancel = null) {
+      const overlay = document.createElement('div');
+      overlay.className = 'loading-overlay';
+      overlay.id = 'confirmationOverlay';
+      
+      overlay.innerHTML = 
+        '<div class="loading-content" style="background: #faa61a; border-color: #e18d00;">' +
+          '<div style="font-size: 32px; margin-bottom: 16px;">⚠</div>' +
+          '<div style="font-size: 16px; font-weight: bold; text-align: center; line-height: 1.4; margin-bottom: 20px;">' + message + '</div>' +
+          '<div style="display: flex; gap: 12px; justify-content: center;">' +
+            '<button id="confirmBtn" style="background: #ed4245; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer;">Delete</button>' +
+            '<button id="cancelBtn" style="background: #6c757d; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer;">Cancel</button>' +
+          '</div>' +
+        '</div>';
+      
+      document.body.appendChild(overlay);
+      
+      // Add event listeners
+      document.getElementById('confirmBtn').addEventListener('click', () => {
+        overlay.remove();
+        if (onConfirm) onConfirm();
+      });
+      
+      document.getElementById('cancelBtn').addEventListener('click', () => {
+        overlay.remove();
+        if (onCancel) onCancel();
+      });
     }
 
     function showLoadingMessage(message, autoCloseAfterMs = 0) {
@@ -2709,13 +3414,12 @@ window.addEventListener('resize', resizeAnnouncementsContent);
       overlay.className = 'loading-overlay';
       overlay.id = 'loadingMessageOverlay';
       
-      overlay.innerHTML = `
-        <div class="loading-content">
-          <div class="loading-spinner-large"></div>
-          <div style="font-size: 16px; font-weight: bold; margin-bottom: 8px;">${message}</div>
-          <div style="font-size: 14px; opacity: 0.8;">Please wait...</div>
-        </div>
-      `;
+      overlay.innerHTML = 
+        '<div class="loading-content">' +
+          '<div class="loading-spinner-large"></div>' +
+          '<div style="font-size: 16px; font-weight: bold; margin-bottom: 8px;">' + message + '</div>' +
+          '<div style="font-size: 14px; opacity: 0.8;">Please wait...</div>' +
+        '</div>';
       document.body.appendChild(overlay);
       
       if (autoCloseAfterMs > 0) {
@@ -2753,9 +3457,9 @@ window.addEventListener('resize', resizeAnnouncementsContent);
         button.setAttribute('data-original-html', originalHTML);
         
         if (loadingText) {
-          button.innerHTML = `<div class="loading-spinner"></div>${loadingText}`;
+          button.innerHTML = '<div class="loading-spinner"></div>' + loadingText;
         } else {
-          button.innerHTML = `<div class="loading-spinner"></div>Processing...`;
+          button.innerHTML = '<div class="loading-spinner"></div>Processing...';
         }
       }
     }
@@ -2849,7 +3553,7 @@ window.addEventListener('resize', resizeAnnouncementsContent);
       if (crewAmount > 0) {
         totalFields += crewAmount;
         for (let i = 1; i <= crewAmount; i++) {
-          const crewField = document.getElementById(`crewName${i}`);
+          const crewField = document.getElementById('crewName' + i);
           if (crewField && crewField.value && crewField.value.trim() !== '') {
             filledFields++;
           }
@@ -2870,7 +3574,7 @@ window.addEventListener('resize', resizeAnnouncementsContent);
       totalFields += validSecurityShips.length;
       validSecurityShips.forEach(ship => {
         const shipId = ship.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '');
-        const captainInput = document.getElementById(`securityCaptain_${shipId}`);
+        const captainInput = document.getElementById('securityCaptain_' + shipId);
         if (captainInput && captainInput.value && captainInput.value.trim() !== '') {
           filledFields++;
         }
@@ -2906,11 +3610,11 @@ window.addEventListener('resize', resizeAnnouncementsContent);
       const progressText = document.getElementById('formProgressText');
       
       if (progressFill) {
-        progressFill.style.width = `${percentage}%`;
+        progressFill.style.width = percentage + '%';
       }
       
       if (progressText) {
-        progressText.textContent = `Form Completion: ${percentage}%`;
+        progressText.textContent = 'Form Completion: ' + percentage + '%';
       }
       
 
@@ -2978,22 +3682,22 @@ window.addEventListener('resize', resizeAnnouncementsContent);
                 const otherInput = document.getElementById('securityShipsOther');
                 const otherValue = otherInput ? otherInput.value.trim() : '';
                 if (otherValue === '') return;
-                shipId = `Other_${otherValue.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '')}`;
+                shipId = 'Other_' + otherValue.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '');
               }
               
               totalSecurityFields++;
-              const captainInput = document.getElementById(`securityCaptain_${shipId}`);
+              const captainInput = document.getElementById('securityCaptain_' + shipId);
               if (captainInput && captainInput.value.trim()) {
                 securityShipFieldsCompleted++;
               }
               
-              const crewAmountInput = document.getElementById(`securityCrew_${shipId}`);
+              const crewAmountInput = document.getElementById('securityCrew_' + shipId);
               if (crewAmountInput) {
                 const securityCrewAmount = parseInt(crewAmountInput.value, 10);
                 if (!isNaN(securityCrewAmount) && securityCrewAmount > 0) {
                   totalSecurityFields += securityCrewAmount;
                   for (let i = 1; i <= securityCrewAmount; i++) {
-                    const crewInput = document.getElementById(`securityCrew_${shipId}_${i}`);
+                    const crewInput = document.getElementById('securityCrew_' + shipId + '_' + i);
                     if (crewInput && crewInput.value.trim()) {
                       securityShipFieldsCompleted++;
                     }
@@ -3033,7 +3737,7 @@ window.addEventListener('resize', resizeAnnouncementsContent);
             if (crewAmount > 0) {
               totalStepFields += crewAmount;
               for (let i = 1; i <= crewAmount; i++) {
-                const crewField = document.getElementById(`crewName${i}`);
+                const crewField = document.getElementById('crewName' + i);
                 if (crewField && crewField.value && crewField.value.trim() !== '') {
                   completedFields++;
                 }
@@ -3136,13 +3840,13 @@ window.addEventListener('resize', resizeAnnouncementsContent);
       if (!isNaN(crewAmount) && crewAmount > 0) {
         for (let i = 1; i <= crewAmount; i++) {
           const label = document.createElement("label");
-          label.textContent = `Crew ${i} Name:`;
-          label.htmlFor = `crewName${i}`;
+          label.textContent = 'Crew ' + i + ' Name:';
+          label.htmlFor = 'crewName' + i;
           label.className = "crew-label";
           const input = document.createElement("input");
           input.type = "text";
-          input.id = `crewName${i}`;
-          input.name = `crewName${i}`;
+          input.id = 'crewName' + i;
+          input.name = 'crewName' + i;
           input.required = true;
           input.className = "crew-input";
           input.addEventListener('input', calculateFormProgress);
@@ -3155,7 +3859,7 @@ window.addEventListener('resize', resizeAnnouncementsContent);
     }
 
     function generateSecurityCrewInputs(shipId, shipName, crewAmount) {
-      const crewNamesContainer = document.getElementById(`securityCrewNames_${shipId}`);
+      const crewNamesContainer = document.getElementById('securityCrewNames_' + shipId);
       if (!crewNamesContainer) return;
       
       crewNamesContainer.innerHTML = "";
@@ -3171,8 +3875,8 @@ window.addEventListener('resize', resizeAnnouncementsContent);
         
         for (let i = 1; i <= crewAmount; i++) {
           const label = document.createElement("label");
-          label.textContent = `Crew ${i} Name:`;
-          label.htmlFor = `securityCrew_${shipId}_${i}`;
+          label.textContent = 'Crew ' + i + ' Name:';
+          label.htmlFor = 'securityCrew_' + shipId + '_' + i;
           label.className = "crew-label";
           label.style.fontSize = '14px';
           label.style.marginTop = '8px';
@@ -3181,8 +3885,8 @@ window.addEventListener('resize', resizeAnnouncementsContent);
           
           const input = document.createElement("input");
           input.type = "text";
-          input.id = `securityCrew_${shipId}_${i}`;
-          input.name = `securityCrew_${shipId}_${i}`;
+          input.id = 'securityCrew_' + shipId + '_' + i;
+          input.name = 'securityCrew_' + shipId + '_' + i;
           input.required = true;
           input.className = "crew-input";
           input.style.width = 'calc(100% - 40px)';
@@ -3218,8 +3922,8 @@ window.addEventListener('resize', resizeAnnouncementsContent);
     }
 
     function checkSecurityShipCompletion(shipId) {
-      const captainInput = document.getElementById(`securityCaptain_${shipId}`);
-      const crewAmountInput = document.getElementById(`securityCrew_${shipId}`);
+      const captainInput = document.getElementById('securityCaptain_' + shipId);
+      const crewAmountInput = document.getElementById('securityCrew_' + shipId);
       
       if (!captainInput || !crewAmountInput) return false;
       
@@ -3231,7 +3935,7 @@ window.addEventListener('resize', resizeAnnouncementsContent);
       let allCrewNamesFilled = true;
       if (crewAmount > 0) {
         for (let i = 1; i <= crewAmount; i++) {
-          const crewInput = document.getElementById(`securityCrew_${shipId}_${i}`);
+          const crewInput = document.getElementById('securityCrew_' + shipId + '_' + i);
           if (!crewInput || crewInput.value.trim() === '') {
             allCrewNamesFilled = false;
             break;
@@ -3245,7 +3949,7 @@ window.addEventListener('resize', resizeAnnouncementsContent);
     function updateSecurityShipSectionStyling(shipId) {
       const allRows = document.querySelectorAll('#securityShipCaptains .security-captain-row');
       for (let row of allRows) {
-        if (row.querySelector(`#securityCaptain_${shipId}`)) {
+        if (row.querySelector('#securityCaptain_' + shipId)) {
           const isComplete = checkSecurityShipCompletion(shipId);
           if (isComplete) {
             row.style.border = '2px solid #22c55e';
@@ -3287,6 +3991,7 @@ window.addEventListener('resize', resizeAnnouncementsContent);
     window.showGenerateButtonOnChange = showGenerateButtonOnChange;
     window.clearFormFields = clearFormFields;
     window.applyManifestPreset = applyManifestPreset;
+    window.showConfirmationOverlay = showConfirmationOverlay;
 
     function validateRequiredFields() {
       document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
@@ -3347,13 +4052,13 @@ window.addEventListener('resize', resizeAnnouncementsContent);
     
     if (id === 'startLocation' || id === 'routeStart' || id === 'routeEnd') {
       if (el.value.trim() === "") {
-        addError(el, `${fieldLabel} is required`, fieldLabel);
+        addError(el, fieldLabel + ' is required', fieldLabel);
       } else if (!locations.includes(el.value)) {
-        addError(el, `${fieldLabel} must be a valid location from the dropdown`, fieldLabel);
+        addError(el, fieldLabel + ' must be a valid location from the dropdown', fieldLabel);
       }
     } else {
       if (el.value === "" || el.value === null) {
-        addError(el, `${fieldLabel} is required`, fieldLabel);
+        addError(el, fieldLabel + ' is required', fieldLabel);
       }
     }
   }
@@ -3381,7 +4086,7 @@ window.addEventListener('resize', resizeAnnouncementsContent);
     const otherInput = document.getElementById(field.input);
     if (selectEl && selectEl.value === "Other" && otherDiv && otherDiv.style.display === "block") {
       if (!otherInput || !otherInput.value.trim()) {
-        addError(otherInput, `${field.label} is required when "Other" is selected`, field.label);
+        addError(otherInput, field.label + ' is required when "Other" is selected', field.label);
       }
     }
   }
@@ -3389,9 +4094,9 @@ window.addEventListener('resize', resizeAnnouncementsContent);
   const crewAmount = parseInt(document.getElementById("crewAmount").value, 10);
   if (!isNaN(crewAmount) && crewAmount > 0) {
     for (let i = 1; i <= crewAmount; i++) {
-      const crewInput = document.getElementById(`crewName${i}`);
+      const crewInput = document.getElementById('crewName' + i);
       if (!crewInput || !crewInput.value.trim()) {
-        addError(crewInput, `Crew ${i} Name is required`, `Crew ${i} Name`);
+        addError(crewInput, 'Crew ' + i + ' Name is required', 'Crew ' + i + ' Name');
       }
     }
   }
@@ -3410,22 +4115,22 @@ window.addEventListener('resize', resizeAnnouncementsContent);
         return;
       }
       displayShipName = otherValue;
-      shipId = `Other_${otherValue.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '')}`;
+      shipId = 'Other_' + otherValue.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '');
     }
     
-    const captainInput = document.getElementById(`securityCaptain_${shipId}`);
+    const captainInput = document.getElementById('securityCaptain_' + shipId);
     if (!captainInput || !captainInput.value.trim()) {
-      addError(captainInput, `Captain name is required for ${displayShipName}`, `${displayShipName} Captain`);
+      addError(captainInput, 'Captain name is required for ' + displayShipName, displayShipName + ' Captain');
     }
     
-    const crewAmountInput = document.getElementById(`securityCrew_${shipId}`);
+    const crewAmountInput = document.getElementById('securityCrew_' + shipId);
     if (crewAmountInput) {
       const securityCrewAmount = parseInt(crewAmountInput.value, 10);
       if (!isNaN(securityCrewAmount) && securityCrewAmount > 0) {
         for (let i = 1; i <= securityCrewAmount; i++) {
-          const crewInput = document.getElementById(`securityCrew_${shipId}_${i}`);
+          const crewInput = document.getElementById('securityCrew_' + shipId + '_' + i);
           if (!crewInput || !crewInput.value.trim()) {
-            addError(crewInput, `${displayShipName} Crew ${i} Name is required`, `${displayShipName} Crew ${i} Name`);
+            addError(crewInput, displayShipName + ' Crew ' + i + ' Name is required', displayShipName + ' Crew ' + i + ' Name');
           }
         }
       }
@@ -3460,10 +4165,10 @@ window.addEventListener('resize', resizeAnnouncementsContent);
       const mat = row.querySelector('.manifest-material');
       
       if (!scu || !scu.value.trim()) {
-        addError(scu, `Manifest Line ${manifestIndex}: SCU is required`, `Manifest Line ${manifestIndex} SCU`);
+        addError(scu, 'Manifest Line ' + manifestIndex + ': SCU is required', 'Manifest Line ' + manifestIndex + ' SCU');
       }
       if (!mat || !mat.value.trim() || mat.value === 'Select Material') {
-        addError(mat, `Manifest Line ${manifestIndex}: Material is required`, `Manifest Line ${manifestIndex} Material`);
+        addError(mat, 'Manifest Line ' + manifestIndex + ': Material is required', 'Manifest Line ' + manifestIndex + ' Material');
       }
       manifestIndex++;
     }
@@ -3508,13 +4213,13 @@ window.addEventListener('resize', resizeAnnouncementsContent);
       }
     });
     
-    let validationMessage = `Form Validation Issues<br><br><strong>Please fix the following ${allErrors.length} issue${allErrors.length === 1 ? '' : 's'}:</strong><br><br>`;
+    let validationMessage = 'Form Validation Issues<br><br><strong>Please fix the following ' + allErrors.length + ' issue' + (allErrors.length === 1 ? '' : 's') + ':</strong><br><br>';
     
     Object.keys(errorsByCategory).forEach(category => {
       if (errorsByCategory[category].length > 0) {
-        validationMessage += `<strong>${category}:</strong><br>`;
+        validationMessage += '<strong>' + category + ':</strong><br>';
         errorsByCategory[category].forEach(error => {
-          validationMessage += `• ${error}<br>`;
+          validationMessage += '• ' + error + '<br>';
         });
         validationMessage += '<br>';
       }
@@ -3597,7 +4302,7 @@ window.addEventListener('resize', resizeAnnouncementsContent);
       const diffMins = Math.floor(diffMs / 60000);
       const hours = Math.floor(diffMins / 60);
       const mins = diffMins % 60;
-      durationDiv.textContent = `Order Duration: ${hours}h ${mins}m`;
+      durationDiv.textContent = 'Order Duration: ' + hours + 'h ' + mins + 'm';
       durationDiv.style.color = "#9d7523";
     }
 
@@ -3610,7 +4315,7 @@ window.addEventListener('resize', resizeAnnouncementsContent);
         const hours = String(now.getHours()).padStart(2, '0');
         const minutes = String(now.getMinutes()).padStart(2, '0');
         
-        const timeString = `${year}-${month}-${day}T${hours}:${minutes}`;
+        const timeString = year + '-' + month + '-' + day + 'T' + hours + ':' + minutes;
         
         const field = document.getElementById(fieldId);
         if (field) {
@@ -3618,9 +4323,9 @@ window.addEventListener('resize', resizeAnnouncementsContent);
           field.classList.remove('error');
           updateOrderDuration();
           
-          console.log(`✓ Time set for ${fieldId}: ${timeString}`);
+          console.log('✓ Time set for ' + fieldId + ': ' + timeString);
         } else {
-          throw new Error(`Field with ID '${fieldId}' not found`);
+          throw new Error('Field with ID \'' + fieldId + '\' not found');
         }
       } catch (error) {
         console.error('Error setting current time:', error);
@@ -3683,7 +4388,7 @@ window.addEventListener('resize', resizeAnnouncementsContent);
       }
       
       const fullMessage = suggestions.length > 0 
-        ? `${userMessage}<br><br><strong>Suggestions:</strong><br>• ${suggestions.join('<br>• ')}`
+        ? userMessage + '<br><br><strong>Suggestions:</strong><br>• ' + suggestions.join('<br>• ')
         : userMessage;
       
       showNotificationOverlay(fullMessage, 'error');
@@ -3722,7 +4427,7 @@ window.addEventListener('resize', resizeAnnouncementsContent);
         if (compDate <= depDate) {
           const timeDiff = Math.abs(compDate - depDate) / (1000 * 60); // minutes
           handleError(
-            `Completion time must be after departure time.<br><br>Current difference: ${Math.round(timeDiff)} minutes backwards.`, 
+            'Completion time must be after departure time.<br><br>Current difference: ' + Math.round(timeDiff) + ' minutes backwards.', 
             null, 
             { departure: departureField.value, completion: completionField.value }
           );
@@ -3788,7 +4493,7 @@ window.addEventListener('resize', resizeAnnouncementsContent);
             completionField.classList.add('error');
             errors.push({
               element: completionField,
-              message: `Completion time must be after departure time (currently ${Math.round(timeDiff)} minutes before departure)`,
+              message: 'Completion time must be after departure time (currently ' + Math.round(timeDiff) + ' minutes before departure)',
               fieldName: 'Completion Time'
             });
           }
@@ -3839,7 +4544,7 @@ window.addEventListener('resize', resizeAnnouncementsContent);
       const diffMins = Math.floor(diffMs / 60000);
       const hours = Math.floor(diffMins / 60);
       const mins = diffMins % 60;
-      return `Order Duration: ${hours}h ${mins}m`;
+      return 'Order Duration: ' + hours + 'h ' + mins + 'm';
     }
 
     function generateOutput() {
@@ -3878,12 +4583,12 @@ window.addEventListener('resize', resizeAnnouncementsContent);
   const crewAmount = parseInt(get("crewAmount"), 10);
   let crewNamesList = [];
   for (let i = 1; i <= crewAmount; i++) {
-    const crewInput = document.getElementById(`crewName${i}`);
+    const crewInput = document.getElementById('crewName' + i);
     if (crewInput && crewInput.value.trim()) {
       crewNamesList.push(crewInput.value.trim());
     }
   }
-  let postCounter = parseInt(sessionStorage.getItem('discordHistoryCounter') || '1', 10);
+  let postCounter = parseInt(localStorage.getItem('discordHistoryCounter') || '1', 10);
   const crewNamesText = crewNamesList.length > 0 ? crewNamesList.join(", ") : "0";
 
   const selectedSecurityShips = getSelectedSecurityShips();
@@ -3903,40 +4608,40 @@ window.addEventListener('resize', resizeAnnouncementsContent);
         const otherInput = document.getElementById('securityShipsOther');
         const otherValue = otherInput ? otherInput.value.trim() : '';
         if (otherValue) {
-          const shipId = `Other_${otherValue.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '')}`;
-          const captainInput = document.getElementById(`securityCaptain_${shipId}`);
+          const shipId = 'Other_' + otherValue.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '');
+          const captainInput = document.getElementById('securityCaptain_' + shipId);
           const captainName = captainInput ? captainInput.value.trim() : '';
           
-          const crewAmountInput = document.getElementById(`securityCrew_${shipId}`);
+          const crewAmountInput = document.getElementById('securityCrew_' + shipId);
           const crewAmount = crewAmountInput ? parseInt(crewAmountInput.value, 10) || 0 : 0;
           let crewNames = [];
           if (crewAmount > 0) {
             for (let i = 1; i <= crewAmount; i++) {
-              const crewInput = document.getElementById(`securityCrew_${shipId}_${i}`);
+              const crewInput = document.getElementById('securityCrew_' + shipId + '_' + i);
               if (crewInput && crewInput.value.trim()) {
                 crewNames.push(crewInput.value.trim());
               }
             }
           }
           
-          let shipText = `${otherValue}`;
-          if (captainName) shipText += `\n**Captain:** ${captainName}`;
-          if (crewNames.length > 0) shipText += `\n**Crew:** ${crewNames.join(", ")}`;
+          let shipText = otherValue;
+          if (captainName) shipText += '\n**Captain:** ' + captainName;
+          if (crewNames.length > 0) shipText += '\n**Crew:** ' + crewNames.join(", ");
           
           securityShipDetails.push(shipText);
           shipCounter++;
         }
       } else if (ship && ship.trim() !== '' && ship !== 'None') {
         const shipId = ship.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '');
-        const captainInput = document.getElementById(`securityCaptain_${shipId}`);
+        const captainInput = document.getElementById('securityCaptain_' + shipId);
         const captainName = captainInput ? captainInput.value.trim() : '';
         
-        const crewAmountInput = document.getElementById(`securityCrew_${shipId}`);
+        const crewAmountInput = document.getElementById('securityCrew_' + shipId);
         const crewAmount = crewAmountInput ? parseInt(crewAmountInput.value, 10) || 0 : 0;
         let crewNames = [];
         if (crewAmount > 0) {
           for (let i = 1; i <= crewAmount; i++) {
-            const crewInput = document.getElementById(`securityCrew_${shipId}_${i}`);
+            const crewInput = document.getElementById('securityCrew_' + shipId + '_' + i);
             if (crewInput && crewInput.value.trim()) {
               crewNames.push(crewInput.value.trim());
             }
@@ -3944,11 +4649,11 @@ window.addEventListener('resize', resizeAnnouncementsContent);
         }
         
         const shipLink = shipLinks[ship];
-        const shipDisplayText = shipLink ? `[${ship}](${shipLink})` : ship;
+        const shipDisplayText = shipLink ? '[' + ship + '](' + shipLink + ')' : ship;
         
-        let shipText = `${shipDisplayText}`;
-        if (captainName) shipText += `\n**Captain:** ${captainName}`;
-        if (crewNames.length > 0) shipText += `\n**Crew:** ${crewNames.join(", ")}`;
+        let shipText = shipDisplayText;
+        if (captainName) shipText += '\n**Captain:** ' + captainName;
+        if (crewNames.length > 0) shipText += '\n**Crew:** ' + crewNames.join(", ");
         
         securityShipDetails.push(shipText);
         shipCounter++;
@@ -3961,7 +4666,7 @@ window.addEventListener('resize', resizeAnnouncementsContent);
 
   const routeStart = get("routeStart");
   const routeEnd = get("routeEnd");
-  const routeText = routeStart && routeEnd ? `${routeStart} :arrow_right: ${routeEnd}` : "";
+  const routeText = routeStart && routeEnd ? routeStart + ' :arrow_right: ' + routeEnd : "";
 
   let manifestLines = [];
   let totalSCU = 0;
@@ -3985,25 +4690,25 @@ window.addEventListener('resize', resizeAnnouncementsContent);
     if (generateBtn) {
       generateBtn.innerHTML = 'Generate Post';
     }
-    showNotificationOverlay(`Manifest Validation Issue<br><br><strong>Total SCU is 0</strong><br><br>Please add cargo to your manifest before generating the Discord post.`, 'warning');
+    showNotificationOverlay('Manifest Validation Issue<br><br><strong>Total SCU is 0</strong><br><br>Please add cargo to your manifest before generating the Discord post.', 'warning');
     showFeedback('warning', 'Cannot generate post: Total SCU is 0. Please add cargo to your manifest.');
     return;
   }
 
   let manifestTable = "SCU   Material         UEC\n";
   manifestLines.forEach(line => {
-    manifestTable += `${line.scu.padEnd(5)} ${line.mat.padEnd(15)} ${line.uec ? line.uec : ""}\n`;
+    manifestTable += line.scu.padEnd(5) + ' ' + line.mat.padEnd(15) + ' ' + (line.uec ? line.uec : "") + '\n';
   });
 
   const totalUECInput = document.getElementById("totalUECBox");
   let totalUEC = totalUECInput && totalUECInput.value ? parseInt(totalUECInput.value.replace(/\D/g, "")) : 0;
 
-  let totalLine = `**Total: ${totalSCU.toLocaleString()} SCU`;
+  let totalLine = '**Total: ' + totalSCU.toLocaleString() + ' SCU';
   if (totalUEC && !isNaN(totalUEC)) {
-    totalLine += ` / ${totalUEC.toLocaleString()} UEC`;
+    totalLine += ' / ' + totalUEC.toLocaleString() + ' UEC';
   }
   totalLine += "**";
-  const totalSCUText = `**Total: ${totalSCU.toLocaleString()} SCU**`;
+  const totalSCUText = '**Total: ' + totalSCU.toLocaleString() + ' SCU**';
 
   const repairs = parseInt(get("repairs") || "0", 10);
   const restock = parseInt(get("restock") || "0", 10);
@@ -4014,65 +4719,110 @@ window.addEventListener('resize', resizeAnnouncementsContent);
 
   const notesText = get("notes") || "None";
 
-  const shipDisplayText = shipLink ? `[${shipNameText}](${shipLink})` : shipNameText;
+  const shipDisplayText = shipLink ? '[' + shipNameText + '](' + shipLink + ')' : shipNameText;
 
-    let output = `**${orderCategoryText} Order**
-${companyNameText} : ${orderTypeText === "Resource Drive" ? "Resource Drive" : orderTypeText}
-${resourceDriveCompanyText ? `Resource Drive Company: ${resourceDriveCompanyText}` : ""}
+    let output = '**' + orderCategoryText + ' Order**\n' +
+companyNameText + ' : ' + (orderTypeText === "Resource Drive" ? "Resource Drive" : orderTypeText) + '\n' +
+(resourceDriveCompanyText ? 'Resource Drive Company: ' + resourceDriveCompanyText : "") + '\n\n' +
 
-———
+'———\n\n' +
 
-**Transport Ship:** ${shipDisplayText}
-**Captain:** ${captainNameText}
-**Crew:** ${crewNamesText}
+'**Transport Ship:** ' + shipDisplayText + '\n' +
+'**Captain:** ' + captainNameText + '\n' +
+'**Crew:** ' + crewNamesText + '\n\n' +
 
-———
+'———\n\n' +
 
-**${securityShipsHeader}:**
-${securityShipsText}
+'**' + securityShipsHeader + ':**\n' +
+securityShipsText + '\n\n' +
 
-———
+'———\n\n' +
 
- **Departure:** ${get("startLocation")}
- **Departure Time:** ${departureDiscord}
- **Route:** ${routeText}
+' **Departure:** ' + get("startLocation") + '\n' +
+' **Departure Time:** ' + departureDiscord + '\n' +
+' **Route:** ' + routeText + '\n\n' +
 
-———
+'———\n\n' +
 
-**Manifest**
-\`\`\`
-${manifestTable.trim()}
-\`\`\`
-${totalLine}
+'**Manifest**\n' +
+String.fromCharCode(96) + String.fromCharCode(96) + String.fromCharCode(96) + '\n' +
+manifestTable.trim() + '\n' +
+String.fromCharCode(96) + String.fromCharCode(96) + String.fromCharCode(96) + '\n' +
+totalLine + '\n\n' +
 
-———
+'———\n\n' +
 
-**Sign Off**
-Order completion time: ${completionDiscord}
-${getOrderDurationText()}
+'**Sign Off**\n' +
+'Order completion time: ' + completionDiscord + '\n' +
+getOrderDurationText() + '\n\n' +
 
-**Deductibles**
-- **Repairs:** ${repairs.toLocaleString()} UEC
-- **Restock:** ${restock.toLocaleString()} UEC
-- **Quantum fuel:** ${quantumFuel.toLocaleString()} UEC
-- **Hydrogen fuel:** ${hydrogenFuel.toLocaleString()} UEC
-- **Crew/ship costs:** ${crewCosts.toLocaleString()} UEC
-**Total Deductibles: ${totalDeductibles.toLocaleString()} UEC**
+'**Deductibles**\n' +
+'- **Repairs:** ' + repairs.toLocaleString() + ' UEC\n' +
+'- **Restock:** ' + restock.toLocaleString() + ' UEC\n' +
+'- **Quantum fuel:** ' + quantumFuel.toLocaleString() + ' UEC\n' +
+'- **Hydrogen fuel:** ' + hydrogenFuel.toLocaleString() + ' UEC\n' +
+'- **Crew/ship costs:** ' + crewCosts.toLocaleString() + ' UEC\n' +
+'**Total Deductibles: ' + totalDeductibles.toLocaleString() + ' UEC**\n\n' +
 
-———
+'———\n\n' +
 
-**Notes**
-\`\`\`
-${notesText}
-\`\`\`
-`;
+'**Notes**\n' +
+String.fromCharCode(96) + String.fromCharCode(96) + String.fromCharCode(96) + '\n' +
+notesText + '\n' +
+String.fromCharCode(96) + String.fromCharCode(96) + String.fromCharCode(96) + '\n';
 
-  let history = JSON.parse(sessionStorage.getItem('discordHistory') || '[]');
-  history.push({ id: postCounter, content: output });
-  sessionStorage.setItem('discordHistory', JSON.stringify(history));
-  sessionStorage.setItem('discordHistoryCounter', (postCounter + 1).toString());
-  renderHistory();
-
+  let history = getManifestHistory();
+  
+  const orderCategory = get("orderCategory") === "Other" ? get("orderCategoryOther") : get("orderCategory");
+  const companyName = get("companyName");
+  const shipName = get("shipName") === "Other" ? get("shipNameOther") : get("shipName");
+  const captainName = get("captainName") === "Other" ? get("captainNameOther") : get("captainName");
+  const summary = orderCategory + ' Order - ' + companyName + ' - ' + shipName + ' (Capt. ' + captainName + ')';
+  
+  const formDataForHistory = {
+    orderCategory: get("orderCategory"),
+    orderCategoryOther: get("orderCategoryOther"),
+    companyName: get("companyName"),
+    orderType: get("orderType"),
+    orderTypeOther: get("orderTypeOther"),
+    resourceDriveCompany: get("resourceDriveCompany"),
+    shipName: get("shipName"),
+    shipNameOther: get("shipNameOther"),
+    captainName: get("captainName"),
+    captainNameOther: get("captainNameOther"),
+    crewAmount: get("crewAmount"),
+    startLocation: get("startLocation"),
+    departureTime: get("departureTime"),
+    routeStart: get("routeStart"),
+    routeEnd: get("routeEnd"),
+    completionTime: get("completionTime"),
+    repairs: get("repairs"),
+    restock: get("restock"),
+    quantumFuel: get("quantumFuel"),
+    hydrogenFuel: get("hydrogenFuel"),
+    crewCosts: get("crewCosts"),
+    notes: get("notes")
+  };
+  
+  const crewNames = [];
+  for (let i = 1; i <= crewAmount; i++) {
+    const crewInput = document.getElementById('crewName' + i);
+    if (crewInput && crewInput.value.trim()) {
+      crewNames.push(crewInput.value.trim());
+    }
+  }
+  
+  const manifestHistory = [];
+  document.querySelectorAll('.manifest-row').forEach(row => {
+    const scu = row.querySelector('.manifest-scu').value;
+    const material = row.querySelector('.manifest-material').value;
+    const uec = row.querySelector('.manifest-uec').value;
+    if (scu && material) {
+      manifestHistory.push({ scu: scu, material: material, uec: uec });
+    }
+  });
+  
+  
   document.getElementById("discordOutput").value = output;
   document.getElementById("discordSection").style.display = "block";
   
@@ -4086,6 +4836,8 @@ ${notesText}
   hideLoadingOverlay();
   hideButtonLoading('generateBtn');
   showFeedback('success', 'Discord post generated successfully!');
+  
+  showNotificationOverlay('✅ Discord Post Generated Successfully!<br><br><strong>Your manifest has been prepared</strong><br><br>Review the Discord post below and click "Send to Discord" when ready.', 'success');
   
     } catch (error) {
       console.error('Error generating output:', error);
@@ -4103,73 +4855,438 @@ ${notesText}
         }
       });
       
-      showNotificationOverlay(`❌ Generation Failed<br><br><strong>Error G100:</strong> Failed to generate Discord post<br><br>A technical error occurred during generation. Please try again or refresh the page if the problem persists.`, 'error');
+      showNotificationOverlay('❌ Generation Failed<br><br><strong>Error G100:</strong> Failed to generate Discord post<br><br>A technical error occurred during generation. Please try again or refresh the page if the problem persists.', 'error');
       showFeedback('error', 'Failed to generate Discord post (G100). Please try again.');
     }
   }, 500);
 }
 
-function renderHistory() {
-  const historyList = document.getElementById('historyList');
+function saveSuccessfulManifestToHistory() {
   
-  if (historyList) {
-    const history = JSON.parse(sessionStorage.getItem('discordHistory') || '[]');
-    
-    if (history.length === 0) {
-      historyList.innerHTML = `
-        <div style="text-align: center; background: #fff; border: 3px solid #9d7523; border-radius: 12px; padding: 30px;">
-          <img src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/BRHS-Logo.png" 
-               alt="BruteHaul Logo" 
-               style="max-width: 200px; width: 100%; margin-bottom: 20px; border-radius: 8px;">
-          <h2 style="color: #9d7523; margin: 20px 0; font-size: 24px;">Brute Haul Manifest Log</h2>
-          <p style="font-size: 18px; color: #781d15; font-weight: bold; margin: 15px 0;">
-            No posts generated this session.
-          </p>
-          <p style="color: #666; margin: 10px 0; font-size: 16px;">
-            Complete and submit manifests to see them listed here.
-          </p>
-        </div>
-      `;
-    } else {
-      let historyHTML = `
-        <div style="margin-bottom: 20px; text-align: center;">
-          <img src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/BRHS-Logo.png" 
-               alt="BruteHaul Logo" 
-               style="max-width: 150px; border-radius: 8px;">
-          <h2 style="color: #9d7523; margin: 15px 0;">Session History (${history.length} posts)</h2>
-        </div>
-      `;
-      
-      history.forEach((post, index) => {
-        historyHTML += `
-          <div style="background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-              <strong style="color: #781d15;">Post ${index + 1}</strong>
-              <button onclick="deleteHistoryPost(${index})" 
-                      style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">
-                Delete
-              </button>
-            </div>
-            <div style="background: white; padding: 10px; border-radius: 4px; font-family: monospace; font-size: 14px; white-space: pre-wrap;">${post.content}</div>
-            <small style="color: #666; margin-top: 10px; display: block;">${post.timestamp}</small>
-          </div>
-        `;
-      });
-      
-      historyList.innerHTML = historyHTML;
+  const get = (id) => {
+    const element = document.getElementById(id);
+    return element ? element.value : '';
+  };
+  
+  const discordMessage = document.getElementById("discordOutput").value;
+  
+  const orderCategory = get("orderCategory") === "Other" ? get("orderCategoryOther") : get("orderCategory");
+  const companyName = get("companyName");
+  const shipName = get("shipName") === "Other" ? get("shipNameOther") : get("shipName");
+  const captainName = get("captainName") === "Other" ? get("captainNameOther") : get("captainName");
+  const summary = orderCategory + ' Order - ' + companyName + ' - ' + shipName + ' (Capt. ' + captainName + ')';
+  
+  const totalSCUText = document.getElementById("totalSCUBox").textContent;
+  const totalSCU = parseInt(totalSCUText.replace(/\D/g, "")) || 0;
+  const totalUEC = parseInt(get("totalUECBox")) || 0;
+  
+  const formDataForHistory = {
+    orderCategory: get("orderCategory"),
+    orderCategoryOther: get("orderCategoryOther"),
+    companyName: get("companyName"),
+    orderType: get("orderType"),
+    orderTypeOther: get("orderTypeOther"),
+    resourceDriveCompany: get("resourceDriveCompany"),
+    shipName: get("shipName"),
+    shipNameOther: get("shipNameOther"),
+    captainName: get("captainName"),
+    captainNameOther: get("captainNameOther"),
+    crewAmount: get("crewAmount"),
+    startLocation: get("startLocation"),
+    departureTime: get("departureTime"),
+    routeStart: get("routeStart"),
+    routeEnd: get("routeEnd"),
+    completionTime: get("completionTime"),
+    repairs: get("repairs"),
+    restock: get("restock"),
+    quantumFuel: get("quantumFuel"),
+    hydrogenFuel: get("hydrogenFuel"),
+    crewCosts: get("crewCosts"),
+    notes: get("notes")
+  };
+  
+  const crewAmount = parseInt(get("crewAmount")) || 0;
+  const crewNames = [];
+  for (let i = 1; i <= crewAmount; i++) {
+    const crewInput = document.getElementById('crewName' + i);
+    if (crewInput && crewInput.value.trim()) {
+      crewNames.push(crewInput.value.trim());
     }
+  }
+  
+  const manifestHistory = [];
+  document.querySelectorAll('.manifest-row').forEach(row => {
+    const scu = row.querySelector('.manifest-scu').value;
+    const material = row.querySelector('.manifest-material').value;
+    const uec = row.querySelector('.manifest-uec').value;
+    if (scu && material) {
+      manifestHistory.push({ scu: scu, material: material, uec: uec });
+    }
+  });
+  
+  let postCounter = parseInt(localStorage.getItem('discordHistoryCounter') || '1', 10);
+  
+  const history = getManifestHistory();
+  history.push({ 
+    id: postCounter, 
+    content: discordMessage,
+    timestamp: new Date().toISOString(),
+    summary: summary,
+    totalSCU: totalSCU,
+    totalUEC: totalUEC,
+    crewNames: crewNames,
+    manifestLines: manifestHistory,
+    ...formDataForHistory
+  });
+  
+  setManifestHistory(history);
+  localStorage.setItem('discordHistoryCounter', (postCounter + 1).toString());
+  renderHistory();
+}
+
+function formatSCDate(timestamp) {
+  if (!timestamp) return 'Unknown Date';
+  try {
+    const date = new Date(timestamp);
+    if (isNaN(date.getTime())) return 'Invalid Date';
+    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+  } catch (e) {
+    return 'Invalid Date';
   }
 }
 
+function renderHistory() {
+  const historyList = document.getElementById('historyList');
+  if (!historyList) return;
+
+  let history = getManifestHistory();
+  let filter = '';
+  let sortOrder = localStorage.getItem('historySortOrder') || 'desc';
+
+  historyList.innerHTML = 
+    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">' +
+      '<input id="historySearchInput" type="text" placeholder="Search history..." style="flex:1;max-width:300px;padding:8px;border-radius:6px;border:1px solid #ccc;">' +
+      '<div style="display:flex;gap:12px;align-items:center;">' +
+        '<select id="historySortSelect" style="padding:8px;border-radius:6px;">' +
+          '<option value="desc">Newest First</option>' +
+          '<option value="asc">Oldest First</option>' +
+        '</select>' +
+        '<button id="deleteAllHistoryBtn" style="background:#ed4245;color:#fff;border:1px solid #781d15;border-radius:6px;padding:8px 12px;cursor:pointer;font-weight:bold;" title="Delete all manifests from history">Delete All</button>' +
+      '</div>' +
+    '</div>' +
+    '<div id="historyPostsContainer"></div>';
+
+  function renderPosts(posts, isSearchResult = false, searchTerm = '') {
+    const container = document.getElementById('historyPostsContainer');
+    if (!container) return;
+    
+    container.innerHTML = "";
+    
+    if (!posts || posts.length === 0) {
+      if (isSearchResult && searchTerm) {
+        container.innerHTML = `
+          <div style="text-align: center; background: #fff; border: 3px solid #9d7523; border-radius: 12px; padding: 30px; margin-top: 20px;">
+            <img src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/BRHS-Logo.png" 
+                 alt="BruteHaul Logo" 
+                 style="max-width: 200px; width: 100%; margin-bottom: 20px; border-radius: 8px;">
+            <h2 style="color: #9d7523; margin: 20px 0; font-size: 24px;">No Results Found</h2>
+            <p style="font-size: 18px; color: #781d15; font-weight: bold; margin: 15px 0;">
+              No manifests found matching "${searchTerm}"
+            </p>
+            <p style="color: #666; margin: 10px 0; font-size: 16px;">
+              Try different search terms or clear the search to view all manifests.
+            </p>
+          </div>
+        `;
+      } else {
+        container.innerHTML = `
+          <div style="text-align: center; background: #fff; border: 3px solid #9d7523; border-radius: 12px; padding: 30px; margin-top: 20px;">
+            <img src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/BRHS-Logo.png" 
+                 alt="BruteHaul Logo" 
+                 style="max-width: 200px; width: 100%; margin-bottom: 20px; border-radius: 8px;">
+            <h2 style="color: #9d7523; margin: 20px 0; font-size: 24px;">Brute Haul Manifest Log</h2>
+            <p style="font-size: 18px; color: #781d15; font-weight: bold; margin: 15px 0;">
+              No manifest generated on this browser.
+            </p>
+            <p style="color: #666; margin: 10px 0; font-size: 16px;">
+              Complete and submit manifests to see them listed here.
+            </p>
+          </div>
+        `;
+      }
+      return;
+    }
+    
+    posts.forEach((post, idx) => {
+          const postDiv = document.createElement("div");
+          postDiv.className = "history-post";
+          postDiv.style.marginBottom = "18px";
+          postDiv.style.border = "2px solid #781d15";
+          postDiv.style.borderRadius = "8px";
+          postDiv.style.background = "#f9f9f9";
+          postDiv.style.padding = "16px";
+          postDiv.style.position = "relative";
+          postDiv.style.boxShadow = "0 2px 8px rgba(0,0,0,0.07)";
+          postDiv.style.transition = "box-shadow 0.2s";
+          postDiv.addEventListener('mouseenter', () => {
+            postDiv.style.boxShadow = "0 4px 16px rgba(120,29,21,0.13)";
+          });
+          postDiv.addEventListener('mouseleave', () => {
+            postDiv.style.boxShadow = "0 2px 8px rgba(0,0,0,0.07)";
+          });
+
+          const titleDiv = document.createElement("div");
+          titleDiv.className = "history-post-title";
+          titleDiv.style.fontWeight = "bold";
+          titleDiv.style.fontSize = "16px";
+          titleDiv.style.marginBottom = "8px";
+          titleDiv.style.color = "#781d15";
+  titleDiv.textContent = 'Post ' + (idx + 1) + ' - ' + formatSCDate(post.timestamp);
+          postDiv.appendChild(titleDiv);
+
+          const contentDiv = document.createElement("div");
+          contentDiv.className = "history-post-content";
+          contentDiv.style.marginBottom = "10px";
+          contentDiv.style.whiteSpace = "pre-wrap";
+          contentDiv.style.fontFamily = "monospace";
+          contentDiv.style.fontSize = "13px";
+          contentDiv.style.backgroundColor = "#f8f8f8";
+          contentDiv.style.border = "1px solid #ddd";
+          contentDiv.style.padding = "12px";
+          contentDiv.style.borderRadius = "6px";
+          contentDiv.style.maxHeight = "300px";
+          contentDiv.style.overflowY = "auto";
+          contentDiv.style.lineHeight = "1.4";
+          contentDiv.textContent = post.content || post.summary || "(No content)";
+          postDiv.appendChild(contentDiv);
+
+          const btnRow = document.createElement("div");
+          btnRow.style.display = "flex";
+          btnRow.style.gap = "8px";
+          btnRow.style.marginTop = "6px";
+
+          const copyBtn = document.createElement("button");
+          copyBtn.className = "history-copy-btn";
+          copyBtn.textContent = "Copy";
+          copyBtn.title = "Copy manifest to clipboard";
+          copyBtn.style.background = "#e2e2e2";
+          copyBtn.style.color = "#230e09";
+          copyBtn.style.border = "1px solid #781d15";
+          copyBtn.style.borderRadius = "4px";
+          copyBtn.style.padding = "4px 10px";
+          copyBtn.style.cursor = "pointer";
+          copyBtn.addEventListener("click", () => {
+            copyHistoryPost(idx);
+          });
+          btnRow.appendChild(copyBtn);
+
+          const autofillBtn = document.createElement("button");
+          autofillBtn.className = "history-autofill-btn";
+          autofillBtn.textContent = "Autofill";
+          autofillBtn.title = "Autofill manifest form with this post's data";
+          autofillBtn.style.background = "#43b581";
+          autofillBtn.style.color = "#fff";
+          autofillBtn.style.border = "1px solid #781d15";
+          autofillBtn.style.borderRadius = "4px";
+          autofillBtn.style.padding = "4px 10px";
+          autofillBtn.style.cursor = "pointer";
+          autofillBtn.addEventListener("click", () => {
+            autofillManifestFormFromHistory(post);
+          });
+          btnRow.appendChild(autofillBtn);
+
+          const deleteBtn = document.createElement("button");
+          deleteBtn.className = "history-delete-btn";
+          deleteBtn.textContent = "Delete";
+          deleteBtn.title = "Delete this manifest from history";
+          deleteBtn.style.background = "#ed4245";
+          deleteBtn.style.color = "#fff";
+          deleteBtn.style.border = "1px solid #781d15";
+          deleteBtn.style.borderRadius = "4px";
+          deleteBtn.style.padding = "4px 10px";
+          deleteBtn.style.cursor = "pointer";
+          deleteBtn.addEventListener("click", () => {
+            showConfirmationOverlay(
+              'Are you sure you want to delete this manifest from history?<br><br><strong>This action cannot be undone.</strong>',
+              () => {
+                posts.splice(idx, 1);
+                setManifestHistory(posts);
+                renderPosts(posts);
+                showNotificationOverlay('✅ Manifest Deleted<br><br><strong>The manifest has been removed from your history.</strong>', 'success');
+              }
+            );
+          });
+          btnRow.appendChild(deleteBtn);
+
+          postDiv.appendChild(btnRow);
+          container.appendChild(postDiv);
+        });
+  }
+  
+  const searchInput = document.getElementById('historySearchInput');
+  const sortSelect = document.getElementById('historySortSelect');
+  
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      filter = e.target.value.toLowerCase();
+      const filteredPosts = history.filter(post => 
+        (post.content && post.content.toLowerCase().includes(filter)) ||
+        (post.summary && post.summary.toLowerCase().includes(filter))
+      );
+      renderPosts(filteredPosts, filter.length > 0, filter);
+    });
+  }
+  
+  if (sortSelect) {
+    sortSelect.value = sortOrder;
+    sortSelect.addEventListener('change', (e) => {
+      sortOrder = e.target.value;
+      localStorage.setItem('historySortOrder', sortOrder);
+      
+      let postsToSort = history;
+      if (filter) {
+        postsToSort = history.filter(post => 
+          (post.content && post.content.toLowerCase().includes(filter)) ||
+          (post.summary && post.summary.toLowerCase().includes(filter))
+        );
+      }
+      
+      const sortedPosts = [...postsToSort].sort((a, b) => {
+        const aTime = new Date(a.timestamp || 0).getTime();
+        const bTime = new Date(b.timestamp || 0).getTime();
+        return sortOrder === 'desc' ? bTime - aTime : aTime - bTime;
+      });
+      renderPosts(sortedPosts, filter.length > 0, filter);
+    });
+  }
+  
+  const deleteAllBtn = document.getElementById('deleteAllHistoryBtn');
+  if (deleteAllBtn) {
+    deleteAllBtn.addEventListener('click', () => {
+      if (history.length === 0) {
+        showNotificationOverlay('ℹ️ No History to Delete<br><br><strong>There are no manifests in your history.</strong>', 'info');
+        return;
+      }
+      
+      showConfirmationOverlay(
+        '⚠️ Delete All Manifests?<br><br><strong>This will permanently delete all ' + history.length + ' manifest(s) from your browser history.</strong><br><br>This action cannot be undone.',
+        () => {
+          setManifestHistory([]);
+          history = [];
+          renderPosts([], false, '');
+          showNotificationOverlay('✅ All Manifests Deleted<br><br><strong>Your manifest history has been cleared.</strong>', 'success');
+        }
+      );
+    });
+  }
+  
+  const sortedPosts = [...history].sort((a, b) => {
+    const aTime = new Date(a.timestamp || 0).getTime();
+    const bTime = new Date(b.timestamp || 0).getTime();
+    return sortOrder === 'desc' ? bTime - aTime : aTime - bTime;
+  });
+  renderPosts(sortedPosts, false, '');
+}
+
+function autofillManifestFormFromHistory(post) {
+  if (!post) return;
+  const fieldMap = {
+    orderCategory: 'orderCategory',
+    orderCategoryOther: 'orderCategoryOther',
+    companyName: 'companyName',
+    orderType: 'orderType',
+    orderTypeOther: 'orderTypeOther',
+    resourceDriveCompany: 'resourceDriveCompany',
+    shipName: 'shipName',
+    shipNameOther: 'shipNameOther',
+    captainName: 'captainName',
+    captainNameOther: 'captainNameOther',
+    crewAmount: 'crewAmount',
+    startLocation: 'startLocation',
+    departureTime: 'departureTime',
+    routeStart: 'routeStart',
+    routeEnd: 'routeEnd',
+    completionTime: 'completionTime',
+    repairs: 'repairs',
+    restock: 'restock',
+    quantumFuel: 'quantumFuel',
+    hydrogenFuel: 'hydrogenFuel',
+    crewCosts: 'crewCosts',
+    notes: 'notes',
+    totalUECBox: 'totalUECBox'
+  };
+  for (const key in fieldMap) {
+    if (post[key] !== undefined && document.getElementById(fieldMap[key])) {
+      document.getElementById(fieldMap[key]).value = post[key];
+    }
+  }
+
+  if (post.crewNames && Array.isArray(post.crewNames)) {
+    document.getElementById('crewAmount').value = post.crewNames.length;
+    generateCrewInputs();
+    post.crewNames.forEach((name, i) => {
+  var crewInput = document.getElementById('crewName' + (i+1));
+  if (crewInput) crewInput.value = name;
+    });
+  } else {
+    generateCrewInputs();
+  }
+
+  if (post.manifestLines && Array.isArray(post.manifestLines)) {
+    window.manifestLineCount = post.manifestLines.length;
+    renderManifestLines();
+    post.manifestLines.forEach((line, i) => {
+      const row = document.querySelectorAll('.manifest-row')[i];
+      if (row) {
+        if (row.querySelector('.manifest-scu') && line.scu !== undefined) row.querySelector('.manifest-scu').value = line.scu;
+        if (row.querySelector('.manifest-material') && line.material !== undefined) row.querySelector('.manifest-material').value = line.material;
+        if (row.querySelector('.manifest-uec') && line.uec !== undefined) row.querySelector('.manifest-uec').value = line.uec;
+      }
+    });
+    updateManifestTotals();
+  }
+
+  if (post.securityShips && Array.isArray(post.securityShips)) {
+    const securityShipsInput = document.getElementById('securityShips');
+    if (securityShipsInput && securityShipsInput.setSelectedShips) {
+      securityShipsInput.setSelectedShips(post.securityShips);
+    } else if (securityShipsInput) {
+      securityShipsInput.value = post.securityShips.join(', ');
+    }
+    populateSecurityShipsDropdown();
+    updateSecurityCaptainDropdowns(post.securityShips);
+  }
+
+  if (post.securityShipData && typeof post.securityShipData === 'object') {
+    Object.entries(post.securityShipData).forEach(([shipId, data]) => {
+      var captainInput = document.getElementById('securityCaptain_' + shipId);
+      if (captainInput && data.captain !== undefined) captainInput.value = data.captain;
+      var crewInput = document.getElementById('securityCrew_' + shipId);
+      if (crewInput && data.crewAmount !== undefined) crewInput.value = data.crewAmount;
+      generateSecurityCrewInputs(shipId, shipId, data.crewAmount || 0);
+      if (Array.isArray(data.crewNames)) {
+        for (var i = 0; i < data.crewNames.length; i++) {
+          var crewNameInput = document.getElementById('securityCrew_' + shipId + '_' + (i+1));
+          if (crewNameInput) crewNameInput.value = data.crewNames[i];
+        }
+      }
+    });
+  }
+
+  calculateFormProgress();
+  showTab('formTab');
+  showNotificationOverlay('Manifest autofilled from history.', 'success', 2000);
+}
+
 function deleteHistoryPost(idx) {
-  let history = JSON.parse(sessionStorage.getItem('discordHistory') || '[]');
+  let history = getManifestHistory();
   history.splice(idx, 1);
-  sessionStorage.setItem('discordHistory', JSON.stringify(history));
+  setManifestHistory(history);
   renderHistory();
 }
 
 function copyHistoryPost(idx) {
-  let history = JSON.parse(sessionStorage.getItem('discordHistory') || '[]');
+  let history = getManifestHistory();
   if (history[idx]) {
     const temp = document.createElement('textarea');
     temp.value = history[idx].content;
@@ -4179,6 +5296,24 @@ function copyHistoryPost(idx) {
     document.body.removeChild(temp);
     showNotificationOverlay("History post copied to clipboard!", 'success');
   }
+}
+
+function saveManifestToHistory(manifest) {
+  let history = JSON.parse(localStorage.getItem('discordHistory') || '[]');
+  history.push(manifest);
+  localStorage.setItem('discordHistory', JSON.stringify(history));
+}
+
+function getManifestHistory() {
+  return JSON.parse(localStorage.getItem('discordHistory') || '[]');
+}
+
+function setManifestHistory(history) {
+  localStorage.setItem('discordHistory', JSON.stringify(history));
+}
+
+function clearManifestHistory() {
+  localStorage.removeItem('discordHistory');
 }
 
 window.deleteHistoryPost = deleteHistoryPost;
@@ -4232,7 +5367,7 @@ async function sendToDiscord() {
     showNotificationOverlay("Required Information Missing<br><br><strong>Order Type and Captain Name are required</strong><br><br>Please fill in these fields to send to Discord.", 'warning');
     showFeedback('warning', 'Order Type and Captain Name are required to send to Discord.');
     showCopyButton();
-    logErrorToGitHub('V005', 'Required fields missing', `Missing fields - Order Type: ${orderType ? 'Present' : 'Missing'}, Captain Name: ${captainName ? 'Present' : 'Missing'}`, null, {
+  logErrorToGitHub('V005', 'Required fields missing', 'Missing fields - Order Type: ' + (orderType ? 'Present' : 'Missing') + ', Captain Name: ' + (captainName ? 'Present' : 'Missing'), null, {
       validationStep: 'Required fields check',
       missingFields: [
         !orderType ? 'Order Type' : null,
@@ -4275,12 +5410,12 @@ async function sendToDiscord() {
     const crewAmount = parseInt(get("crewAmount"), 10);
     let crewNamesList = [];
     for (let i = 1; i <= crewAmount; i++) {
-      const crewInput = document.getElementById(`crewName${i}`);
+  var crewInput = document.getElementById('crewName' + i);
       if (crewInput && crewInput.value.trim()) {
         crewNamesList.push(crewInput.value.trim());
       }
     }
-    const crewAmountWithNames = crewAmount > 0 ? `${crewAmount} (${crewNamesList.join(", ")})` : "0";
+  var crewAmountWithNames = crewAmount > 0 ? (crewAmount + ' (' + crewNamesList.join(', ') + ')') : '0';
     
     const totalUECInput = document.getElementById("totalUECBox");
     const totalUEC = totalUECInput && totalUECInput.value ? parseInt(totalUECInput.value.replace(/\D/g, "")) || 0 : 0;
@@ -4297,7 +5432,7 @@ async function sendToDiscord() {
     
     for (const endpoint of endpoints) {
       try {
-        console.log(`Trying endpoint: ${endpoint}`);
+  console.log('Trying endpoint: ' + endpoint);
         response = await fetch(endpoint, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -4313,7 +5448,7 @@ async function sendToDiscord() {
             securityShips: securityShipsText,
             securityShipsData: selectedSecurityShips.filter(ship => ship && ship !== 'None' && ship !== 'Other' && ship.trim() !== '').map(ship => {
               const shipId = ship.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '');
-              const captainInput = document.getElementById(`securityCaptain_${shipId}`);
+              var captainInput = document.getElementById('securityCaptain_' + shipId);
               return {
                 ship: ship,
                 captain: captainInput ? captainInput.value.trim() : ''
@@ -4340,15 +5475,15 @@ async function sendToDiscord() {
         
         if (response.ok) {
           successfulEndpoint = endpoint;
-          console.log(`Success with endpoint: ${endpoint}`);
+          console.log('Success with endpoint: ' + endpoint);
           break;
         } else {
-          lastError = `HTTP ${response.status}: ${response.statusText}`;
-          console.log(`HTTP error with ${endpoint}: ${lastError}`);
+          lastError = 'HTTP ' + response.status + ': ' + response.statusText;
+          console.log('HTTP error with ' + endpoint + ': ' + lastError);
         }
       } catch (error) {
         lastError = error.message;
-        console.log(`Network error with ${endpoint}:`, error.message);
+        console.log('Network error with ' + endpoint + ':', error.message);
         continue;
       }
     }
@@ -4384,6 +5519,10 @@ async function sendToDiscord() {
 
     if (response.ok) {
       hideLoadingOverlay();
+      
+      // Save to history only after successful Discord send
+      saveSuccessfulManifestToHistory();
+      
       showLoadingMessage("✅ Successfully sent to Brute Haul Discord!<br><br>Your manifest has been posted and logged.", 2000);
       showFeedback('success', 'Successfully sent to Brute Haul');
       document.getElementById("discordSection").style.display = "none";
@@ -4509,11 +5648,11 @@ async function sendToDiscord() {
           break;
       }
       
-      showNotificationOverlay(`❌ Failed to send to Discord<br><br><strong>Error ${errorCode}:</strong> ${errorMsg}<br><br>${instructions}`, 'error');
-      showFeedback('error', `Error sending to Brute Haul (${errorCode}): ${errorMsg}`);
+      showNotificationOverlay('❌ Failed to send to Discord<br><br><strong>Error ' + errorCode + ':</strong> ' + errorMsg + '<br><br>' + instructions, 'error');
+      showFeedback('error', 'Error sending to Brute Haul (' + errorCode + '): ' + errorMsg);
       showCopyButton();
       
-      logErrorToGitHub(errorCode, errorMsg, `HTTP ${response.status}: ${data?.error || 'Unknown server error'}`, null, {
+      logErrorToGitHub(errorCode, errorMsg, 'HTTP ' + response.status + ': ' + (data && data.error || 'Unknown server error'), null, {
         httpStatus: response.status,
         httpStatusText: response.statusText,
         serverResponse: data,
@@ -4580,8 +5719,8 @@ async function sendToDiscord() {
       instructions = 'Server is under high load. Please try again in a few minutes.';
     }
     
-    showNotificationOverlay(`❌ Connection Failed<br><br><strong>Error ${errorCode}:</strong> ${errorMsg}<br><br>${instructions}`, 'error');
-    showFeedback('error', `The Brute Haul System is currently offline (${errorCode}). Please try again later.`);
+    showNotificationOverlay('❌ Connection Failed<br><br><strong>Error ' + errorCode + ':</strong> ' + errorMsg + '<br><br>' + instructions, 'error');
+    showFeedback('error', 'The Brute Haul System is currently offline (' + errorCode + '). Please try again later.');
     showCopyButton();
     
     logErrorToGitHub(errorCode, errorMsg, err.message, err.stack, {
@@ -4618,7 +5757,7 @@ function generateAnnouncement() {
     showNotificationOverlay("Please enter a title or body for the announcement.", 'warning', 3000);
     return;
   }
-  const output = `📢 **${title || "Announcement"}**\n\n${body}`;
+  var output = '📢 **' + (title || "Announcement") + '**\n\n' + body;
   document.getElementById("announcementOutput").value = output;
 }
 
@@ -4692,7 +5831,7 @@ async function logErrorToGitHub(errorCode, errorMsg, fullError, stackTrace, addi
       stackTrace: stackTrace,
       userAgent: navigator.userAgent,
       pageUrl: window.location.href,
-      viewport: `${window.innerWidth}x${window.innerHeight}`,
+      viewport: window.innerWidth + 'x' + window.innerHeight,
       language: navigator.language,
       platform: navigator.platform,
       cookiesEnabled: navigator.cookieEnabled,
@@ -4737,7 +5876,7 @@ async function logErrorToGitHub(errorCode, errorMsg, fullError, stackTrace, addi
       const crewAmount = parseInt(get("crewAmount"), 10);
       const crewNames = [];
       for (let i = 1; i <= crewAmount; i++) {
-        const crewName = get(`crewName${i}`);
+        var crewName = get('crewName' + i);
         if (crewName) crewNames.push(crewName);
       }
       formData.crewNames = crewNames;
@@ -4752,8 +5891,8 @@ async function logErrorToGitHub(errorCode, errorMsg, fullError, stackTrace, addi
           selectedSecurityShips.forEach(ship => {
             if (ship && ship !== 'None') {
               const shipId = ship.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '');
-              const captainInput = document.getElementById(`securityCaptain_${shipId}`);
-              const crewInput = document.getElementById(`securityCrew_${shipId}`);
+              var captainInput = document.getElementById('securityCaptain_' + shipId);
+              var crewInput = document.getElementById('securityCrew_' + shipId);
               securityShipsData.push({
                 ship: ship,
                 captain: captainInput ? captainInput.value.trim() : '',
@@ -4782,161 +5921,126 @@ async function logErrorToGitHub(errorCode, errorMsg, fullError, stackTrace, addi
       
       errorContext.formData = formData;
     } catch (formError) {
-      errorContext.formDataError = `Could not collect form data: ${formError.message}`;
+      errorContext.formDataError = 'Could not collect form data: ' + formError.message;
     }
-    
-    const issueData = {
-      title: `Brute Haul Bot Send Failure - ${errorCode}: ${errorMsg}`,
-      body: `## Automatic Error Report Generation
+  } catch (setupError) {
+    console.error('❌ GitHub setup error:', setupError);
+    return;
+  }
+  
+  try {
+    var issueData = {
+      title: 'Brute Haul Bot Send Failure - ' + errorCode + ': ' + errorMsg,
+      body: '## Automatic Error Report Generation\n\n' +
+            '**Error Code:** ' + errorCode + '\n' +
+            '**Error Message:** ' + errorMsg + '\n' +
+            '**Timestamp:** ' + errorContext.timestamp + '\n\n' +
+            '---\n\n' +
+            '## Error Details\n\n' +
+            '| Field | Value |\n' +
+            '|----------|-------|\n' +
+            '| **Error Code** | ' + errorCode + ' |\n' +
+            '| **Error Message** | ' + errorMsg + ' |\n' +
+            '| **Page URL** | ' + errorContext.pageUrl + ' |\n' +
+            '| **User Agent** | ' + errorContext.userAgent + ' |\n' +
+            '| **Viewport** | ' + errorContext.viewport + ' |\n' +
+            '| **Language** | ' + errorContext.language + ' |\n' +
+            '| **Platform** | ' + errorContext.platform + ' |\n' +
+            '| **Online Status** | ' + (errorContext.onlineStatus ? 'Online' : 'Offline') + ' |\n' +
+            '| **Cookies Enabled** | ' + (errorContext.cookiesEnabled ? 'Yes' : 'No') + ' |\n' +
+            '| **Referrer** | ' + errorContext.referrer + ' |\n\n' +
+            '---\n\n' +
+            '## Technical Details\n\n' +
+            '### Full Error Message\n' +
+            (fullError || 'No additional error details') + '\n\n' +
+            '### Stack Trace\n' +
+            (stackTrace || 'No stack trace available') + '\n\n' +
+            '---\n\n## Form Data Context\n\n' +
+            (errorContext.formData ? 
+              '| Field | Value |\n|-------|-------|\n' +
+              '| **Order Type** | ' + (errorContext.formData.orderType || 'Not set') + ' |\n' +
+              '| **Captain Name** | ' + (errorContext.formData.captainName || 'Not set') + ' |\n' +
+              '| **Ship Name** | ' + (errorContext.formData.shipName || 'Not set') + ' |\n' +
+              '| **Company Name** | ' + (errorContext.formData.companyName || 'Not set') + ' |\n' +
+              '| **Total SCU** | ' + (errorContext.formData.totalSCU || '0') + ' |\n' +
+              '| **Total UEC** | ' + (errorContext.formData.totalUEC || '0') + ' |\n' +
+              '| **Message Length** | ' + errorContext.formData.messageLength + ' characters |\n' +
+              '| **Manifest Items** | ' + (errorContext.formData.manifestData ? errorContext.formData.manifestData.length : 0) + ' items |\n' +
+              '| **Security Ships** | ' + (errorContext.formData.securityShips ? errorContext.formData.securityShips.join(', ') : 'None') + ' |\n' +
+              '| **Crew Amount** | ' + (errorContext.formData.crewAmount || '0') + ' |\n' :
+              'Form data unavailable: ' + (errorContext.formDataError || 'Unknown reason')) +
+            '\n\n### Complete Form Data\n\n' +
+            (errorContext.formData ? 
+              '**Order Information**\n' +
+              '- **Order Category:** ' + (errorContext.formData.orderCategory || 'Not set') + 
+              (errorContext.formData.orderCategoryOther ? ' (Other: ' + errorContext.formData.orderCategoryOther + ')' : '') + '\n' +
+              '- **Order Type:** ' + (errorContext.formData.orderType || 'Not set') + 
+              (errorContext.formData.orderTypeOther ? ' (Other: ' + errorContext.formData.orderTypeOther + ')' : '') + '\n' +
+              '- **Company Name:** ' + (errorContext.formData.companyName || 'Not set') + '\n' +
+              '- **Resource Drive Company:** ' + (errorContext.formData.resourceDriveCompany || 'Not applicable') + '\n\n' +
+              '**Transport Ship Information**\n' +
+              '- **Ship Name:** ' + (errorContext.formData.shipName || 'Not set') + 
+              (errorContext.formData.shipNameOther ? ' (Other: ' + errorContext.formData.shipNameOther + ')' : '') + '\n' +
+              '- **Captain Name:** ' + (errorContext.formData.captainName || 'Not set') + 
+              (errorContext.formData.captainNameOther ? ' (Other: ' + errorContext.formData.captainNameOther + ')' : '') + '\n' +
+              '- **Crew Amount:** ' + (errorContext.formData.crewAmount || '0') + '\n' +
+              (errorContext.formData.crewNames && errorContext.formData.crewNames.length > 0 ? '- **Crew Names:** ' + errorContext.formData.crewNames.join(', ') + '\n' : '') + '\n' +
+              '**Security Ships**\n' +
+              (errorContext.formData.securityShips && errorContext.formData.securityShips.length > 0 ? 
+                errorContext.formData.securityShips.map(function(ship) { return ship === 'None' ? '- None' : '- ' + ship; }).join('\n') : 
+                '- None') + '\n' :
+              'No form data available') + '\n\n' +
 
-**Error Code:** \`${errorCode}\`  
-**Error Message:** ${errorMsg}  
-**Timestamp:** ${errorContext.timestamp}  
+            '**Route Information**\n' +
+            '- **Start Location:** ' + (errorContext.formData.startLocation || 'Not set') + '\n' +
+            '- **Route Start:** ' + (errorContext.formData.routeStart || 'Not set') + '\n' +
+            '- **Route End:** ' + (errorContext.formData.routeEnd || 'Not set') + '\n' +
+            '- **Departure Time:** ' + (errorContext.formData.departureTime || 'Not set') + '\n' +
+            '- **Completion Time:** ' + (errorContext.formData.completionTime || 'Not set') + '\n\n' +
 
----
+            '**Manifest Data**\n' +
+            '- **Total SCU:** ' + (errorContext.formData.totalSCU || '0') + '\n' +
+            '- **Total UEC:** ' + (errorContext.formData.totalUEC || '0') + '\n' +
+            (errorContext.formData ?
+              (errorContext.formData.manifestData && errorContext.formData.manifestData.length > 0 ? 
+                '\n**Manifest Items:**\n' + errorContext.formData.manifestData.map(function(item, index) {
+                  return (index + 1) + '. ' + (item.scu || '0') + ' SCU - ' + (item.material || 'Not set') + ' - ' + (item.uec || '0') + ' UEC';
+                }).join('\n') : 
+                '\n**No manifest items found**') + '\n\n' +
 
-## Error Details
+              '**Deductibles**\n' +
+              '- **Repairs:** ' + (errorContext.formData.repairs || '0') + ' UEC\n' +
+              '- **Restock:** ' + (errorContext.formData.restock || '0') + ' UEC\n' +
+              '- **Quantum Fuel:** ' + (errorContext.formData.quantumFuel || '0') + ' UEC\n' +
+              '- **Hydrogen Fuel:** ' + (errorContext.formData.hydrogenFuel || '0') + ' UEC\n' +
+              '- **Crew/Ship Costs:** ' + (errorContext.formData.crewCosts || '0') + ' UEC\n\n' +
 
-| Field | Value |
-|-------|-------|
-| **Error Code** | \`${errorCode}\` |
-| **Error Message** | ${errorMsg} |
-| **Page URL** | ${errorContext.pageUrl} |
-| **User Agent** | ${errorContext.userAgent} |
-| **Viewport** | ${errorContext.viewport} |
-| **Language** | ${errorContext.language} |
-| **Platform** | ${errorContext.platform} |
-| **Online Status** | ${errorContext.onlineStatus ? '✅ Online' : '❌ Offline'} |
-| **Cookies Enabled** | ${errorContext.cookiesEnabled ? '✅ Yes' : '❌ No'} |
-| **Referrer** | ${errorContext.referrer} |
-
----
-
-## Technical Details
-
-### Full Error Message
-\`\`\`
-${fullError || 'No additional error details'}
-\`\`\`
-
-### Stack Trace
-\`\`\`
-${stackTrace || 'No stack trace available'}
-\`\`\`
-
----
-
-## Form Data Context
-
-${errorContext.formData ? `
-| Field | Value |
-|-------|-------|
-| **Order Type** | ${errorContext.formData.orderType || 'Not set'} |
-| **Captain Name** | ${errorContext.formData.captainName || 'Not set'} |
-| **Ship Name** | ${errorContext.formData.shipName || 'Not set'} |
-| **Company Name** | ${errorContext.formData.companyName || 'Not set'} |
-| **Total SCU** | ${errorContext.formData.totalSCU || '0'} |
-| **Total UEC** | ${errorContext.formData.totalUEC || '0'} |
-| **Message Length** | ${errorContext.formData.messageLength} characters |
-| **Manifest Items** | ${errorContext.formData.manifestData ? errorContext.formData.manifestData.length : 0} items |
-| **Security Ships** | ${errorContext.formData.securityShips ? errorContext.formData.securityShips.join(', ') : 'None'} |
-| **Crew Amount** | ${errorContext.formData.crewAmount || '0'} |
-` : `Form data unavailable: ${errorContext.formDataError || 'Unknown reason'}`}
-
-<details>
-<summary><strong>Complete Form Data Copy-Paste</strong> (Click to expand)</summary>
-
-### User's Complete Form Submission
-
-${errorContext.formData ? `
-**Order Information**
-- **Order Category:** ${errorContext.formData.orderCategory || 'Not set'}${errorContext.formData.orderCategoryOther ? ` (Other: ${errorContext.formData.orderCategoryOther})` : ''}
-- **Order Type:** ${errorContext.formData.orderType || 'Not set'}${errorContext.formData.orderTypeOther ? ` (Other: ${errorContext.formData.orderTypeOther})` : ''}
-- **Company Name:** ${errorContext.formData.companyName || 'Not set'}
-- **Resource Drive Company:** ${errorContext.formData.resourceDriveCompany || 'Not applicable'}
-
-**Transport Ship Information**
-- **Ship Name:** ${errorContext.formData.shipName || 'Not set'}${errorContext.formData.shipNameOther ? ` (Other: ${errorContext.formData.shipNameOther})` : ''}
-- **Captain Name:** ${errorContext.formData.captainName || 'Not set'}${errorContext.formData.captainNameOther ? ` (Other: ${errorContext.formData.captainNameOther})` : ''}
-- **Crew Amount:** ${errorContext.formData.crewAmount || '0'}
-${errorContext.formData.crewNames && errorContext.formData.crewNames.length > 0 ? `- **Crew Names:** ${errorContext.formData.crewNames.join(', ')}` : ''}
-
-**Security Ships**
-${errorContext.formData.securityShips && errorContext.formData.securityShips.length > 0 ? 
-  errorContext.formData.securityShips.map(ship => ship === 'None' ? '- None' : `- ${ship}`).join('\n') : 
-  '- None'
-}
-${errorContext.formData.securityShipsData && errorContext.formData.securityShipsData.length > 0 ? 
-  errorContext.formData.securityShipsData.map(ship => 
-    `  - **${ship.ship}:** Captain: ${ship.captain || 'Not set'}, Crew: ${ship.crewAmount || '0'}`
-  ).join('\n') : ''
-}
-
-**Route Information**
-- **Start Location:** ${errorContext.formData.startLocation || 'Not set'}
-- **Route Start:** ${errorContext.formData.routeStart || 'Not set'}
-- **Route End:** ${errorContext.formData.routeEnd || 'Not set'}
-- **Departure Time:** ${errorContext.formData.departureTime || 'Not set'}
-- **Completion Time:** ${errorContext.formData.completionTime || 'Not set'}
-
-**Manifest Data**
-- **Total SCU:** ${errorContext.formData.totalSCU || '0'}
-- **Total UEC:** ${errorContext.formData.totalUEC || '0'}
-${errorContext.formData.manifestData && errorContext.formData.manifestData.length > 0 ? 
-  '\n**Manifest Items:**\n' + errorContext.formData.manifestData.map((item, index) => 
-    `${index + 1}. ${item.scu || '0'} SCU - ${item.material || 'Not set'} - ${item.uec || '0'} UEC`
-  ).join('\n') : 
-  '\n**No manifest items found**'
-}
-
-**Deductibles**
-- **Repairs:** ${errorContext.formData.repairs || '0'} UEC
-- **Restock:** ${errorContext.formData.restock || '0'} UEC
-- **Quantum Fuel:** ${errorContext.formData.quantumFuel || '0'} UEC
-- **Hydrogen Fuel:** ${errorContext.formData.hydrogenFuel || '0'} UEC
-- **Crew/Ship Costs:** ${errorContext.formData.crewCosts || '0'} UEC
-
-**Notes**
-\`\`\`
-${errorContext.formData.notes || 'No notes provided'}
-\`\`\`
-
-**Generated Discord Message**
-\`\`\`
-${errorContext.formData.discordMessage || 'No message was generated'}
-\`\`\`
-` : 'Form data could not be collected'}
-
-</details>
-
----
-
-## User Impact
-
-A user attempted to send a cargo manifest to Discord but encountered this error. The error was displayed to the user with appropriate instructions for resolution.
-
-**User Experience:**
-- ❌ Discord send failed
-- ✅ Error message displayed to user
-- ✅ Copy button provided as fallback
-- ✅ Error logged for developer review
-
----
-
-## Related Information
-
-**Error Category:** ${errorCode.startsWith('E') ? 'Network/Server Error' : errorCode.startsWith('D') ? 'Discord API Error' : errorCode.startsWith('G') ? 'Google Sheets Error' : errorCode.startsWith('B') ? 'Bot Error' : errorCode.startsWith('V') ? 'Validation Error' : 'Other'}
-
-**Severity:** ${['E500', 'E503', 'E504', 'R001', 'D001', 'B001', 'B002'].includes(errorCode) ? '🔴 High' : ['E400', 'E401', 'E403', 'E404', 'D002', 'G001', 'G003'].includes(errorCode) ? '🟡 Medium' : '🟢 Low'}
-
----
-
-*This issue was automatically created by the Brute Haul Cargo Log error reporting system at ${errorContext.timestamp}*`,
+              '**Notes**\\n' +
+              String.fromCharCode(96) + String.fromCharCode(96) + String.fromCharCode(96) + '\\n' +
+              (errorContext.formData.notes || 'No notes provided') + '\\n' +
+              String.fromCharCode(96) + String.fromCharCode(96) + String.fromCharCode(96) + '\\n\\n' +
+              
+              '**Generated Discord Message**\\n' +
+              String.fromCharCode(96) + String.fromCharCode(96) + String.fromCharCode(96) + '\\n' +
+              (errorContext.formData.discordMessage || 'No message was generated') + '\\n' +
+              String.fromCharCode(96) + String.fromCharCode(96) + String.fromCharCode(96) + '\\n' 
+            : 'Form data could not be collected') +
+        
+        '\n\n</details>\n\n' +
+        '---\n\n' +
+        '## User Impact\n\n' +
+        'A user attempted to send a cargo manifest to Discord but encountered this error. The error was displayed to the user with appropriate instructions for resolution.\n\n' +
+        '**User Experience:**\n' +
+        '- ❌ Discord send failed\n' +
+        '- ✅ Error message displayed to user\n' +
+        '- ✅ Copy button provided as fallback\n' +
+        '- ✅ Error logged for developer review\n\n' +
+        '---\n\n' +
+        '## Related Information\n\n' +
+        '**Error Category:** ' + (errorCode.startsWith('E') ? 'Network/Server Error' : errorCode.startsWith('D') ? 'Discord API Error' : errorCode.startsWith('G') ? 'Google Sheets Error' : errorCode.startsWith('B') ? 'Bot Error' : errorCode.startsWith('V') ? 'Validation Error' : 'Other') + '\n',
       labels: [
-        'bug', 
-        'discord-failure', 
-        'auto-generated',
-        `error-${errorCode.toLowerCase()}`,
+        'bug',
+        'error-report',
         errorCode.startsWith('E') ? 'network-error' : 
         errorCode.startsWith('D') ? 'discord-error' : 
         errorCode.startsWith('G') ? 'sheets-error' : 
@@ -4947,10 +6051,10 @@ A user attempted to send a cargo manifest to Discord but encountered this error.
     
     console.log('Attempting to create GitHub issue for error:', errorCode);
     
-    const response = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/issues`, {
+    const response = await fetch('https://api.github.com/repos/' + GITHUB_REPO + '/issues', {
       method: 'POST',
       headers: {
-        'Authorization': `token ${GITHUB_TOKEN}`,
+        'Authorization': 'token ' + GITHUB_TOKEN,
         'Content-Type': 'application/json',
         'Accept': 'application/vnd.github.v3+json',
         'User-Agent': 'Brute-Haul-Error-Reporter/1.0'
@@ -4960,10 +6064,10 @@ A user attempted to send a cargo manifest to Discord but encountered this error.
     
     if (response.ok) {
       const issueResult = await response.json();
-      console.log(`✅ Error logged to GitHub Issues successfully: #${issueResult.number}`);
-      console.log(`📋 Issue URL: ${issueResult.html_url}`);
+      console.log('✅ Error logged to GitHub Issues successfully: #' + issueResult.number);
+      console.log('📋 Issue URL: ' + issueResult.html_url);
       
-      sessionStorage.setItem('lastErrorIssue', issueResult.html_url);
+      localStorage.setItem('lastErrorIssue', issueResult.html_url);
     } else {
       const errorText = await response.text();
       console.error('❌ Failed to log error to GitHub:', response.status, response.statusText, errorText);
@@ -4971,18 +6075,17 @@ A user attempted to send a cargo manifest to Discord but encountered this error.
   } catch (logError) {
     console.error('❌ GitHub error logging failed:', logError);
   }
-}
+} // End of logErrorToGitHub function
 
 function showErrorReportLink() {
-  const lastErrorIssue = sessionStorage.getItem('lastErrorIssue');
+  const lastErrorIssue = localStorage.getItem('lastErrorIssue');
   if (lastErrorIssue) {
     const linkElement = document.createElement('div');
-    linkElement.innerHTML = `
-      <div style="margin-top: 10px; padding: 10px; background: #f0f0f0; border-radius: 5px; font-size: 12px;">
-        📋 <a href="${lastErrorIssue}" target="_blank" style="color: #781d15;">View error report</a> 
-        (Developer has been notified)
-      </div>
-    `;
+    linkElement.innerHTML = 
+      '<div style="margin-top: 10px; padding: 10px; background: #f0f0f0; border-radius: 5px; font-size: 12px;">' +
+        '📋 <a href="' + lastErrorIssue + '" target="_blank" style="color: #781d15;">View error report</a> ' +
+        '(Developer has been notified)' +
+      '</div>';
     
     const errorFeedback = document.getElementById('errorFeedback');
     if (errorFeedback && errorFeedback.style.display !== 'none') {
@@ -5000,15 +6103,15 @@ window.setupGitHubErrorReporting = function() {
     
     fetch('https://api.github.com/user', {
       headers: {
-        'Authorization': `token ${token}`,
+        'Authorization': 'token ' + token,
         'Accept': 'application/vnd.github.v3+json'
       }
     })
     .then(response => response.json())
     .then(data => {
       if (data.login) {
-        console.log(`✅ Token validated for user: ${data.login}`);
-        alert(`GitHub token setup successful!\nUser: ${data.login}\nError reporting is now active.\n\nNote: This simulates the deployed environment.`);
+        console.log('✅ Token validated for user: ' + data.login);
+        alert('GitHub token setup successful!\\nUser: ' + data.login + '\\nError reporting is now active.\\n\\nNote: This simulates the deployed environment.');
       } else {
         console.error('❌ Token validation failed:', data);
         alert('Token validation failed. Please check your token.');
@@ -5055,22 +6158,23 @@ window.checkGitHubTokenStatus = function() {
   }
 };
 
-    window.addEventListener('error', function(event) {
-      handleError('Uncaught JavaScript error occurred', event.error, {
-        filename: event.filename,
-        lineno: event.lineno,
-        colno: event.colno,
-        message: event.message
-      });
-    });
+window.addEventListener('error', function(event) {
+  handleError('Uncaught JavaScript error occurred', event.error, {
+    filename: event.filename,
+    lineno: event.lineno,
+    colno: event.colno,
+    message: event.message
+  });
+});
 
-    window.addEventListener('unhandledrejection', function(event) {
-      handleError('Unhandled promise rejection', event.reason, {
-        promise: event.promise
-      });
-      event.preventDefault();
-    });
+window.addEventListener('unhandledrejection', function(event) {
+  handleError('Unhandled promise rejection', event.reason, {
+    promise: event.promise
+  });
+  event.preventDefault();
+});
 
-  </script>
+</script>
 
-</div>
+</body>
+</html>
