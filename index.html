@@ -203,6 +203,20 @@
       border: 1px solid #781d15;
       margin-bottom: 10px;
     }
+    .other-input {
+      width: 85%;
+      max-width: 360px;
+      box-sizing: border-box;
+      font-size: 0.95em;
+      color: #230e09;
+      background: #e2e2e2;
+      border: 1px solid #781d15;
+      margin-top: 8px;
+      margin-left: 0px;
+      padding: 8px 10px;
+      border-radius: 6px;
+      display: none;
+    }
     .crew-label {
       display: block;
       margin-left: 30px;
@@ -281,37 +295,27 @@
       vertical-align: middle;
       filter: invert(1);
     }
-    h1 {
-      color: #9d7523;
-      text-align: center;
-      font-size: 2.4em;
-      font-weight: bold;
-    }
-    h2 {
-      color: #9d7523;
-    }
-    .manifest-row {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      margin-bottom: 10px;
-      padding: 12px;
-      border: 2px solid #9d7523;
-      border-radius: 8px;
-      background: #f8f6f2;
-      box-shadow: 0 2px 6px rgba(157,117,35,0.07);
-      position: relative;
-    }
+    /* Global h1 reset removed to avoid interfering with page header; use .page-header h1 for header styling */
     .manifest-row label {
       margin: 0;
       font-weight: normal;
       color: #230e09;
       min-width: 60px;
     }
+    .manifest-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
     .manifest-row input,
     .manifest-row select {
       width: auto;
       margin-bottom: 0;
+    }
+    .manifest-row .manifest-material {
+      box-sizing: border-box;
     }
     .manifest-row .manifest-scu {
       width: 60px;
@@ -434,7 +438,7 @@
       background: #e2e2e2;
       border: 1px solid #781d15;
       border-top: none;
-      max-height: 150px;
+      max-height: 180px;
       overflow-y: auto;
       z-index: 1000;
       display: none;
@@ -444,12 +448,12 @@
       display: block;
     }
     .searchable-dropdown .dropdown-item {
-      padding: 6px 12px;
+      padding: 6px 8px;
       cursor: pointer;
       border-bottom: 1px solid #ccc;
       background: #e2e2e2;
       color: #230e09;
-      font-size: 14px;
+      font-size: 13px;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -463,6 +467,16 @@
     }
     .searchable-dropdown .dropdown-item:last-child {
       border-bottom: none;
+    }
+    .searchable-dropdown .dropdown-item input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      margin-right: 8px;
+      transform: none;
+      vertical-align: middle;
+      pointer-events: auto;
+      -webkit-appearance: checkbox;
+      appearance: checkbox;
     }
     .checkbox-dropdown .dropdown-toggle:after {
       content: "▼";
@@ -550,10 +564,11 @@
       flex: 1;
     }
 
-    #historyTab {
-      padding: 20px;
+    #historyViewerTab {
+      padding: 16px;
       max-width: 1200px;
       margin: 0 auto;
+      box-sizing: border-box;
     }
     
     .main-content-wrapper {
@@ -720,17 +735,21 @@
       transform: translateY(0);
     }
 
-    /* Transport request cargo details: read-only and responsive sizing for non-mobile */
     @media (min-width: 481px) {
       #tr_cargoDetails {
         height: min(50vh, 420px);
-        resize: none;
+        resize: vertical;
         overflow: auto;
+        max-width: 100%;
+        box-sizing: border-box;
+        white-space: pre-wrap;
+        overflow-wrap: break-word;
+        word-break: break-word;
       }
     }
     @media (max-width: 480px) {
       #tr_cargoDetails {
-        height: 90px; /* keep previous small size for mobile */
+        height: 90px;
         resize: vertical;
       }
     }
@@ -973,21 +992,23 @@
       display: block;
     }
     
-    #historyTab {
+    #historyViewerTab {
       display: none;
       background: #f8f9fa;
-      padding: 20px;
+      padding: 16px;
       border-radius: 8px;
       margin-top: 20px;
       position: relative !important;
       visibility: visible !important;
       opacity: 1 !important;
       height: auto !important;
-      min-height: 300px !important;
+      min-height: 200px !important;
       z-index: 1000 !important;
+      overflow: auto;
+      max-height: calc(100vh - 200px);
     }
     
-    #historyTab.active {
+    #historyViewerTab.active {
       display: block !important;
     }
     
@@ -1018,6 +1039,103 @@
       font-size: 12px;
       display: inline-block;
     }
+    .priority-badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 8px;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.85em;
+      line-height: 1;
+      vertical-align: middle;
+    }
+    .prio-Emergency { background: #b32428; }
+    .prio-High { background: #d96b2f; }
+    .prio-Medium { background: #f0ad4e; color: #230e09; }
+    .prio-Low { background: #28a745; }
+    .status-badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 8px;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.85em;
+      line-height: 1;
+      vertical-align: middle;
+      margin-left: 6px;
+    }
+    .status-New { background: #00bcd4; }
+    .status-Assigned { background: #f0ad4e; }
+    .status-Completed { background: #28a745; }
+    .status-Declined { background: #8b0000; }
+    /* Assignment modal styles */
+    .assignment-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 20000;
+      padding: 12px;
+      box-sizing: border-box;
+    }
+    .assignment-modal-panel {
+      background: #fff;
+      padding: 14px;
+      border-radius: 10px;
+      width: 520px;
+      max-width: calc(100% - 40px);
+      max-height: 80vh;
+      overflow-y: auto;
+      box-sizing: border-box;
+    }
+    @media (min-width: 1000px) {
+      .assignment-modal-panel { width: 720px; }
+    }
+      /* Keep modal a reasonable fixed width (520px) to avoid overly wide popups */
+    .assignment-modal-panel h3 { margin-top: 0; margin-bottom: 8px; }
+    .assignment-modal-panel .searchable-dropdown { margin-top: 6px; }
+    .assignment-modal-panel .dropdown-list {
+      max-height: 40vh;
+      overflow-y: auto;
+      z-index: 21000;
+    }
+    /* Hide scrollbar for the modal panel itself, but allow visible scrollbars for dropdowns and crew lists */
+    .assignment-modal-panel {
+      -ms-overflow-style: none; /* IE 10+ */
+      scrollbar-width: none; /* Firefox */
+    }
+    .assignment-modal-panel::-webkit-scrollbar {
+      display: none;
+      width: 0;
+      height: 0;
+    }
+
+    /* Allow visible scrollbars for dropdown lists */
+    .assignment-modal-panel .dropdown-list {
+      -ms-overflow-style: auto;
+      scrollbar-width: auto;
+    }
+    .assignment-modal-panel .dropdown-list::-webkit-scrollbar { width: 10px; height: 10px; }
+    .assignment-modal-panel .dropdown-list::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.16); border-radius: 6px; }
+
+    /* Crew names container: allow scrolling with visible scrollbar when long */
+    .assignment-modal-panel [id^="assign_crew_names_"] {
+      max-height: 40vh;
+      overflow-y: auto;
+      -ms-overflow-style: auto;
+      scrollbar-width: auto;
+    }
+    .assignment-modal-panel [id^="assign_crew_names_"]::-webkit-scrollbar { width: 10px; }
+    .assignment-modal-panel [id^="assign_crew_names_"]::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.16); border-radius: 6px; }
+    .assignment-modal-panel input[type="text"], .assignment-modal-panel input[type="number"], .assignment-modal-panel .searchable-dropdown input {
+      width: 100%;
+      box-sizing: border-box;
+      max-width: 100%;
+    }
+    .assignment-modal-panel .searchable-dropdown { position: relative; }
+    .assignment-modal-panel .dropdown-list { left: 0; right: 0; }
   </style>
   <script src="locations.js"></script>
 </head>
@@ -1032,8 +1150,7 @@
         <div style="display: flex; gap: 12px; margin-bottom: 0;">
       <button type="button" onclick="showTab('formTab')" id="formTabBtn" style="border: 3px solid transparent;">Manifest Form</button>
       <button type="button" onclick="showTab('transportTab')" id="transportTabBtn" style="border: 3px solid transparent;">Transport Request</button>
-      <button type="button" onclick="showTab('viewerTab')" id="viewerTabBtn" style="border: 3px solid transparent;">Viewer</button>
-      <button type="button" onclick="showTab('historyTab')" id="historyTabBtn" style="border: 3px solid transparent;">History</button>
+  <button type="button" onclick="showTab('historyViewerTab')" id="historyTabBtn" style="border: 3px solid transparent;">History & Viewer</button>
         <a href="https://discord.gg/Ejpr5ZagvV" target="_blank" title="Join BRHS Discord" id="discordButton"
            style="margin-left:auto; display:inline-flex; align-items:center; justify-content:center; width:60px; height:60px; background:#5865F2; border-radius:8px; text-decoration:none; border:0px solid #9d7523; margin-right:12px;">
           <svg width="38" height="38" viewBox="0 0 71 55" fill="white">
@@ -1054,24 +1171,39 @@
       </div>
     </div>
 
-    <div id="historyTab" style="display: none; width: 100%; max-width: 95%; margin: 0 auto;">
-      <div style="background: linear-gradient(145deg, #ffffff 0%, #f8f8f8 100%); border-radius: 16px; padding: 28px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); border: 1px solid rgba(157, 117, 35, 0.2);">
-        <div id="historyList" style="min-height: 300px; padding: 20px;">
-          <div style="text-align: center; background: #fff; border: 3px solid #9d7523; border-radius: 12px; padding: 30px;">
-            <img src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/BRHS-Logo.png" 
-                 alt="BruteHaul Logo" 
-                 style="max-width: 200px; width: 100%; margin-bottom: 20px; border-radius: 8px;">
-            <h2 style="color: #9d7523; margin: 20px 0; font-size: 24px;">Brute Haul Manifest Log</h2>
-            <p style="font-size: 18px; color: #781d15; font-weight: bold; margin: 15px 0;">
-              No posts generated this session.
-            </p>
-            <p style="color: #666; margin: 10px 0; font-size: 16px;">
-              Complete and submit manifests to see them listed here.
-            </p>
-            <div style="margin-top: 20px; padding: 10px; background: #e8f5e8; border-radius: 8px; border: 2px solid #28a745;">
-              <strong style="color: #28a745;">✓ History Tab Working!</strong>
+    <div id="historyViewerTab" style="display: none; width: 100%; max-width: 95%; margin: 0 auto;">
+      <div style="display: grid; grid-template-columns: 1fr; gap: 18px;">
+        <div style="background: linear-gradient(145deg, #ffffff 0%, #f8f8f8 100%); border-radius: 16px; padding: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); border: 1px solid rgba(157, 117, 35, 0.12);">
+          <h2 style="color:#9d7523;margin-top:0;">Manifest History</h2>
+          <div id="historyList" style="min-height: 200px; padding: 12px;"> 
+            <div style="text-align: center; background: #fff; border: 3px solid #9d7523; border-radius: 12px; padding: 22px;">
+              <img src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/BRHS-Logo.png" alt="BruteHaul Logo" style="max-width: 160px; width: 100%; margin-bottom: 12px; border-radius: 8px;">
+              <h3 style="color: #9d7523; margin: 12px 0; font-size: 20px;">Brute Haul Manifest Log</h3>
+              <p style="font-size: 15px; color: #781d15; font-weight: bold; margin: 8px 0;">No posts generated this session.</p>
+              <p style="color: #666; margin: 6px 0; font-size: 14px;">Complete and submit manifests to see them listed here.</p>
             </div>
           </div>
+        </div>
+        <div style="background: linear-gradient(145deg, #ffffff 0%, #f8f8f8 100%); border-radius: 16px; padding: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.08); border: 1px solid rgba(157, 117, 35, 0.12);">
+          <h2 style="color:#9d7523;margin-top:0;">Transport Requests</h2>
+          <div id="viewerControls" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap;">
+            <div style="display:flex;gap:8px;align-items:center;">
+              <label style="font-weight:600;color:#781d15;margin-right:6px;">Sort:</label>
+              <select id="viewer_sort" style="min-width:200px;padding:8px;border:1px solid #781d15;border-radius:6px;height:40px;box-sizing:border-box;">
+                <option value="date_desc">Newest</option>
+                <option value="date_asc">Oldest</option>
+                <option value="priority">Priority</option>
+                <option value="status">Status</option>
+              </select>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;min-width:320px;">
+              <input id="viewer_search" placeholder="Search Request ID, Org, Requester, Route" style="flex:1;min-width:220px;padding:8px;border:1px solid #781d15;border-radius:6px;height:40px;box-sizing:border-box;" />
+              <button type="button" id="viewer_search_btn" style="height:40px;padding:0 12px;border-radius:6px;background:#9d7523;color:#fff;border:none;">Search</button>
+              <button type="button" id="viewer_clear_btn" style="height:40px;padding:0 12px;border-radius:6px;background:#eee;color:#333;border:1px solid #ccc;">Clear</button>
+            </div>
+          </div>
+          <div id="viewerStatus" style="margin-bottom:12px;color:#333;font-weight:bold;display:none;">Viewer status</div>
+          <div id="viewerContent" style="min-height:120px; padding:8px;"></div>
         </div>
       </div>
     </div>
@@ -1084,18 +1216,22 @@
             <div style="display:flex;gap:12px;flex-wrap:wrap;">
               <div style="flex:1;min-width:220px;">
                 <label>Organization:</label>
-                <select id="tr_orgName" required style="width:100%;">
+                <select id="tr_orgName" required style="width:100%;" onchange="toggleCustomOrg(this)">
                   <option value="" selected disabled>Select organization</option>
                   <option value="Brute Haul">Brute Haul</option>
                   <option value="Space Rats">Space Rats</option>
                   <option value="The Benjineering Project">The Benjineering Project</option>
+                  <option value="__other__">Other</option>
                 </select>
+                <input type="text" id="tr_orgNameOther" class="other-input" placeholder="Enter organization name" style="display:none;" />
               </div>
               <div style="flex:1;min-width:220px;">
                 <label>Requester Name:</label>
-                <select id="tr_requester" required style="width:100%;" aria-required="true">
+                <select id="tr_requester" required style="width:100%;" aria-required="true" onchange="toggleCustomRequester(this)">
                   <option value="" selected disabled>Select requester</option>
+                  <option value="__other__">Other</option>
                 </select>
+                <input type="text" id="tr_requesterOther" class="other-input" placeholder="Enter requester name" style="display:none;" />
               </div>
               <div style="flex:1;min-width:220px;">
                 <label>Security Ships needed?</label>
@@ -1121,13 +1257,13 @@
               </div>
               <div style="flex:1 1 100%;min-width:220px;">
                 <label>Cargo Details:</label>
-                <textarea id="tr_cargoDetails" required readonly placeholder="Cargo details" style="width:100%;height:90px;resize:none;" aria-required="true"></textarea>
+                <textarea id="tr_cargoDetails" required placeholder="Enter cargo details here.
+Example: What are you hauling? Any special requirements or requests? Any preferred ships or crew?" style="width:100%;max-width:100%;height:120px;resize:vertical;box-sizing:border-box;white-space:pre-wrap;overflow-wrap:break-word;" aria-required="true"></textarea>
               </div>
               <div style="flex:0 0 140px;">
                 <label>SCU Total:</label>
                 <input type="number" id="tr_requiredSCU" required min="0" step="1" style="width:100%;" aria-required="true" />
               </div>
-              <!-- Priority moved to its own line to avoid being pushed against SCU Total -->
               <div style="flex:1 1 100%;min-width:220px;margin-top:8px;">
                 <label>Priority:</label>
                 <select id="tr_priority" required style="width:100%;" aria-required="true">
@@ -1141,7 +1277,6 @@
             </div>
             <div style="margin-top:12px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
               <button type="button" onclick="submitTransportRequest()" style="background:#9d7523;color:#fff;border:none;padding:10px 14px;border-radius:6px;">Submit Request</button>
-              <button type="button" onclick="sendTransportRequestToDiscord()" style="background:#5865F2;color:#fff;border:none;padding:10px 14px;border-radius:6px;">Send to Discord</button>
               <button type="button" onclick="clearTransportRequestForm()" style="background:#eee;color:#333;border:1px solid #ccc;padding:8px 12px;border-radius:6px;">Clear</button>
               <div id="tr_status" style="margin-left:12px;color:#2a7a2a;font-weight:bold;display:none;">Request submitted</div>
             </div>
@@ -1576,26 +1711,23 @@
 
 function showTab(tab) {
   const formTab = document.getElementById('formTab');
-  const historyTab = document.getElementById('historyTab');
+  const historyTab = document.getElementById('historyViewerTab');
   const transportTab = document.getElementById('transportTab');
   const viewerTab = document.getElementById('viewerTab');
 
     if (formTab && historyTab && transportTab && viewerTab) {
-    // default: hide all then show selected
-    formTab.style.display = 'none';
-    historyTab.style.display = 'none';
-    transportTab.style.display = 'none';
-    viewerTab.style.display = 'none';
-
+  formTab.style.display = 'none';
+  historyTab.style.display = 'none';
+  transportTab.style.display = 'none';
     if (tab === 'formTab') {
       formTab.style.display = 'block';
-    } else if (tab === 'historyTab') {
+    } else if (tab === 'historyTab' || tab === 'historyViewerTab') {
       historyTab.style.display = 'block';
-      renderHistory();
+      if (typeof renderHistory === 'function') renderHistory();
+      if (typeof renderViewer === 'function') renderViewer();
     } else if (tab === 'transportTab') {
       transportTab.style.display = 'block';
     } else if (tab === 'viewerTab') {
-      viewerTab.style.display = 'block';
       if (typeof renderViewer === 'function') renderViewer();
     }
   }
@@ -1603,23 +1735,19 @@ function showTab(tab) {
   const formTabBtn = document.getElementById('formTabBtn');
   const historyTabBtn = document.getElementById('historyTabBtn');
   const transportTabBtn = document.getElementById('transportTabBtn');
-  const viewerTabBtn = document.getElementById('viewerTabBtn');
 
-  if (formTabBtn && historyTabBtn && transportTabBtn && viewerTabBtn) {
+  if (formTabBtn && historyTabBtn && transportTabBtn) {
     formTabBtn.style.background = tab === 'formTab' ? '#9d7523' : '#781d15';
-    historyTabBtn.style.background = tab === 'historyTab' ? '#9d7523' : '#781d15';
+    historyTabBtn.style.background = (tab === 'historyTab' || tab === 'historyViewerTab' || tab === 'viewerTab') ? '#9d7523' : '#781d15';
     transportTabBtn.style.background = tab === 'transportTab' ? '#9d7523' : '#781d15';
-    viewerTabBtn.style.background = tab === 'viewerTab' ? '#9d7523' : '#781d15';
 
     formTabBtn.style.color = '#fff';
     historyTabBtn.style.color = '#fff';
     transportTabBtn.style.color = '#fff';
-    viewerTabBtn.style.color = '#fff';
 
     formTabBtn.style.border = tab === 'formTab' ? '3px solid #000' : '3px solid transparent';
-    historyTabBtn.style.border = tab === 'historyTab' ? '3px solid #000' : '3px solid transparent';
+    historyTabBtn.style.border = (tab === 'historyTab' || tab === 'historyViewerTab' || tab === 'viewerTab') ? '3px solid #000' : '3px solid transparent';
     transportTabBtn.style.border = tab === 'transportTab' ? '3px solid #000' : '3px solid transparent';
-    viewerTabBtn.style.border = tab === 'viewerTab' ? '3px solid #000' : '3px solid transparent';
   }
 }
 window.showTab = showTab;
@@ -1654,8 +1782,13 @@ function resizeAnnouncementsContent() {
 window.addEventListener('resize', resizeAnnouncementsContent);
 
     function submitTransportRequest() {
-      const orgName = document.getElementById('tr_orgName')?.value?.trim();
-      const requester = document.getElementById('tr_requester')?.value?.trim();
+      let orgName = document.getElementById('tr_orgName')?.value?.trim();
+      const orgOther = document.getElementById('tr_orgNameOther')?.value?.trim();
+      if (orgOther) orgName = orgOther;
+
+      let requester = document.getElementById('tr_requester')?.value?.trim();
+      const requesterOther = document.getElementById('tr_requesterOther')?.value?.trim();
+      if (requesterOther) requester = requesterOther;
       const securityNeeded = document.getElementById('tr_securityNeeded')?.value;
       const pickup = document.getElementById('tr_pickup')?.value?.trim();
       const destination = document.getElementById('tr_destination')?.value?.trim();
@@ -1665,13 +1798,46 @@ window.addEventListener('resize', resizeAnnouncementsContent);
 
       const statusDiv = document.getElementById('tr_status');
 
-      // validate using shared transport request validator (highlights fields and shows overlay)
       if (!validateTransportRequest()) {
         return;
       }
+      function pad(num, size) { return String(num).padStart(size, '0'); }
+      const orgMap = {
+        'Brute Haul': '01',
+        'Space Rats': '02',
+        'The Benjineering Project': '03'
+      };
+      const orgCode = orgMap[orgName] || '99';
+
+      let requesterIndex = 999;
+      const requesterSelect = document.getElementById('tr_requester');
+      if (requesterSelect) {
+        const options = Array.from(requesterSelect.querySelectorAll('option'))
+          .filter(o => o.value && o.value !== '' );
+        const foundIdx = options.findIndex(o => o.value.trim() === requester);
+        requesterIndex = foundIdx >= 0 ? (foundIdx + 1) : 999;
+      }
+
+      const now = new Date();
+      const mm = pad(now.getUTCMonth() + 1, 2);
+      const dd = pad(now.getUTCDate(), 2);
+      const yy = pad(now.getUTCFullYear() % 100, 2);
+      const hh = pad(now.getUTCHours(), 2);
+      const min = pad(now.getUTCMinutes(), 2);
+      const sec = pad(now.getUTCSeconds(), 2);
+      const timestampPart = `${mm}${dd}${yy}${hh}${min}${sec}`;
+      const prioritySuffixMap = {
+        'Emergency': '-99',
+        'High': '-80',
+        'Medium': '-50',
+        'Low': '-10'
+      };
+      const suffix = priority ? (prioritySuffixMap[priority] || '') : '';
+      const requestNumber = `${orgCode}-${pad(requesterIndex,3)}-${timestampPart}${suffix}`;
 
       const req = {
         id: 'TR-' + Date.now(),
+        requestNumber,
         timestamp: new Date().toISOString(),
         orgName,
         requester,
@@ -1690,13 +1856,16 @@ window.addEventListener('resize', resizeAnnouncementsContent);
         if (statusDiv) {
           statusDiv.style.display = 'inline-block';
           statusDiv.style.color = '#2a7a2a';
-          statusDiv.textContent = 'Request submitted ✓';
+          statusDiv.textContent = 'Request submitted ✓  [' + requestNumber + ']';
         }
-        // Clear the form shortly after submit so the user sees confirmation first
         setTimeout(() => {
           clearTransportRequestForm();
         }, 900);
-        // hide the status message a bit later
+        try {
+          sendTransportRequestToDiscord();
+        } catch (err) {
+          console.warn('Failed to automatically send transport request to backend:', err);
+        }
         setTimeout(() => {
           if (statusDiv) statusDiv.style.display = 'none';
         }, 3000);
@@ -1722,8 +1891,31 @@ window.addEventListener('resize', resizeAnnouncementsContent);
       if (notif) notif.remove();
     }
 
+  window.toggleCustomOrg = function(selectEl) {
+      const other = document.getElementById('tr_orgNameOther');
+      if (!other) return;
+      if (selectEl && selectEl.value === '__other__') {
+        other.style.display = 'block';
+        other.focus();
+      } else {
+        other.style.display = 'none';
+        other.value = '';
+      }
+    }
+
+  window.toggleCustomRequester = function(selectEl) {
+      const other = document.getElementById('tr_requesterOther');
+      if (!other) return;
+      if (selectEl && selectEl.value === '__other__') {
+        other.style.display = 'block';
+        other.focus();
+      } else {
+        other.style.display = 'none';
+        other.value = '';
+      }
+    }
+
     function validateTransportRequest() {
-      // Remove previous error states
       ['tr_orgName','tr_requester','tr_securityNeeded','tr_pickup','tr_destination','tr_cargoDetails','tr_requiredSCU','tr_priority'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.classList.remove('error');
@@ -1755,7 +1947,6 @@ window.addEventListener('resize', resizeAnnouncementsContent);
         }
       });
 
-      // Validate pickup/destination are in locations list when available
       const pickupEl = document.getElementById('tr_pickup');
       const destEl = document.getElementById('tr_destination');
       if (typeof locations !== 'undefined') {
@@ -1771,7 +1962,6 @@ window.addEventListener('resize', resizeAnnouncementsContent);
         }
       }
 
-      // Validate SCU is a number >= 0
       const scuEl = document.getElementById('tr_requiredSCU');
       if (scuEl) {
         const n = Number(scuEl.value);
@@ -1783,11 +1973,8 @@ window.addEventListener('resize', resizeAnnouncementsContent);
       }
 
       if (errors.length > 0) {
-        // Build message
   const msgHtml = '<strong>Please fix the following issues:</strong><br/><br/>' + errors.map(e => '• ' + e).join('<br/>');
-  // Show a prominent warning overlay similar to other overlays (HTML allowed)
   showNotificationOverlay(msgHtml, 'warning');
-        // Focus first error field and scroll into view
         if (firstEl) {
           try { firstEl.focus(); firstEl.scrollIntoView({behavior: 'smooth', block: 'center'}); } catch (e) {}
         }
@@ -1798,16 +1985,14 @@ window.addEventListener('resize', resizeAnnouncementsContent);
     }
 
     function sendTransportRequestToDiscord() {
-      // Get the most recent transport request from localStorage
       const allRequests = JSON.parse(localStorage.getItem('transportRequests') || '[]');
       if (!allRequests || allRequests.length === 0) {
         showNotificationOverlay('<strong>No transport request found!</strong><br/><br/>Please submit a request first before sending to Discord.', 'warning');
         return;
       }
 
-      const transportData = allRequests[0]; // Get the most recent one
+      const transportData = allRequests[0];
       
-      // Show loading state
       const statusDiv = document.getElementById('tr_status');
       if (statusDiv) {
         statusDiv.style.display = 'inline-block';
@@ -1815,13 +2000,11 @@ window.addEventListener('resize', resizeAnnouncementsContent);
         statusDiv.textContent = 'Sending to Discord...';
       }
 
-      // Prepare the payload
       const payload = {
         transportData: transportData,
-        channelId: 1391877534215438398  // Use the default manifest channel
+        channelId: 1391877534215438398
       };
 
-      // Send to Discord backend
       fetch('/send-transport-request', {
         method: 'POST',
         headers: {
@@ -1844,7 +2027,6 @@ window.addEventListener('resize', resizeAnnouncementsContent);
           statusDiv.textContent = 'Sent to Discord ✓';
         }
         console.log('✅ Transport request sent to Discord:', data);
-        // Hide status message after 3 seconds
         setTimeout(() => {
           if (statusDiv) statusDiv.style.display = 'none';
         }, 3000);
@@ -1864,7 +2046,6 @@ window.addEventListener('resize', resizeAnnouncementsContent);
     window.clearTransportRequestForm = clearTransportRequestForm;
     window.sendTransportRequestToDiscord = sendTransportRequestToDiscord;
 
-    // Viewer functions
     function renderViewer() {
       const container = document.getElementById('viewerContent');
       const status = document.getElementById('viewerStatus');
@@ -1874,19 +2055,46 @@ window.addEventListener('resize', resizeAnnouncementsContent);
       const transport = JSON.parse(localStorage.getItem('transportRequests') || '[]');
       const history = JSON.parse(localStorage.getItem('discordHistory') || '[]');
 
-      container.innerHTML = '<div style="margin-bottom:12px;color:#333;font-weight:bold;">Transport Requests: ' + transport.length + ' &nbsp;|&nbsp; History Items: ' + history.length + '</div>';
+      const sortBy = (document.getElementById('viewer_sort')?.value) || 'date_desc';
+      const searchTerm = (document.getElementById('viewer_search')?.value || '').toString().trim().toLowerCase();
+
+      let filtered = (transport || []).slice();
+      if (searchTerm) {
+        filtered = filtered.filter(r => {
+          const route = ((r.start || '') + ' ' + (r.end || '')).toLowerCase();
+          return (r.requestNumber || '').toLowerCase().includes(searchTerm) ||
+                 (r.orgName || '').toLowerCase().includes(searchTerm) ||
+                 (r.requester || '').toLowerCase().includes(searchTerm) ||
+                 route.includes(searchTerm);
+        });
+      }
+
+      const priorityOrder = { 'Emergency': 4, 'High': 3, 'Medium': 2, 'Low': 1 };
+      const statusOrder = { 'New': 4, 'Assigned': 3, 'Completed': 2, 'Declined': 1 };
+      if (sortBy === 'date_desc') {
+        filtered.sort((a,b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+      } else if (sortBy === 'date_asc') {
+        filtered.sort((a,b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+      } else if (sortBy === 'priority') {
+        filtered.sort((a,b) => (priorityOrder[b.priority] || 0) - (priorityOrder[a.priority] || 0));
+      } else if (sortBy === 'status') {
+        filtered.sort((a,b) => (statusOrder[b.status] || 0) - (statusOrder[a.status] || 0));
+      }
+
+      container.innerHTML = '<div style="margin-bottom:12px;color:#333;font-weight:bold;">Transport Requests: ' + filtered.length + '</div>';
 
       const listDiv = document.createElement('div');
       listDiv.style.display = 'grid';
       listDiv.style.gridTemplateColumns = '1fr';
       listDiv.style.gap = '10px';
 
-      if (!transport || transport.length === 0) {
+      if (!filtered || filtered.length === 0) {
         listDiv.innerHTML = '<div style="padding:12px;background:#fff;border:1px solid #ccc;border-radius:6px;">No transport requests found.</div>';
       } else {
-        transport.forEach(req => {
+        filtered.forEach(req => {
           const card = document.createElement('div');
           card.style.padding = '12px';
+          card.style.position = 'relative';
           card.style.border = '1px solid #9d7523';
           card.style.borderRadius = '8px';
           card.style.background = '#fff';
@@ -1896,25 +2104,67 @@ window.addEventListener('resize', resizeAnnouncementsContent);
 
           const left = document.createElement('div');
           left.style.flex = '1';
-          left.innerHTML = '<div style="font-weight:700;color:#781d15;">' + (req.orgName || 'Unknown Org') + ' — ' + (req.contactName || '') + '</div>' +
-            '<div style="font-size:0.95em;color:#333;">' + (req.pickup || '') + ' → ' + (req.destination || '') + '</div>' +
-            '<div style="font-size:0.85em;color:#666;margin-top:6px;">' + (req.cargoDetails ? req.cargoDetails : '<em>No details</em>') + '</div>';
+          const displayOrg = req.orgName || 'Unknown Org';
+          const displayPriority = req.priority || 'Medium';
+          let priorityClass = 'prio-Medium';
+          if (displayPriority === 'Emergency') priorityClass = 'prio-Emergency';
+          else if (displayPriority === 'High') priorityClass = 'prio-High';
+          else if (displayPriority === 'Low') priorityClass = 'prio-Low';
+
+          const displayStatus = (req.status || 'New');
+          let statusClass = 'status-New';
+          if (displayStatus === 'Assigned') statusClass = 'status-Assigned';
+          else if (displayStatus === 'Completed') statusClass = 'status-Completed';
+          else if (displayStatus === 'Declined') statusClass = 'status-Declined';
+
+          const requestIdAndPriority = req.requestNumber ? '<div style="font-size:0.95em;color:#0b5; font-weight:700; margin-bottom:6px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">' +
+            '<span>Request ID: ' + req.requestNumber + '</span>' +
+            '<span class="priority-badge ' + priorityClass + '">' + displayPriority + '</span>' +
+            '<span class="status-badge ' + statusClass + '">' + displayStatus + '</span>' +
+            '</div>' : '';
+
+          const orgLine = '<div style="font-weight:700;color:#781d15;font-size:1.05em;margin-bottom:6px;">' + displayOrg + ' Transport Request</div>';
+
+          left.innerHTML = requestIdAndPriority + orgLine +
+            '<div style="font-size:1.2em;color:#333;margin:8px 0;">→</div>' +
+            '<div style="font-size:0.95em;color:#333;"><strong>Details:</strong> ' + (req.cargoDetails ? req.cargoDetails : '<em>No details</em>') + '</div>';
+
           if (req.assigned) {
-            left.innerHTML += '<div style="margin-top:8px;font-size:0.85em;color:#155724;background:#e6f4ea;padding:8px;border-radius:6px;">' +
-              '<strong>Assigned:</strong> ' + (req.assigned.ships ? req.assigned.ships.join(', ') : '') + '<br/>' +
-              '<strong>Captains:</strong> ' + (req.assigned.captains ? req.assigned.captains.join(', ') : '') +
-            '</div>';
+            if (req.assigned.shipAssignments && req.assigned.shipAssignments.length) {
+              let html = '<div id="assigned_block_' + req.id + '" style="margin-top:8px;font-size:0.9em;color:#155724;background:#e6f4ea;padding:8px;border-radius:6px;">';
+              req.assigned.shipAssignments.forEach(sa => {
+                html += '<div style="margin-bottom:6px;"><strong>' + (sa.ship || 'Ship') + ':</strong> ' + (sa.captain ? ('Captain: ' + sa.captain) : 'No captain');
+                if (sa.crew && sa.crew.length) html += '<br/><em>Crew:</em> ' + sa.crew.join(', ');
+                html += '</div>';
+              });
+              if (req.assigned.securityShips && req.assigned.securityShips.length) {
+                html += '<div style="margin-top:6px;"><strong>Security Ships:</strong> ' + req.assigned.securityShips.join(', ') + '</div>';
+              }
+              html += '</div>';
+              left.innerHTML += html;
+            } else {
+              const assignedCargo = req.assigned.ships && req.assigned.ships.length ? req.assigned.ships.join(', ') : '';
+              const assignedSecurity = req.assigned.securityShips && req.assigned.securityShips.length ? req.assigned.securityShips.join(', ') : '';
+              const assignedCaps = req.assigned.captains && req.assigned.captains.length ? req.assigned.captains.join(', ') : '';
+              left.innerHTML += '<div style="margin-top:8px;font-size:0.85em;color:#155724;background:#e6f4ea;padding:8px;border-radius:6px;">' +
+                (assignedCargo ? ('<strong>Cargo Ships:</strong> ' + assignedCargo + '<br/>') : '') +
+                (assignedSecurity ? ('<strong>Security Ships:</strong> ' + assignedSecurity + '<br/>') : '') +
+                (assignedCaps ? ('<strong>Crew:</strong> ' + assignedCaps) : '') +
+              '</div>';
+            }
           }
 
-          // show simplified transport request fields (compatible with new format)
           left.innerHTML += '<div style="margin-top:8px;font-size:0.9em;color:#333;">' +
-            '<strong>Org:</strong> ' + (req.orgName || '-') + ' &nbsp;|&nbsp; ' +
-            '<strong>Requester:</strong> ' + (req.requester || '-') + ' &nbsp;|&nbsp; ' +
-            '<strong>Security:</strong> ' + (req.securityNeeded || 'No') + '<br/>' +
-            '<strong>Route:</strong> ' + (req.start || '') + ' → ' + (req.end || '') + '<br/>' +
-            '<strong>SCU:</strong> ' + (req.requiredSCU ? req.requiredSCU.toLocaleString() : '0') + ' &nbsp;|&nbsp; ' +
-            '<strong>Priority:</strong> ' + (req.priority || 'Medium') +
-          '</div>';
+            '<strong>Org:</strong> ' + (req.orgName || '-') + '  |  ' +
+            '<strong>Requester:</strong> ' + (req.requester || '-') + '  |  ' +
+            '<strong>Security:</strong> ' + (req.securityNeeded || 'No') +
+          '</div>' +
+          '<div style="font-size:0.9em;color:#333;"><strong>Route:</strong> ' + (req.start || '') + ' → ' + (req.end || '') + '</div>' +
+          '<div style="font-size:0.9em;color:#333;margin-top:6px;"><strong>SCU:</strong> ' + (req.requiredSCU ? req.requiredSCU.toLocaleString() : '0') + '</div>';
+
+          if ((req.status || '') === 'Declined' && req.declineReason) {
+            left.innerHTML += '<div style="margin-top:8px;color:#721c24;background:#f8d7da;padding:8px;border-radius:6px;"><strong>Decline Reason:</strong> ' + (req.declineReason || '') + '</div>';
+          }
 
           const right = document.createElement('div');
           right.style.display = 'flex';
@@ -1922,11 +2172,15 @@ window.addEventListener('resize', resizeAnnouncementsContent);
           right.style.alignItems = 'center';
 
           const ts = document.createElement('div');
-          ts.style.fontSize = '0.8em';
+          ts.style.position = 'absolute';
+          ts.style.right = '8px';
+          ts.style.top = '8px';
+          ts.style.fontSize = '0.75em';
           ts.style.color = '#666';
+          ts.style.textAlign = 'right';
+          ts.style.zIndex = '1100';
           ts.textContent = new Date(req.timestamp).toLocaleString();
 
-          // Status display
           const statusBadge = document.createElement('div');
           statusBadge.style.fontSize = '0.85em';
           statusBadge.style.padding = '6px 8px';
@@ -1935,7 +2189,6 @@ window.addEventListener('resize', resizeAnnouncementsContent);
           statusBadge.style.color = '#333';
           statusBadge.textContent = req.status || 'New';
 
-          // Action buttons: Declined, Assigned, Completed
           const declinedBtn = document.createElement('button');
           declinedBtn.textContent = 'Declined';
           declinedBtn.style.background = '#f0ad4e';
@@ -1944,10 +2197,14 @@ window.addEventListener('resize', resizeAnnouncementsContent);
           declinedBtn.style.padding = '6px 10px';
           declinedBtn.style.borderRadius = '6px';
           declinedBtn.style.cursor = 'pointer';
-          declinedBtn.onclick = function() { updateTransportStatus(req.id, 'Declined'); };
+          declinedBtn.onclick = function() {
+            const reason = prompt('Please enter a reason for declining this request:');
+            if (reason === null) return; // user cancelled
+            updateTransportStatus(req.id, 'Declined', { declineReason: reason });
+          };
 
           const assignedBtn = document.createElement('button');
-          assignedBtn.textContent = 'Assigned';
+          assignedBtn.textContent = 'Assign';
           assignedBtn.style.background = '#17a2b8';
           assignedBtn.style.color = '#fff';
           assignedBtn.style.border = 'none';
@@ -1966,11 +2223,24 @@ window.addEventListener('resize', resizeAnnouncementsContent);
           completedBtn.style.cursor = 'pointer';
           completedBtn.onclick = function() { updateTransportStatus(req.id, 'Completed'); };
 
-          right.appendChild(ts);
+          const archiveBtn = document.createElement('button');
+          archiveBtn.textContent = 'Archive';
+          archiveBtn.style.background = '#6c757d';
+          archiveBtn.style.color = '#fff';
+          archiveBtn.style.border = 'none';
+          archiveBtn.style.padding = '6px 10px';
+          archiveBtn.style.borderRadius = '6px';
+          archiveBtn.style.cursor = 'pointer';
+          archiveBtn.title = 'Move this request to the archive';
+          archiveBtn.onclick = function() { archiveTransportRequest(req.id); };
+          card.appendChild(ts);
           right.appendChild(statusBadge);
           right.appendChild(declinedBtn);
           right.appendChild(assignedBtn);
           right.appendChild(completedBtn);
+          if ((req.status || '') === 'Completed' || (req.status || '') === 'Declined') {
+            right.appendChild(archiveBtn);
+          }
 
           card.appendChild(left);
           card.appendChild(right);
@@ -1982,9 +2252,6 @@ window.addEventListener('resize', resizeAnnouncementsContent);
       container.appendChild(listDiv);
     }
 
-    // deletion of transport requests is disabled — use Declined status instead
-
-    // clearAllTransportRequests removed to prevent deletion of requests via the UI.
     window.renderViewer = renderViewer;
 
     function updateTransportStatus(id, status, assignedData) {
@@ -1994,7 +2261,12 @@ window.addEventListener('resize', resizeAnnouncementsContent);
           if (t.id === id) {
             t.status = status;
             if (assignedData) {
-              t.assigned = assignedData;
+              if (assignedData.shipAssignments || assignedData.ships || assignedData.securityShips || assignedData.assignedAt) {
+                t.assigned = assignedData;
+              }
+              if (assignedData.declineReason !== undefined) {
+                t.declineReason = assignedData.declineReason;
+              }
             }
           }
           return t;
@@ -2006,8 +2278,29 @@ window.addEventListener('resize', resizeAnnouncementsContent);
       }
     }
 
+    function archiveTransportRequest(id) {
+      try {
+        const all = JSON.parse(localStorage.getItem('transportRequests') || '[]');
+        const idx = all.findIndex(t => t.id === id);
+        if (idx === -1) {
+          showNotificationOverlay('<strong>Request not found</strong>', 'warning');
+          return;
+        }
+        const [item] = all.splice(idx, 1);
+        item.archivedAt = new Date().toISOString();
+        const archived = JSON.parse(localStorage.getItem('archivedTransportRequests') || '[]');
+        archived.unshift(item);
+        localStorage.setItem('archivedTransportRequests', JSON.stringify(archived));
+        localStorage.setItem('transportRequests', JSON.stringify(all));
+        renderViewer();
+        showNotificationOverlay('<strong>Archived</strong><br/>Request moved to archive.', 'success');
+      } catch (e) {
+        console.error('Failed to archive transport request', e);
+        showNotificationOverlay('<strong>Archive failed</strong><br/>' + (e && e.message ? e.message : ''), 'error');
+      }
+    }
+
     function showAssignUI(req, card) {
-      // prevent multiple assign UIs
       if (card._assigning) return;
       card._assigning = true;
 
@@ -2016,7 +2309,6 @@ window.addEventListener('resize', resizeAnnouncementsContent);
       assignDiv.style.padding = '8px';
       assignDiv.style.borderTop = '1px dashed #ccc';
 
-      // Ships multi-select (searchable)
       const shipLabel = document.createElement('label');
       shipLabel.textContent = 'Assign Ships (type to filter, click to add):';
       shipLabel.style.display = 'block';
@@ -2038,37 +2330,7 @@ window.addEventListener('resize', resizeAnnouncementsContent);
       shipList.id = shipListId;
       shipWrapper.appendChild(shipList);
 
-      // initialize multi-searchable for ships
-      createMultiSearchableDropdown(shipInputId, shipListId, transportShips);
-  // ensure clicking shows the dropdown (defensive)
-  shipInput.addEventListener('click', () => { if (shipInput.showDropdown) shipInput.showDropdown(); });
 
-      // Captains multi-select (searchable)
-      const capLabel = document.createElement('label');
-      capLabel.textContent = 'Assign Captains (type to filter, click to add):';
-      capLabel.style.display = 'block';
-      capLabel.style.fontSize = '0.9em';
-      capLabel.style.margin = '8px 0 4px 0';
-
-      const capInputId = 'assign_cap_input_' + req.id;
-      const capListId = capInputId + 'List';
-      const capWrapper = document.createElement('div');
-      capWrapper.className = 'searchable-dropdown';
-      const capInput = document.createElement('input');
-      capInput.type = 'text';
-      capInput.id = capInputId;
-      capInput.placeholder = 'Type or click to add captains';
-      capInput.autocomplete = 'off';
-      capWrapper.appendChild(capInput);
-      const capList = document.createElement('div');
-      capList.className = 'dropdown-list';
-      capList.id = capListId;
-      capWrapper.appendChild(capList);
-
-      // initialize multi-searchable for captains
-      createMultiSearchableDropdown(capInputId, capListId, captainNames);
-  // ensure clicking shows the dropdown (defensive)
-  capInput.addEventListener('click', () => { if (capInput.showDropdown) capInput.showDropdown(); });
 
       const actionRow = document.createElement('div');
       actionRow.style.marginTop = '8px';
@@ -2082,12 +2344,81 @@ window.addEventListener('resize', resizeAnnouncementsContent);
       const cancelBtn = document.createElement('button');
       cancelBtn.textContent = 'Cancel';
       cancelBtn.style.background = '#eee'; cancelBtn.style.color = '#333'; cancelBtn.style.border='1px solid #ccc'; cancelBtn.style.padding='6px 10px'; cancelBtn.style.borderRadius='6px';
-
       confirmBtn.onclick = function() {
         const selectedShips = shipInput.selectedItems ? Array.from(shipInput.selectedItems) : [];
-        const selectedCaps = capInput.selectedItems ? Array.from(capInput.selectedItems) : [];
-        updateTransportStatus(req.id, 'Assigned', { ships: selectedShips, captains: selectedCaps, assignedAt: new Date().toISOString() });
-        // remove the assign UI and refresh viewer
+        const secEl = document.getElementById('assign_sec_ship_input_' + req.id);
+        const selectedSecurity = secEl && secEl.selectedItems ? Array.from(secEl.selectedItems) : [];
+
+        const errors = [];
+        if ((!selectedShips || selectedShips.length === 0) && (!selectedSecurity || selectedSecurity.length === 0)) {
+          errors.push('No ships selected. Please select at least one cargo or security ship.');
+        }
+
+        selectedShips.forEach(ship => {
+          const shipId = ship.replace(/\s+/g,'_').replace(/[^a-zA-Z0-9_]/g,'');
+          const capInputIdLocal = 'assign_captain_' + req.id + '_' + shipId;
+          const capEl = document.getElementById(capInputIdLocal);
+          const captain = capEl ? (capEl.value || '').trim() : '';
+          const crewAmountEl = document.getElementById('assign_crew_amount_' + req.id + '_' + shipId);
+          const crewCount = crewAmountEl ? (parseInt(crewAmountEl.value,10) || 0) : 0;
+          if (crewCount > 0 && !captain) {
+            errors.push('Captain is required for ' + ship + ' when crew > 0.');
+            if (capEl) capEl.classList.add('error');
+          }
+        });
+
+        selectedSecurity.forEach(ship => {
+          const shipId = 'SEC_' + ship.replace(/\s+/g,'_').replace(/[^a-zA-Z0-9_]/g,'');
+          const capInputIdLocal = 'assign_captain_' + req.id + '_' + shipId;
+          const capEl = document.getElementById(capInputIdLocal);
+          const captain = capEl ? (capEl.value || '').trim() : '';
+          if (!captain) {
+            errors.push('Security ship "' + ship + '" requires a captain.');
+            if (capEl) capEl.classList.add('error');
+          }
+        });
+
+        if (errors.length > 0) {
+          const msg = '<strong>Please fix the following assignment issues:</strong><br/><br/>' + errors.map(e => '• ' + e).join('<br/>');
+          showNotificationOverlay(msg, 'warning');
+          return;
+        }
+
+        const shipAssignments = [];
+        selectedShips.forEach(ship => {
+          const shipId = ship.replace(/\s+/g,'_').replace(/[^a-zA-Z0-9_]/g,'');
+          const capInputIdLocal = 'assign_captain_' + req.id + '_' + shipId;
+          const capEl = document.getElementById(capInputIdLocal);
+          const captain = capEl ? (capEl.value || '').trim() : '';
+          const crewAmountEl = document.getElementById('assign_crew_amount_' + req.id + '_' + shipId);
+          const crewCount = crewAmountEl ? (parseInt(crewAmountEl.value,10) || 0) : 0;
+          const crewNames = [];
+          for (let i=1;i<=crewCount;i++){
+            const ci = document.getElementById('assign_crew_' + req.id + '_' + shipId + '_' + i);
+            if (ci && ci.value && ci.value.trim()) crewNames.push(ci.value.trim());
+          }
+          shipAssignments.push({ ship: ship, captain: captain, crew: crewNames });
+        });
+
+
+        if (selectedSecurity && selectedSecurity.length) {
+          selectedSecurity.forEach(ship => {
+            const shipId = 'SEC_' + ship.replace(/\s+/g,'_').replace(/[^a-zA-Z0-9_]/g,'');
+            const capInputIdLocal = 'assign_captain_' + req.id + '_' + shipId;
+            const capEl = document.getElementById(capInputIdLocal);
+            const captain = capEl ? (capEl.value || '').trim() : '';
+            const crewAmountEl = document.getElementById('assign_crew_amount_' + req.id + '_' + shipId);
+            const crewCount = crewAmountEl ? (parseInt(crewAmountEl.value,10) || 0) : 0;
+            const crewNames = [];
+            for (let i=1;i<=crewCount;i++){
+              const ci = document.getElementById('assign_crew_' + req.id + '_' + shipId + '_' + i);
+              if (ci && ci.value && ci.value.trim()) crewNames.push(ci.value.trim());
+            }
+            shipAssignments.push({ ship: ship, captain: captain, crew: crewNames, security: true });
+          });
+        }
+
+        updateTransportStatus(req.id, 'Assigned', { ships: selectedShips, shipAssignments: shipAssignments, securityShips: selectedSecurity, assignedAt: new Date().toISOString() });
         assignDiv.remove();
         card._assigning = false;
       };
@@ -2098,20 +2429,262 @@ window.addEventListener('resize', resizeAnnouncementsContent);
 
   assignDiv.appendChild(shipLabel);
   assignDiv.appendChild(shipWrapper);
-  assignDiv.appendChild(capLabel);
-  assignDiv.appendChild(capWrapper);
+  if ((req.securityNeeded || '').toString().toLowerCase() === 'yes') {
+    const secLabel = document.createElement('label');
+    secLabel.textContent = 'Assign Security Ships (type to filter, click to add):';
+    secLabel.style.display = 'block';
+    secLabel.style.fontSize = '0.9em';
+    secLabel.style.margin = '8px 0 4px 0';
+
+    const secInputId = 'assign_sec_ship_input_' + req.id;
+    const secListId = secInputId + 'List';
+    const secWrapper = document.createElement('div');
+    secWrapper.className = 'searchable-dropdown';
+    const secInput = document.createElement('input');
+    secInput.type = 'text';
+    secInput.id = secInputId;
+    secInput.placeholder = 'Type or click to add security ships';
+    secInput.autocomplete = 'off';
+    secWrapper.appendChild(secInput);
+    const secList = document.createElement('div');
+    secList.className = 'dropdown-list';
+    secList.id = secListId;
+    secWrapper.appendChild(secList);
+
+    assignDiv.appendChild(secLabel);
+    assignDiv.appendChild(secWrapper);
+  }
+
   assignDiv.appendChild(actionRow);
 
   card.appendChild(assignDiv);
+  try {
+    createMultiSearchableDropdown(shipInputId, shipListId, transportShips);
+    shipInput.addEventListener('click', () => { if (shipInput.showDropdown) shipInput.showDropdown(); });
+  } catch (e) { console.warn('Failed to init ship multi-dropdown', e); }
+  try {
+    const secInputEl = document.getElementById('assign_sec_ship_input_' + req.id);
+    if (secInputEl) {
+      createMultiSearchableDropdown('assign_sec_ship_input_' + req.id, 'assign_sec_ship_input_' + req.id + 'List', securityShips);
+      secInputEl.addEventListener('click', () => { if (secInputEl.showDropdown) secInputEl.showDropdown(); });
+    }
+  } catch (e) { console.warn('Failed to init security multi-dropdown', e); }
+  const perShipContainerId = 'assign_ships_container_' + req.id;
+  let perShipContainer = document.getElementById(perShipContainerId);
+  if (!perShipContainer) {
+    perShipContainer = document.createElement('div');
+    perShipContainer.id = perShipContainerId;
+    perShipContainer.style.marginTop = '8px';
+    perShipContainer.style.display = 'block';
+    perShipContainer.style.width = '100%';
+    assignDiv.insertBefore(perShipContainer, actionRow);
+  }
+
+  function sanitizeId(name) { return name.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, ''); }
+
+  function openModalForShip(ship, isSecurity) {
+    const shipKey = (isSecurity ? 'SEC_' : '') + sanitizeId(ship);
+    const holderId = 'assign_inputs_holder_' + req.id + '_' + shipKey;
+    if (document.getElementById(holderId)) return;
+
+    const modalId = 'assign_ship_modal_' + req.id + '_' + shipKey;
+    if (document.getElementById(modalId)) {
+      document.getElementById(modalId).style.display = 'flex';
+      return;
     }
 
-    // Multi-select searchable dropdown helper: stores selected items on input.selectedItems (array)
+    const modal = document.createElement('div');
+    modal.id = modalId;
+    modal.className = 'assignment-modal-backdrop';
+
+    const panel = document.createElement('div');
+    panel.className = 'assignment-modal-panel';
+
+    const title = document.createElement('h3');
+    title.textContent = (isSecurity ? 'Security Ship' : 'Cargo Ship') + ' Assignment — ' + ship;
+    title.style.marginTop = '0';
+    panel.appendChild(title);
+
+    const capInputIdLocal = 'assign_captain_' + req.id + '_' + shipKey;
+    const capListIdLocal = capInputIdLocal + '_List';
+    let capInputLocal = document.getElementById(capInputIdLocal);
+    let capListLocal = document.getElementById(capListIdLocal);
+    if (!capInputLocal) {
+      capInputLocal = document.createElement('input');
+      capInputLocal.type = 'text'; capInputLocal.id = capInputIdLocal; capInputLocal.placeholder = 'Click to select captain...'; capInputLocal.autocomplete='off';
+      capListLocal = document.createElement('div'); capListLocal.className = 'dropdown-list'; capListLocal.id = capListIdLocal;
+    }
+    const capLabelEl = document.createElement('div'); capLabelEl.textContent = 'Captain:'; capLabelEl.style.fontWeight = '700'; capLabelEl.style.marginTop = '8px';
+    panel.appendChild(capLabelEl);
+    const capWrap = document.createElement('div'); capWrap.className = 'searchable-dropdown'; capWrap.appendChild(capInputLocal); capWrap.appendChild(capListLocal);
+    panel.appendChild(capWrap);
+
+    const crewLabelEl = document.createElement('div'); crewLabelEl.textContent = 'Crew Amount:'; crewLabelEl.style.fontWeight = '700'; crewLabelEl.style.marginTop = '12px';
+    panel.appendChild(crewLabelEl);
+    let crewInput = document.getElementById('assign_crew_amount_' + req.id + '_' + shipKey);
+    if (!crewInput) {
+      crewInput = document.createElement('input');
+      crewInput.type = 'number'; crewInput.min='0'; crewInput.max='20'; crewInput.step='1'; crewInput.value='0'; crewInput.id = 'assign_crew_amount_' + req.id + '_' + shipKey;
+    }
+    crewInput.style.width = '120px'; crewInput.style.marginTop = '6px';
+    panel.appendChild(crewInput);
+
+    const crewNamesContainer = document.getElementById('assign_crew_names_' + req.id + '_' + shipKey) || document.createElement('div');
+    crewNamesContainer.id = 'assign_crew_names_' + req.id + '_' + shipKey;
+    crewNamesContainer.style.marginTop = '10px';
+    panel.appendChild(crewNamesContainer);
+
+    function renderCrewNames() {
+      const n = parseInt(crewInput.value,10) || 0;
+      crewNamesContainer.innerHTML = '';
+      for (let i=1;i<=n;i++){
+        let ci = document.getElementById('assign_crew_' + req.id + '_' + shipKey + '_' + i);
+        if (!ci) {
+          ci = document.createElement('input'); ci.type='text'; ci.placeholder = 'Crew name ' + i; ci.id = 'assign_crew_' + req.id + '_' + shipKey + '_' + i; ci.style.display='block'; ci.style.marginTop='6px'; ci.style.width='100%';
+        }
+        crewNamesContainer.appendChild(ci);
+      }
+    }
+    renderCrewNames();
+    crewInput.addEventListener('input', renderCrewNames);
+
+    const footer = document.createElement('div'); footer.style.display='flex'; footer.style.justifyContent='flex-end'; footer.style.gap='8px'; footer.style.marginTop='14px';
+    const saveBtn = document.createElement('button'); saveBtn.textContent = 'Save'; saveBtn.style.background = '#17a2b8'; saveBtn.style.color='#fff'; saveBtn.style.padding='8px 12px'; saveBtn.style.border='none'; saveBtn.style.borderRadius='6px';
+    const cancelBtnModal = document.createElement('button'); cancelBtnModal.textContent = 'Cancel'; cancelBtnModal.style.padding='8px 12px'; cancelBtnModal.style.border='1px solid #ccc'; cancelBtnModal.style.borderRadius='6px';
+    footer.appendChild(cancelBtnModal); footer.appendChild(saveBtn); panel.appendChild(footer);
+
+    modal.appendChild(panel);
+    document.body.appendChild(modal);
+
+    try { initializeCaptainDropdown(capInputLocal, capListLocal, ship); } catch (e) { console.warn('Failed to init captain dropdown in modal', e); }
+
+    cancelBtnModal.onclick = function() { modal.remove(); };
+    saveBtn.onclick = function() {
+      const holder = document.createElement('div');
+      holder.id = holderId;
+      holder.style.display = 'none';
+
+      try {
+        if (capInputLocal.parentNode && capInputLocal.parentNode !== holder) holder.appendChild(capInputLocal);
+        if (capListLocal && capListLocal.parentNode && capListLocal.parentNode !== holder) holder.appendChild(capListLocal);
+        if (crewInput.parentNode && crewInput.parentNode !== holder) holder.appendChild(crewInput);
+        if (crewNamesContainer.parentNode && crewNamesContainer.parentNode !== holder) holder.appendChild(crewNamesContainer);
+      } catch (e) { /* ignore */ }
+
+      const summaryId = 'assigned_summary_' + req.id + '_' + shipKey;
+      let summary = document.getElementById(summaryId);
+      if (!summary) {
+        summary = document.createElement('div');
+        summary.id = summaryId;
+        summary.style.border = '1px solid #ddd';
+        summary.style.padding = '8px';
+        summary.style.borderRadius = '6px';
+        summary.style.marginBottom = '6px';
+        summary.style.background = '#f8f9f9';
+        summary.style.display = 'flex';
+        summary.style.justifyContent = 'space-between';
+        summary.style.alignItems = 'center';
+
+        const left = document.createElement('div');
+        left.style.display = 'flex';
+        left.style.flexDirection = 'column';
+        left.style.flex = '1';
+        const nameLine = document.createElement('div'); nameLine.style.fontWeight = '700'; nameLine.textContent = ship; left.appendChild(nameLine);
+        const metaLine = document.createElement('div'); metaLine.style.fontSize='0.9em'; metaLine.style.color='#333'; metaLine.id = summaryId + '_meta'; left.appendChild(metaLine);
+        summary.appendChild(left);
+
+        const right = document.createElement('div'); right.style.display='flex'; right.style.gap='8px';
+        const removeBtn = document.createElement('button'); removeBtn.textContent = 'Remove'; removeBtn.style.background='#ed4245'; removeBtn.style.color='#fff'; removeBtn.style.border='none'; removeBtn.style.padding='6px 8px'; removeBtn.style.borderRadius='6px';
+        removeBtn.onclick = function() {
+          if (shipInput.selectedItems) shipInput.selectedItems = shipInput.selectedItems.filter(x=>x!==ship);
+          const chipContainer = document.getElementById(shipInputId + '_chips'); if (chipContainer) chipContainer.querySelectorAll('.chip').forEach(ch => { if (ch.textContent === ship) ch.remove(); });
+        
+          const h = document.getElementById(holderId); if (h) h.remove();
+          const s = document.getElementById(summaryId); if (s) s.remove();
+        };
+        right.appendChild(removeBtn);
+        summary.appendChild(right);
+      }
+
+      const capNow = (document.getElementById(capInputIdLocal) ? document.getElementById(capInputIdLocal).value : '') || '';
+      const crewNow = (document.getElementById('assign_crew_amount_' + req.id + '_' + shipKey) ? (parseInt(document.getElementById('assign_crew_amount_' + req.id + '_' + shipKey).value,10)||0) : 0);
+      const metaEl = document.getElementById(summaryId + '_meta');
+      if (metaEl) metaEl.textContent = (capNow ? ('Captain: ' + capNow) : 'No captain') + (crewNow ? ('  •  Crew: ' + crewNow) : '');
+
+      perShipContainer.appendChild(summary);
+      perShipContainer.appendChild(holder);
+
+      modal.remove();
+    };
+  }
+
+  function renderPerShipAssignments() {
+    perShipContainer.innerHTML = '';
+    const existingHolders = Array.from(document.querySelectorAll('[id^="assign_inputs_holder_' + req.id + '_"]'));
+    if (existingHolders.length === 0) {
+      perShipContainer.innerHTML = '<div style="font-size:0.9em;color:#666;margin-top:6px;">No ships assigned yet — select a ship to open the assignment popup.</div>';
+      return;
+    }
+    existingHolders.forEach(holder => {
+      const parts = holder.id.split('_' + req.id + '_');
+      const shipKey = parts[1];
+      const shipLabel = shipKey.replace(/^SEC_/, '').replace(/_/g,' ');
+      const summaryId = 'assigned_summary_' + req.id + '_' + shipKey;
+      const summary = document.getElementById(summaryId);
+      if (summary) perShipContainer.appendChild(summary);
+      perShipContainer.appendChild(holder);
+    });
+  }
+
+  renderPerShipAssignments();
+
+  let lastSelectedObj = { cargo: shipInput.selectedItems ? Array.from(shipInput.selectedItems) : [], sec: (document.getElementById('assign_sec_ship_input_' + req.id) ? (document.getElementById('assign_sec_ship_input_' + req.id).selectedItems || []) : []) };
+  let lastSelected = JSON.stringify(lastSelectedObj);
+  const pollInterval = setInterval(() => {
+    if (!document.body.contains(assignDiv)) { clearInterval(pollInterval); return; }
+    const curCargo = shipInput.selectedItems ? Array.from(shipInput.selectedItems) : [];
+    const secElNow = document.getElementById('assign_sec_ship_input_' + req.id);
+    const curSec = secElNow && secElNow.selectedItems ? Array.from(secElNow.selectedItems) : [];
+    const curObj = { cargo: curCargo, sec: curSec };
+    const cur = JSON.stringify(curObj);
+    if (cur !== lastSelected) {
+      try {
+        const prev = JSON.parse(lastSelected);
+        const addedCargo = curCargo.filter(s => !(prev.cargo || []).includes(s));
+        const removedCargo = (prev.cargo || []).filter(s => !curCargo.includes(s));
+        const addedSec = curSec.filter(s => !(prev.sec || []).includes(s));
+        const removedSec = (prev.sec || []).filter(s => !curSec.includes(s));
+
+        addedCargo.forEach(s => { openModalForShip(s, false); });
+        addedSec.forEach(s => { openModalForShip(s, true); });
+
+        removedCargo.forEach(s => {
+          const key = sanitizeId(s);
+          const holder = document.getElementById('assign_inputs_holder_' + req.id + '_'+ key);
+          if (holder) holder.remove();
+          const summary = document.getElementById('assigned_summary_' + req.id + '_' + key);
+          if (summary) summary.remove();
+        });
+        removedSec.forEach(s => {
+          const key = 'SEC_' + sanitizeId(s);
+          const holder = document.getElementById('assign_inputs_holder_' + req.id + '_'+ key);
+          if (holder) holder.remove();
+          const summary = document.getElementById('assigned_summary_' + req.id + '_' + key);
+          if (summary) summary.remove();
+        });
+      } catch (e) { /* fallback */ }
+
+      lastSelected = cur;
+      renderPerShipAssignments();
+    }
+  }, 300);
+    }
+
     function createMultiSearchableDropdown(inputId, listId, items) {
       const input = document.getElementById(inputId);
       const list = document.getElementById(listId);
       if (!input || !list) return;
 
-      // Create a chips container to display selected items visually
       let chips = document.getElementById(inputId + '_chips');
       if (!chips) {
         chips = document.createElement('div');
@@ -2172,7 +2745,6 @@ window.addEventListener('resize', resizeAnnouncementsContent);
           });
           chips.appendChild(chip);
         });
-        // update input placeholder to hint
         if (input.selectedItems.length === 0) {
           input.placeholder = input.getAttribute('data-default-placeholder') || '';
         } else {
@@ -2191,23 +2763,19 @@ window.addEventListener('resize', resizeAnnouncementsContent);
       });
 
       input.addEventListener('focus', () => { filtered = items.filter(i=>!input.selectedItems.includes(i)); renderList(); show(); });
-  // also show on click to support clicking (not only typing/focus)
   input.addEventListener('click', (e) => { e.stopPropagation(); filtered = items.filter(i=>!input.selectedItems.includes(i)); renderList(); show(); input.focus(); });
       input.addEventListener('blur', () => { hide(); });
 
       input.addEventListener('keydown', (e) => {
         if (e.key === 'Backspace' && input.value === '') {
-          // remove last selected
           input.selectedItems.pop();
           updateChips();
           renderList();
         }
       });
 
-      // initial render
       renderList();
       updateChips();
-      // expose a small helper to show the dropdown externally
       input.showDropdown = function() { filtered = items.filter(i=>!input.selectedItems.includes(i)); renderList(); show(); };
     }
 
@@ -2325,7 +2893,6 @@ window.addEventListener('resize', resizeAnnouncementsContent);
       }
     });
 
-    // Populate requester select in transport form with captain names
     window.addEventListener('DOMContentLoaded', function() {
       const trRequester = document.getElementById('tr_requester');
       if (trRequester && typeof captainNames !== 'undefined') {
@@ -2335,6 +2902,10 @@ window.addEventListener('resize', resizeAnnouncementsContent);
           opt.textContent = c;
           trRequester.appendChild(opt);
         });
+  const otherOpt = document.createElement('option');
+  otherOpt.value = '__other__';
+  otherOpt.textContent = 'Other';
+  trRequester.appendChild(otherOpt);
       }
     });
 
@@ -2632,7 +3203,33 @@ window.addEventListener('resize', resizeAnnouncementsContent);
           const checkbox = document.createElement('input');
           checkbox.type = 'checkbox';
           checkbox.checked = selectedShips.includes(ship);
-          checkbox.addEventListener('click', (e) => e.stopPropagation());
+          checkbox.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (ship === 'None') {
+              if (selectedShips.includes('None')) {
+                selectedShips = [];
+              } else {
+                selectedShips = ['None'];
+              }
+            } else {
+              if (selectedShips.includes('None')) {
+                selectedShips = selectedShips.filter(s => s !== 'None');
+              }
+              if (selectedShips.includes(ship)) {
+                selectedShips = selectedShips.filter(s => s !== ship);
+              } else {
+                selectedShips.push(ship);
+              }
+            }
+            updateInputDisplay();
+            renderShipItems(shipsToShow);
+            input.classList.remove('error');
+            toggleSecurityShipsOther();
+            const validShips = selectedShips.filter(s => s !== 'None' && s !== 'Other');
+            updateSecurityCaptainDropdowns(validShips);
+            calculateFormProgress();
+          });
           
           const label = document.createElement('span');
           label.textContent = ship;
@@ -2795,7 +3392,6 @@ window.addEventListener('resize', resizeAnnouncementsContent);
         }
       });
 
-      // Add input listeners to update totals automatically
       document.querySelectorAll('.manifest-scu, .manifest-uec').forEach(input => {
         input.addEventListener('input', updateManifestTotals);
       });
@@ -3107,9 +3703,20 @@ window.addEventListener('resize', resizeAnnouncementsContent);
         "sadfish", "Efazer"
       ];
       const captainsWithOther = [...captainsArray, "Other"];
-      
+      let floatList = document.createElement('div');
+      floatList.className = 'dropdown-list floating-captain-list';
+      floatList.style.position = 'absolute';
+      floatList.style.zIndex = '24000';
+      floatList.style.display = 'none';
+      floatList.style.background = '#e2e2e2';
+      floatList.style.border = '1px solid #781d15';
+      floatList.style.boxSizing = 'border-box';
+      floatList.style.maxHeight = '40vh';
+      floatList.style.overflowY = 'auto';
+      document.body.appendChild(floatList);
+
       function renderItems(captains) {
-        list.innerHTML = '';
+        floatList.innerHTML = '';
         captains.forEach(captain => {
           const item = document.createElement('div');
           item.className = 'dropdown-item';
@@ -3120,85 +3727,79 @@ window.addEventListener('resize', resizeAnnouncementsContent);
           item.style.color = '#230e09';
           item.style.fontSize = '14px';
           item.textContent = captain;
-          
-          item.addEventListener('mouseenter', () => {
-            item.style.background = '#d0d0d0';
-          });
-          
-          item.addEventListener('mouseleave', () => {
-            item.style.background = '#e2e2e2';
-          });
-          
+
+          item.addEventListener('mouseenter', () => { item.style.background = '#d0d0d0'; });
+          item.addEventListener('mouseleave', () => { item.style.background = '#e2e2e2'; });
+
           item.addEventListener('click', () => {
-            if (captain === "Other") {
+            if (captain === 'Other') {
               const customName = prompt('Enter captain name for ' + shipName + ':');
-              if (customName && customName.trim()) {
-                input.value = customName.trim();
-              } else {
-                input.value = "";
-              }
+              if (customName && customName.trim()) input.value = customName.trim(); else input.value = '';
             } else {
               input.value = captain;
             }
-            list.style.display = 'none';
+            hideDropdown();
             input.classList.remove('error');
             calculateFormProgress();
             showGenerateButtonOnChange();
-            
             const shipId = input.id.replace('securityCaptain_', '');
             updateSecurityShipSectionStyling(shipId);
           });
-          
-          list.appendChild(item);
+
+          floatList.appendChild(item);
         });
       }
-      
+
+      function positionFloat() {
+        const rect = input.getBoundingClientRect();
+        const scrollY = window.scrollY || window.pageYOffset;
+        const scrollX = window.scrollX || window.pageXOffset;
+        const left = rect.left + scrollX;
+        const belowTop = rect.bottom + scrollY;
+        floatList.style.minWidth = (rect.width) + 'px';
+        floatList.style.left = left + 'px';
+        floatList.style.top = belowTop + 'px';
+        const overflowRight = (left + floatList.offsetWidth) - window.innerWidth;
+        if (overflowRight > 0) {
+          floatList.style.left = Math.max(8, left - overflowRight - 8) + 'px';
+        }
+      }
+
       function showDropdown() {
         renderItems(captainsWithOther);
-        list.style.display = 'block';
+        floatList.style.display = 'block';
+        requestAnimationFrame(positionFloat);
       }
-      
+
       function hideDropdown() {
-        setTimeout(() => {
-          list.style.display = 'none';
-        }, 200);
+        setTimeout(() => { if (floatList) floatList.style.display = 'none'; }, 100);
       }
-      
+
       function filterCaptains(searchTerm) {
         const term = searchTerm.toLowerCase();
-        return captainsWithOther.filter(captain => 
-          captain.toLowerCase().includes(term)
-        );
+        return captainsWithOther.filter(captain => captain.toLowerCase().includes(term));
       }
-      
-      input.addEventListener('click', (e) => {
-        e.stopPropagation();
-        showDropdown();
-      });
-      
-      input.addEventListener('focus', () => {
-        showDropdown();
-      });
-      
+
+      input.addEventListener('click', (e) => { e.stopPropagation(); showDropdown(); });
+      input.addEventListener('focus', () => { showDropdown(); });
       input.addEventListener('input', (e) => {
         const searchTerm = e.target.value;
         const filtered = searchTerm.length === 0 ? captainsWithOther : filterCaptains(searchTerm);
         renderItems(filtered);
-        list.style.display = 'block';
+        floatList.style.display = 'block';
+        requestAnimationFrame(positionFloat);
         calculateFormProgress();
         showGenerateButtonOnChange();
       });
-      
-      input.addEventListener('blur', () => {
-        hideDropdown();
-      });
-      
+
+      input.addEventListener('blur', () => { hideDropdown(); });
+
       document.addEventListener('click', (e) => {
-        if (!input.contains(e.target) && !list.contains(e.target)) {
-          list.style.display = 'none';
+        if (!input.contains(e.target) && !floatList.contains(e.target)) {
+          hideDropdown();
         }
       });
-      
+
       renderItems(captainsWithOther);
     }
     
@@ -3257,6 +3858,24 @@ window.addEventListener('resize', resizeAnnouncementsContent);
       renderManifestLines();
       renderHistory();
       calculateFormProgress();
+
+      (function initViewerControls(){
+        const viewerSort = document.getElementById('viewer_sort');
+        const viewerSearch = document.getElementById('viewer_search');
+        const viewerSearchBtn = document.getElementById('viewer_search_btn');
+        const viewerClearBtn = document.getElementById('viewer_clear_btn');
+
+        if (viewerSort) viewerSort.addEventListener('change', renderViewer);
+        if (viewerSearch) viewerSearch.addEventListener('input', function(e){ if (this.value.length === 0) renderViewer(); });
+        if (viewerSearch) viewerSearch.addEventListener('keyup', function(e){ if (e.key === 'Enter') renderViewer(); });
+        if (viewerSearchBtn) viewerSearchBtn.addEventListener('click', renderViewer);
+        if (viewerClearBtn) viewerClearBtn.addEventListener('click', function(){
+          if (viewerSearch) viewerSearch.value = '';
+          if (viewerSort) viewerSort.value = 'date_desc';
+          renderViewer();
+        });
+
+      })();
       
       const formElements = document.querySelectorAll('input, select, textarea');
       formElements.forEach(element => {
@@ -3305,13 +3924,12 @@ window.addEventListener('resize', resizeAnnouncementsContent);
       if (!dtString) return "";
       const date = new Date(dtString);
       if (isNaN(date.getTime())) return "";
-      // Add 930 years (Updates to SC time automatically)
       const yearsToAdd = 930;
       date.setFullYear(date.getFullYear() + yearsToAdd);
       const unix = Math.floor(date.getTime() / 1000);
       return '<t:' + unix + ':f>';
     }
-    // Ship Message Links no longer using threads cause spartan is lazy
+    // Ship Message Links no longer using threads cause spartan is lazy - !!DEPRECIATED FEATURE!!
     const shipLinks = {
       "BRHS Seastrom": "https://discord.com/channels/900478857436606535/1391878505905524817/1404322180329898046",
       "AACS Judgements Bow": "https://discord.com/channels/900478857436606535/1391878505905524817/1404319407106293843",
@@ -3397,7 +4015,6 @@ window.addEventListener('resize', resizeAnnouncementsContent);
       
       document.body.appendChild(overlay);
       
-      // Add event listeners
       document.getElementById('confirmBtn').addEventListener('click', () => {
         overlay.remove();
         if (onConfirm) onConfirm();
@@ -5520,7 +6137,6 @@ async function sendToDiscord() {
     if (response.ok) {
       hideLoadingOverlay();
       
-      // Save to history only after successful Discord send
       saveSuccessfulManifestToHistory();
       
       showLoadingMessage("✅ Successfully sent to Brute Haul Discord!<br><br>Your manifest has been posted and logged.", 2000);
@@ -6075,7 +6691,7 @@ async function logErrorToGitHub(errorCode, errorMsg, fullError, stackTrace, addi
   } catch (logError) {
     console.error('❌ GitHub error logging failed:', logError);
   }
-} // End of logErrorToGitHub function
+}
 
 function showErrorReportLink() {
   const lastErrorIssue = localStorage.getItem('lastErrorIssue');
