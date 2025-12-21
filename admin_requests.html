@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin - Transport Requests</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: linear-gradient(135deg, #e2e2e2 0%, #d0d0d0 100%);
+      color: #230e09;
+      min-height: 100vh;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .main-container {
+      max-width: 95%;
+      width: 100%;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+      padding: 0 20px;
+    }
+    .page-header {
+      background: linear-gradient(135deg, #781d15 0%, #5a1510 100%);
+      border-radius: 16px;
+      padding: 32px;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+      margin-bottom: 8px;
+    }
+    .page-header h1 {
+      color: #e2e2e2;
+      margin: 0;
+      font-size: 2.5em;
+      font-weight: 300;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    .card {
+      background: linear-gradient(145deg, #ffffff 0%, #f8f8f8 100%);
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+      border: 1px solid rgba(157, 117, 35, 0.2);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      width: 100%;
+      box-sizing: border-box;
+      margin-bottom: 24px;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+    }
+    .error {
+      color: #a33;
+      margin: 18px 0;
+      font-weight: bold;
+    }
+    .requests-list {
+      margin-top: 24px;
+    }
+    pre {
+      background: #f0f0f0;
+      border-radius: 6px;
+      padding: 16px;
+      overflow-x: auto;
+      color: #230e09;
+      font-size: 1.1em;
+    }
+    .admin-logo {
+      max-width: 160px;
+      width: 100%;
+      margin-bottom: 18px;
+      border-radius: 8px;
+      background: transparent;
+    }
+  </style>
+</head>
+<body>
+  <div class="main-container">
+    <div class="page-header">
+      <img src="https://github.com/DyslexicNerd01/Brute-Haul-Cargo-Log/raw/main/BRHS-Logo.png" alt="BruteHaul Logo" class="admin-logo">
+      <h1>Admin: Transport Requests</h1>
+    </div>
+    <div class="card">
+      <div id="adminRequestsContent">Loading...</div>
+    </div>
+  </div>
+  <script>
+    function showError(msg) {
+      document.getElementById('adminRequestsContent').innerHTML = `
+        <div style="text-align:center;padding:40px 0;">
+          <img src="https://cdn-icons-png.flaticon.com/512/595/595067.png" alt="Error" style="width:80px;height:80px;opacity:0.7;margin-bottom:18px;">
+          <h2 style="color:#781d15;margin-bottom:12px;">Access Denied</h2>
+          <div class="error">${msg}</div>
+          <p style="color:#555;margin-top:18px;">You must log in from the main page to access this admin panel.</p>
+        </div>
+      `;
+    }
+    if (sessionStorage.getItem('adminAuthed') !== '1') {
+      showError('You are not authorized to view this page.');
+    } else {
+      fetch('/cgi-bin/list_requests.py', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'password=password'
+      })
+      .then(async r => {
+        let data;
+        try { data = await r.json(); } catch (e) { data = null; }
+        if (!r.ok || !data) throw new Error('HTTP error or invalid JSON');
+        return data;
+      })
+      .then(data => {
+        if (Array.isArray(data) && data.length > 0) {
+          document.getElementById('adminRequestsContent').innerHTML = '<div class="requests-list"><pre>' + JSON.stringify(data, null, 2) + '</pre></div>';
+        } else if (Array.isArray(data) && data.length === 0) {
+          document.getElementById('adminRequestsContent').innerHTML = `
+            <div style="text-align:center;padding:40px 0;">
+              <img src="https://cdn-icons-png.flaticon.com/512/595/595067.png" alt="No Data" style="width:80px;height:80px;opacity:0.7;margin-bottom:18px;">
+              <h2 style="color:#781d15;margin-bottom:12px;">No Transport Requests Found</h2>
+              <p style="color:#555;">All submitted requests will appear here for admin review.<br>More admin features coming soon!</p>
+            </div>
+          `;
+        } else if (data && data.error) {
+          showError(data.error);
+        } else {
+          showError('No requests found or unknown error.');
+        }
+      })
+      .catch(err => {
+        document.getElementById('adminRequestsContent').innerHTML = `
+          <div style="text-align:center;padding:40px 0;">
+            <img src="https://cdn-icons-png.flaticon.com/512/595/595067.png" alt="Offline" style="width:80px;height:80px;opacity:0.7;margin-bottom:18px;">
+            <h2 style="color:#781d15;margin-bottom:12px;">Server Offline or Unreachable</h2>
+            <p style="color:#555;">You are still logged in as admin.<br>Server features will return when the server is back online.<br>More admin features coming soon!</p>
+          </div>
+        `;
+      });
+    }
+  </script>
+</body>
+</html>
