@@ -1,3 +1,78 @@
+
+  <!-- Admin Lock Icon (top right) -->
+  <div id="adminLockContainer" style="position:fixed;top:24px;right:3vw;z-index:1000;">
+    <button id="adminLockBtn" title="Admin Login" style="background:transparent;border:none;cursor:pointer;padding:0;outline:none;">
+      <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#781d15" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    </button>
+  </div>
+
+  <!-- Admin Requests Modal -->
+  <div id="adminRequestsModal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.45);z-index:2000;align-items:center;justify-content:center;">
+    <div style="background:#fff;padding:32px 24px 24px 24px;border-radius:12px;max-width:800px;width:95vw;max-height:90vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,0.18);position:relative;">
+      <button id="closeAdminModal" style="position:absolute;top:12px;right:12px;background:transparent;border:none;font-size:1.8em;color:#781d15;cursor:pointer;">&times;</button>
+      <h2 style="color:#781d15;margin-top:0;">Admin: Transport Requests</h2>
+      <div id="adminRequestsContent" style="margin-top:18px;min-height:60px;"></div>
+    </div>
+  </div>
+  <script>
+  // Admin lock icon logic
+  const adminLockBtn = document.getElementById('adminLockBtn');
+  const adminModal = document.getElementById('adminRequestsModal');
+  const closeAdminModal = document.getElementById('closeAdminModal');
+  const adminContent = document.getElementById('adminRequestsContent');
+  adminLockBtn.addEventListener('click', function() {
+    const password = prompt('Enter admin password to view transport requests:');
+    if (!password) return;
+    // Try to check password with server, but allow offline login
+    let offlineAuthed = false;
+    const allowOffline = (password === 'password');
+    fetch('/cgi-bin/list_requests.py', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: 'password=' + encodeURIComponent(password)
+    })
+    .then(async r => {
+      let data;
+      try { data = await r.json(); } catch (e) { data = null; }
+      if (Array.isArray(data) || (data && Array.isArray(data.requests))) {
+        sessionStorage.setItem('adminAuthed', '1');
+        window.location.href = 'admin_requests.html';
+      } else if (data && data.error) {
+        if (allowOffline) {
+          sessionStorage.setItem('adminAuthed', '1');
+          window.location.href = 'admin_requests.html';
+        } else {
+          alert('Access denied: ' + data.error);
+        }
+      } else {
+        if (allowOffline) {
+          sessionStorage.setItem('adminAuthed', '1');
+          window.location.href = 'admin_requests.html';
+        } else {
+          alert('Access denied.');
+        }
+      }
+    })
+    .catch(() => {
+      if (allowOffline) {
+        sessionStorage.setItem('adminAuthed', '1');
+        window.location.href = 'admin_requests.html';
+      } else {
+        alert('Access denied or error connecting to server.');
+      }
+    });
+  });
+  closeAdminModal.addEventListener('click', function() {
+    adminModal.style.display = 'none';
+    adminContent.innerHTML = '';
+  });
+  window.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      adminModal.style.display = 'none';
+      adminContent.innerHTML = '';
+    }
+  });
+  </script>
 <!doctype html>
 <html lang="en">
 <head>
@@ -1002,10 +1077,8 @@
       visibility: visible !important;
       opacity: 1 !important;
       height: auto !important;
-      min-height: 200px !important;
       z-index: 1000 !important;
-      overflow: auto;
-      max-height: calc(100vh - 200px);
+      overflow: visible;
     }
     
     #historyViewerTab.active {
@@ -1017,7 +1090,7 @@
       visibility: visible !important;
       opacity: 1 !important;
       height: auto !important;
-      min-height: 200px !important;
+      overflow: visible;
     }
     
     #discordOutputContainer {
@@ -1137,7 +1210,1262 @@
     .assignment-modal-panel .searchable-dropdown { position: relative; }
     .assignment-modal-panel .dropdown-list { left: 0; right: 0; }
   </style>
-  <script src="locations.js"></script>
+  <script>
+  // Complete list of all Star Citizen universe locations (inlined from locations.js)
+  const locations = [
+    // === NUMERICAL & SPECIAL CHARACTERS ===
+    "2930-CRU983",
+  "78 Leonis (star)",
+  // === MAJOR LANDING ZONES & TRADING HUBS ===
+  "Aaron Halo",
+  "Aberdeen",
+  "Abyss",
+  "Adir",
+  "Adira Falls",
+  "Administration Office",
+  "Aemilia",
+  "Aero",
+  "Afterlife",
+  "Ail'ka (star)",
+  "Ail'ka - Kyuk'ya",
+  "Ail'ka - T.āl",
+  "Ail'ka - Yā'mon",
+  "Ail'ka Belt Alpha",
+  "Ail'ka Belt Beta",
+  "Akiro Cluster",
+  "Ako's Return",
+  "Ambitious Dream Station",
+  "Angeli",
+  "Anóna",
+  "ArcCorp Mining Area 022",
+  "ArcCorp Mining Area 045",
+  "ArcCorp Mining Area 048",
+  "ArcCorp Mining Area 056",
+  "ArcCorp Mining Area 061",
+  "ArcCorp Mining Area 073",
+  "ArcCorp Mining Area 141",
+  "ArcCorp Mining Area 157",
+  "ArcCorp Processing Center 115",
+  "ArcCorp Processing Center 123",
+  "Archangel Station",
+  "Archibald Station",
+  "Archon Base",
+  "Area04",
+  "Area06",
+  "Area11",
+  "Area17",
+  "Area18",
+  "Area20",
+  "Aremis",
+  "Arial",
+  "Arid Reach",
+  "Ariel",
+  "Armitage (planet)",
+  "Ashburn Channel Aid Shelter",
+  "Ashana",
+  "Ashland",
+  "Aston Ridge Aid Shelter",
+  "Aspire Grand",
+  "Astor's Clearing",
+  "Asura",
+  "Attritus OLP",
+  "Attritus PAF-I",
+  "Attritus PAF-II",
+  "Attritus PAF-III",
+  "August Dunlow Spaceport",
+  "Aydo",
+  // === B LOCATIONS ===
+  "Bacchus - Garron",
+  "Bacchus - Geddon", 
+  "Bacchus A",
+  "Bacchus B",
+  "Bacchus Belt Alpha",
+  "Bacchus Flotilla",
+  "Bacchus I",
+  "Bacchus II",
+  "Bacchus III",
+  "Baijini Point",
+  "Baker - Kiel",
+  "Baker - Osiris",
+  "Baker - Tayac",
+  "Baker - Th.us'ūng",
+  "Baker - Yā'mon",
+  "Baker A",
+  "Baker B",
+  "Baker I",
+  "Baker II",
+  "Baker III",
+  "Baker IV",
+  "Balto's Blind",
+  "Banshee (star)",
+  "Banshee - Fora",
+  "Banshee - Garron",
+  "Banshee - Leir",
+  "Banshee - Tamsa",
+  "Banshee - Yulin",
+  "Banshee I",
+  "Banshee II",
+  "Banshee IV",
+  "Banu Station",
+  "Bareton",
+  "Barton Flats Aid Shelter",
+  "Benny Henge",
+  "Bennyhenge",
+  "Benson Mining Outpost",
+  "Bevic Convention Center",
+  "Blackrock Exchange",
+  "Blighter's Run",
+  "Bloodshot Ridge",
+  "Bloom",
+  "Bombora",
+  "Boondoggle",
+  "Borea",
+  "Bountiful Harvest Hydroponics",
+  "Branaugh (star)",
+  "Branaugh - Chronos",
+  "Branaugh Belt Alpha",
+  "Branaugh I",
+  "Branaugh II", 
+  "Branaugh III",
+  "Bremen (star)",
+  "Bremen - Kallis",
+  "Bremen - Nyx",
+  "Bremen - Tanga",
+  "Bremen - Vega",
+  "Bremen I",
+  "Bremen III",
+  "Bremen IV",
+  "Brentworth Care Center",
+  "Brio's Breaker Yard",
+  "Broken Moon",
+  "Broken Patch",
+  "Bruder",
+  "Buckets",
+  "Bud's Growery",
+  "Bueno Ravine",
+  "Bullock's Reach",
+  "Buloi Sataball Arena",
+  "Burnout",
+  // === C LOCATIONS ===
+  "Café Musain",
+  "Calhoun Pass Emergency Shelter",
+  "Caliban (star)",
+  "Caliban - Nul",
+  "Caliban - Oberon",
+  "Caliban - Orion", 
+  "Caliban - Viking",
+  "Caliban 2a",
+  "Caliban 3a",
+  "Caliban 3b",
+  "Caliban 4a",
+  "Caliban 4b",
+  "Caliban 4c",
+  "Caliban 4d",
+  "Caliban 4e",
+  "Caliban 4f",
+  "Caliban Belt Alpha",
+  "Caliban I",
+  "Caliban III",
+  "Caliban IV",
+  "Caliban V",
+  "Calliope",
+  "Callisto",
+  "Canard View",
+  "Cano (star)",
+  "Cano - Davien",
+  "Cano - Pyro",
+  "Cano Belt Alpha", 
+  "Cano I",
+  "Cano III",
+  "Cano IV",
+  "Caplan Circuit",
+  "Carteyna",
+  "Carteyna City",
+  "Carver's Ridge",
+  "Cascom",
+  "Cassel",
+  "Casselean",
+  "Castor",
+  "Castra (star)",
+  "Castra - Hadrian",
+  "Castra - Nyx",
+  "Castra - Oso",
+  "Castra - Oya",
+  "Castra - Pyro",
+  "Castra I",
+  "Cathcart (star)",
+  "Cathcart - Davien",
+  "Cathcart - Hades",
+  "Cathcart - Kilian",
+  "Cathcart - Nexus",
+  "Cathcart Belt Alpha",
+  "Cellin",
+  "Centauri (star)",
+  "Centauri - Elysium",
+  "Centauri - Nul",
+  "Centauri Belt Alpha",
+  "Centauri I",
+  "Centauri IV",
+  "Centauri V",
+  "Central Business District (Lorville)",
+  "Cestulus",
+  "Char",
+  "Charon (moon)",
+  "Charon (star)",
+  "Charon - Genesis",
+  "Charon - Helios",
+  "Charon - Kins",
+  "Charon - Tyrol",
+  "Chawla's Beach",
+  "Checkmate Station",
+  "Chronos (star)",
+  "Chronos - Branaugh",
+  "Chronos - Kellog",
+  "Chronos - Kiel",
+  "Chronos Belt Alpha",
+  "Chronos I",
+  "Chronos II",
+  "Chronos III",
+  "Clear View Emergency Shelter",
+  "Cloudrest Retreat",
+  "Cloudview Center",
+  "Comm Array 042",
+  "Comm Array 126",
+  "Comm Array 275",
+  "Comm Array 306",
+  "Comm Array 472",
+  "Comm Array 556",
+  "Comm Array 625",
+  "Comm Array 730",
+  "Comm Array 849",
+  "Comm Array ST1-02",
+  "Comm Array ST1-13",
+  "Comm Array ST1-48",
+  "Comm Array ST1-61",
+  "Comm Array ST1-92",
+  "Comm Array ST2-28",
+  "Comm Array ST2-47",
+  "Comm Array ST2-55",
+  "Comm Array ST2-76",
+  "Comm Array ST3-18",
+  "Comm Array ST3-35",
+  "Comm Array ST3-90",
+  "Comm Array ST4-22",
+  "Comm Array ST4-31",
+  "Comm Array ST4-59",
+  "Comm Array ST4-64",
+  "Commarray SCC",
+  "Conscientious Objects",
+  "Cordry's",
+  "Corilla",
+  "Connor's",
+  "Consumption",
+  "Covalex Distribution Centre S1DC06",
+  "Covalex Distribution Centre S4DC05",
+  "Covalex Hub Gallete",
+  "Covalex Hub Gundo",
+  "Covalex Hub Lagrange",
+  "Covalex Hub Laskowski",
+  "Covalex Hub O'Neill",
+  "Covalex Hub Reilly",
+  "Covalex Hub Sutter",
+  "Covalex Hub Tompkins",
+  "Covalex Hub Wightman",
+  "Covalex Hub Xenia",
+  "Covalex Hub Young",
+  "Covalex Hub Ziegler",
+  "Coven",
+  "Cry-Astro Service 042",
+  "Cry-Astro Service 151",
+  "Cry-Astro Service 262",
+  "Cry-Astro Plant CRY-B01",
+  "Cry-Astro Plant CRY-B02",
+  "Cry-Astro Plant CRY-B11",
+  "Cry-Astro Plant CRY-B16",
+  "Cubby Blast",
+  "Cygnus",
+  // === D LOCATIONS ===
+  "Davien (star)",
+  "Davien - Cano",
+  "Davien - Cathcart",
+  "Davien - Sol",
+  "Davien - Croshaw",
+  "Davien Belt Alpha",
+  "Davien I",
+  "Davien II",
+  "Davien III",
+  "Davien IV",
+  "Daymar",
+  "Deakins Research Outpost",
+  "Deimos",
+  "Delamar",
+  "Dell Township",
+  "Desmond Memorial Convention Center",
+  "Devlin Scrap & Salvage",
+  "Dinger's Depot",
+  "Dobbs",
+  "Downlow",
+  "Drifters",
+  "Dunboro",
+  "Dunlow Ridge Emergency Shelter",
+  "Dupree Storage Depot A",
+  "Dupree Storage Depot B",
+  "Dupree Storage Depot C",
+  "Dupree Storage Depot D",
+  "Dupree Storage Depot E",
+  "Dupree Storage Depot F",
+  "Dupree Storage Template",
+  // === E LOCATIONS ===
+  "Eager Flats Aid Shelter",
+  "Eealus (star)",
+  "Eealus - La'uo",
+  "Eealus - Trise",
+  "Ellis (star)",
+  "Ellis - Goss",
+  "Ellis - Nexus",
+  "Ellis - Tayac",
+  "Ellis Belt Alpha",
+  "Ellis Belt Beta",
+  "Ellis I",
+  "Ellis II",
+  "Ellis III",
+  "Ellis IV",
+  "Ellis V",
+  "Ellis VI",
+  "Ellis VII",
+  "Ellis VIII",
+  "Ellis IX",
+  "Ellis X",
+  "Ellis XI",
+  "Ellis XII",
+  "Elsewhere",
+  "Earth",
+  "Elysium (star)",
+  "Elysium - Centauri",
+  "Elysium - Ferron",
+  "Elysium Belt Alpha",
+  "Elysium I",
+  "Elysium II",
+  "Elysium III",
+  "Elysium IV",
+  "Empyrean Park",
+  "Encole Station",
+  "Empire Health Services",
+  "Europa",
+  "Everus Harbor",
+  // === F LOCATIONS ===
+  "Fallow Field",
+  "Farro Data Center Alpha",
+  "Farro Data Center I",
+  "Farro Data Center II",
+  "Farro Data Center III",
+  "Farro Data Center IV",
+  "Farro Data Center V",
+  "Farro Data Center VI",
+  "Farro Data Center VII",
+  "Farro Data Center VIII",
+  "Farro Data Center IX",
+  "Farro Data Center X",
+  "FEO Canyon Depot",
+  "Ferron (star)",
+  "Ferron - Elysium",
+  "Ferron - Osiris",
+  "Ferron Belt Alpha",
+  "Ferron I",
+  "Ferron II",
+  "Ferron III",
+  "Ferron IV",
+  "Fetch",
+  "Finn's Folly",
+  "Fora (star)",
+  "Fora - Banshee",
+  "Fora - Garron",
+  "Fora - Hades",
+  "Fora - Leir",
+  "Fora - Tamsa",
+  "Fora Belt Alpha",
+  "Fora I",
+  "Fora II",
+  "Fora III",
+  "Frigid Knot",
+  "Frostbite (settlement)",
+  // === G LOCATIONS ===  
+  "G-Loc Bar",
+  "Gallete Family Farms",
+  "Ganymede",
+  "Garron (star)",
+  "Garron - Bacchus",
+  "Garron - Banshee",
+  "Garron - Fora",
+  "Garron - Hades",
+  "Garron - Kins",
+  "Garron - Tyrol",
+  "Garron Belt Alpha",
+  "Garron I",
+  "Garron II",
+  "Garron III",
+  "Garron IV",
+  "Geddon (star)",
+  "Geddon - Bacchus",
+  "Geddon - Hades",
+  "Geddon Belt Alpha",
+  "Geddon I",
+  "Geddon II",
+  "Genesis (star)",
+  "Genesis - Charon",
+  "Genesis - Hadrian",
+  "Genesis Belt Alpha",
+  "Genesis I",
+  "Genesis II",
+  "Ghost Hollow",
+  "GIO",
+  "Goner's Deal",
+  "Gonzo",
+  "Good Times Temple",
+  "Goss (star)",
+  "Goss - Ellis",
+  "Goss - Tayac",
+  "Goss - Tyrol",
+  "Goss Belt Alpha",
+  "Goss I",
+  "Goss II",
+  "Goss III",
+  "Grand Barter Bazaar",
+  "Gray Gardens",
+  "Green Imperial Medical",
+  "Greencircle Habitation",
+  "Grim HEX",
+  "Greycat Pomeroy",
+  "Greycat Roc",
+  "Greycat Stanton",
+  // === H LOCATIONS ===
+  "Hades (star)",
+  "Hades - Cathcart",
+  "Hades - Fora",
+  "Hades - Garron",
+  "Hades - Geddon",
+  "Hades - Kins",
+  "Hades - Oberon",
+  "Hades - Orion",
+  "Hades Belt Alpha",
+  "Hades I",
+  "Hades II",
+  "Hades III",
+  "HDMS Chameleon",
+  "HDMS Edmond",
+  "HDMS Hahn",
+  "HDMS Norgay",
+  "HDMS Oparei",
+  "HDMS Ryder",
+  "HDMS Stanhope",
+  "HDPC Fissure Pack Station",
+  "HDPC Racquel Research Outpost",
+  "HDSF Ason",
+  "HDSF Stanhope",
+  "Hadrian (star)",
+  "Hadrian - Castra",
+  "Hadrian - Genesis",
+  "Hadrian - Oberon",
+  "Hadrian Belt Alpha",
+  "Hadrian I",
+  "Hadrian II",
+  "Hadrian III",
+  "Half Stack",
+  "Hard Knocks",
+  "Harper's Point",
+  "Hasbin Hall",
+  "Haven",
+  "Haven Food Cluster",
+  "Hela's Regret",
+  "Helios (star)",
+  "Helios - Charon",
+  "Helios - Tyrol",
+  "Helios - Vega",
+  "Helios Belt Alpha",
+  "Helios I",
+  "Helios II",
+  "Hickes Research Outpost",
+  "HDMS-Anderson",
+  "HDMS-Bezdek",
+  "HDMS-Edmond",
+  "HDMS-Hadley",
+  "HDMS-Hahn",
+  "HDMS-Lathan",
+  "HDMS-Norgaard",
+  "HDMS-Oparei",
+  "HDMS-Perlman",
+  "HDMS-Pinewood",
+  "HDMS-Ryder",
+  "HDMS-Stanhope",
+  "HDMS-Thedus",
+  "HDMS-Woodruff",
+  "HDPC-Cassillo",
+  "HDPC-Farnesway",
+  "HDSF-Adlai",
+  "HDSF-Barnabas",
+  "HDSF-Breckinridge",
+  "HDSF-Colfax",
+  "HDSF-Damaris",
+  "HDSF-Elbridge",
+  "HDSF-Hendricks",
+  "HDSF-Hiram",
+  "HDSF-Hobart",
+  "HDSF-Ishmael",
+  "HDSF-Millerand",
+  "HDSF-Palomar",
+  "HDSF-Rufus",
+  "HDSF-Sherman",
+  "HDSF-Tamar",
+  "HDSF-Tompkins",
+  "HDSF-Zacharias",
+  "Hospice",
+  "Humboldt Mines",
+  "Hurston",
+  "Hurston Dynamics Showcase",
+  "Hurston Security Station",
+  // === I LOCATIONS ===
+  "ICC ScanHub Stanton",
+  "Independent Arbitrator Hub",
+  "Inspiration Park",
+  "Intercity Research Facility",
+  "Invictus Base",
+  "IO",
+  "IO-North tower",
+  // === J LOCATIONS ===
+  "Jackson's Swap",
+  "JRPC Alpha Outpost",
+  "JRPC Beta Outpost",
+  "JRPC Charlie Outpost",
+  "JRPC Delta Outpost",
+  "JRPC Echo Outpost",
+  "JRPC Foxtrot Outpost",
+  "JRPC Golf Outpost",
+  "JRPC Hotel Outpost",
+  "JRPC India Outpost",
+  "JRPC Juliet Outpost",
+  "JRPC Kilo Outpost",
+  "JRPC Lima Outpost",
+  "JRPC Mike Outpost",
+  "JRPC November Outpost",
+  "JRPC Oscar Outpost",
+  "JRPC Papa Outpost",
+  "JRPC Quebec Outpost",
+  "JRPC Romeo Outpost",
+  "JRPC Sierra Outpost",
+  "JRPC Tango Outpost",
+  "JRPC Uniform Outpost",
+  "JRPC Victor Outpost",
+  "JRPC Whiskey Outpost",
+  "JRPC X-ray Outpost",
+  "JRPC Yankee Outpost",
+  "JRPC Zulu Outpost",
+  "Jumptown",
+  "Jupiter",
+  "JusticeStar Satellite",
+  // === K LOCATIONS ===
+  "Kabir's Post",
+  "Kallis (star)",
+  "Kallis - Bremen",
+  "Kallis - Nemo",
+  "Kallis Belt Alpha",
+  "Kallis I",
+  "Kallis II",
+  "Kant's Peak",
+  "Kellog (star)",
+  "Kellog - Chronos",
+  "Kellog - Virgil",
+  "Kellog Belt Alpha",
+  "Kellog I",
+  "Kellog II",
+  "Kellog III",
+  "Kelo Bottom",
+  "Kiel (star)",
+  "Kiel - Baker",
+  "Kiel - Chronos",
+  "Kiel Belt Alpha",
+  "Kiel I",
+  "Kiel II",
+  "Kiel III",
+  "Kiel IV",
+  "Kiel V",
+  "Kiel VI",
+  "Kilian (star)",
+  "Kilian - Cathcart",
+  "Kilian - Nexus",
+  "Kilian Belt Alpha",
+  "Kilian I",
+  "Kilian II",
+  "Kilian VIII",
+  "Kilian X",
+  "Kilian XI",
+  "Kilian XII",
+  "Kilian XIII",
+  "Kilian XIV",
+  "Kinder Plots",
+  "Kins (star)",
+  "Kins - Charon",
+  "Kins - Garron",
+  "Kins - Hades",
+  "Kins Belt Alpha",
+  "Kins Belt Beta",
+  "Kins I",
+  "Kins II",
+  "Kins III",
+  "Kins IV",
+  "Kins V",
+  "Klescher Rehabilitation Facility (Aberdeen)",
+  "Koli",
+  "Kosso Basin Aid Shelter",
+  "Kudre Ore",
+  "Kudre Ore Mine",
+  "Kuiper Belt",
+  "Kuā'li",
+  "Kyu'nao",
+  "Kyu'ām",
+  "Kyuk'ya (star)",
+  "Kyuk'ya - Ail'ka",
+  "Kyuk'ya A",
+  "Kyuk'ya B",
+  "Kyuk'ya Belt Alpha",
+  "Kyuk'ya I",
+  "Kyuk'ya II",
+  "Kо̄ri'lya",
+  // === L LOCATIONS ===
+  "L19 Residences",
+  "La'uo (star)",
+  "La'uo - Eealus",
+  "La'uo - Tohil",
+  "La'uo - Trise",
+  "La'uo Belt Alpha",
+  "La'uo Belt Beta",
+  "Lago",
+  "Lamina OLP",
+  "Lamina PAF-I",
+  "Lamina PAF-II",
+  "Lamina PAF-III",
+  "Lanisto",
+  "Last Day",
+  "Last Ditch",
+  "Last Landings",
+  "Launch Pad",
+  "Lazarus Phoenix Research Lab",
+  "Lazarus Tithonus Research Lab",
+  "Lazarus Transport Hub Phoenix-I",
+  "Lazarus Transport Hub Phoenix-II",
+  "Lazarus Transport Hub Phoenix-III",
+  "Lazarus Transport Hub Tithonus-I",
+  "Lazarus Transport Hub Tithonus-II",
+  "Lazarus Transport Hub Tithonus-III",
+  "Leavsden Square",
+  "Leir (star)",
+  "Leir I",
+  "Leir III",
+  "Levski",
+  "List of Stanton locations",
+  "Lixāuu",
+  "Lo",
+  "Locke",
+  "Lorona",
+  "Lorville",
+  "Lorville Outskirts",
+  "Lost and Found",
+  "Loveridge Mineral Reserve",
+  "LROP Rayari Anuk",
+  "LROP Rayari Cantwell",
+  "LROP Rayari Delta",
+  "LROP Rayari Gaines",
+  "LROP Rayari Kaltag",
+  "LROP Rayari McGrath",
+  "Lowdown",
+  "Ludlow",
+  "Luna",
+  "Lyre",
+  "Lyria",
+  "Lyris Flotilla",
+  "Lūng'xyi",
+  // === M LOCATIONS ===
+  "M.iiy'ong",
+  "MacArthur",
+  "MacIntyre & Victor's Bar",
+  "Magda",
+  "Magma",
+  "Magnus (star)",
+  "Magnus - Stanton",
+  "Magnus Gateway",
+  "Magnus I",
+  "Magnus III",
+  "Mainline",
+  "Maker's Point",
+  "Maria Pure of Heart",
+  "Mariana",
+  "Marisol Belt",
+  "Markahil (star)",
+  "Mars",
+  "Megumi Refueling",
+  "Mentor",
+  "Mercury (planet)",
+  "Mercy Hospital",
+  "MIC-L1 Shallow Frontier Station",
+  "MIC-L2 Long Forest Station",
+  "MIC-L3 Endless Odyssey Station",
+  "MIC-L4 Red Crossroads Station",
+  "MIC-L5 Modern Icarus Station",
+  "MicroTech (planet)",
+  "MicroTech Logistics Depot S4LD01",
+  "MicroTech Logistics Depot S4LD13",
+  "Mya Aid Shelter",
+  "Min 1a",
+  "Min 1b",
+  "Min 1c",
+  "Min 1d",
+  "Min I",
+  "Miner's Lament",
+  "Minlo Spire",
+  "Miranda",
+  "Mogote Aid Shelter",
+  "Monox",
+  "Moreland Hills",
+  "Morgan's Gate",
+  "Moscow",
+  "MT DataCenter 2UB-RB9-5",
+  "MT DataCenter 4HJ-LVE-A",
+  "MT DataCenter 5WQ-R2V-C",
+  "MT DataCenter 8FK-Q2X-K",
+  "MT DataCenter D79-ECG-R",
+  "MT DataCenter E2Q-NSG-Y",
+  "MT DataCenter KH3-AAE-L",
+  "MT DataCenter L8P-JUC-8",
+  "MT DataCenter QVX-J88-J",
+  "MT DataCenter TMG-XEV-2",
+  "MT OpCenter TLI-4",
+  "Mya",
+  // === N LOCATIONS ===
+  "Najita",
+  "Nakamura Valley Aid Shelter",
+  "Narena's Rest",
+  "Nedila",
+  "Nemo (star)",
+  "Nemo I",
+  "Nemo II",
+  "Neo Taurii",
+  "Neptune",
+  "Nest Apartments",
+  "Neutrality",
+  "Nevermind",
+  "New Austin",
+  "New Babbage",
+  "New Babbage Interstellar Spaceport",
+  "New Corvo",
+  "New Junction",
+  "New York",
+  "Newcastle",
+  "Nexus (star)",
+  "Nexus I",
+  "Nexus II",
+  "Nexus III",
+  "Ne'er",
+  "NKZ",
+  "Noble",
+  "Nogo",
+  "Nova Kyiv",
+  "NT-999-XV",
+  "NT-999-XVI",
+  "NT-999-XX",
+  "NT-999-XXII",
+  "Nuen Waste Management",
+  "Nuiqsut Emergency Shelter",
+  "Nul (star)",
+  "Nul I",
+  "Nul II",
+  "Nul IV",
+  "Nyx (star)",
+  "Nyx I",
+  "Nyx II",
+  "Nyx III",
+  // === O LOCATIONS ===
+  "OB Heller",
+  "OB Kobold",
+  "OB Station Gryphon",
+  "OB Station Pegasus",
+  "Oberon (moon)",
+  "Oberon (star)",
+  "Oberon III",
+  "Oberon IV",
+  "Oberon V",
+  "Oberon VI",
+  "Oberon VII",
+  "Odin (star)",
+  "Odin II",
+  "Odin III",
+  "Odin IV",
+  "Odyssa",
+  "Old '38",
+  "Oli'Sha",
+  "Olympus",
+  "Olympus Pool",
+  "Onyx",
+  "Onyx Facility S1A8",
+  "OP Station Demien",
+  "Operations Depot Lyria",
+  "Orbituary",
+  "Oretani (star)",
+  "Oretani Belt Alpha",
+  "Oretani I",
+  "Oretani II",
+  "Oretani III",
+  "Oretani IV",
+  "Oretani V",
+  "Oretani VI",
+  "Orion (star)",
+  "Orion Belt Alpha",
+  "Orion I",
+  "Orion II",
+  "Orison",
+  "Orison General",
+  "Osha",
+  "Osiris (star)",
+  "Osiris - Baker",
+  "Osiris Belt Alpha",
+  "Osiris II",
+  "Oso (star)",
+  "Oso I",
+  "Oso II",
+  "Oso III",
+  "Oso IV",
+  "Oso V",
+  "Oso VI",
+  "Ostler's Claim",
+  "Outpost 54",
+  "Oya (star)",
+  "Oya I",
+  "Oya II",
+  "Oya III",
+  "Oya IV",
+  // === SPACE STATIONS & LAGRANGE POINTS ===
+  "Port Olisar",
+  "Port Renatus", 
+  "Port Tressler",
+  "P.uay'aha",
+  "Paradise Cove",
+  "Patch City",
+  "Penselin",
+  "Persei",
+  "Petram",
+  "Petrus",
+  "Pharmacy",
+  "Phobos",
+  "Pi'tua",
+  "Picker's Field",
+  "Pike",
+  "Pinecone",
+  "Ping'leth",
+  "Player hab",
+  "Pluto",
+  "Point Wain Emergency Shelter",
+  "Prime",
+  "PRIVATE PROPERTY",
+  "Prophet's Peak",
+  "Prospect Depot",
+  "Prospect Point",
+  "Providence industrial platform",
+  "Pue'nu",
+  "PYAM-SUPVISR-3-4",
+  "Pyen'pui.a",
+  "Pyro (star)",
+  "Pyro - Stanton",
+  "Pyro Gateway",
+  "Pyro I",
+  "Pyro IV",
+  "Pyro V",
+  "Seraphim Station",
+  // Crusader Lagrange Points
+  "CRU-L1",
+  "CRU-L4", 
+  "CRU-L5",
+  "CRU-L1 Ambitious Dream Station",
+  "CRU-L4 Shallow Fields Station",
+  "CRU-L5 Beautiful Glen Station", 
+  // MicroTech Lagrange Points
+  "MIC-L1",
+  "MIC-L2",
+  "MIC-L3",
+  "MIC-L4",
+  "MIC-L5",  
+  // ArcCorp Lagrange Points
+  "ARC-L1 Wide Forest Station",
+  "ARC-L2 Lively Pathway Station", 
+  "ARC-L3 Modern Express Station",
+  "ARC-L4 Faint Glen Station",
+  "ARC-L5 Yellow Core Station",  
+  // Hurston Lagrange Points
+  "HUR-L1 Green Glade Station",
+  "HUR-L2 Faithful Dream Station",
+  "HUR-L3 Thundering Express Station",
+  "HUR-L4 Melodic Fields Station",
+  "HUR-L5 High Course Station",
+  // === Q LOCATIONS ===
+  "QuarterDeck",
+  "Quasi",
+  "Queeg",
+  "Quinton",
+  // === R LOCATIONS ===
+  "R.il'a (star)",
+  "R.il'a VI",
+  "RAB-Alpha",
+  "Rai.p'uāng",
+  "Rappel",
+  "Rat's Nest",
+  "Raven's Roost",
+  "Rayari Anvik Research Outpost",
+  "Rayari Cantwell Research Outpost",
+  "Rayari Deltana Research Outpost",
+  "Rayari Kaltag Research Outpost",
+  "Rayari Livengood Research Outpost",
+  "Rayari McGrath Research Outpost",
+  "Rayari, Inc. Outpost",
+  "Razor's Edge",
+  "Reclamation & Disposal",
+  "Reclamation & Disposal Orinth",
+  "Red God",
+  "Refinery Deck",
+  "Regiment Downs",
+  "Reis",
+  "Reisse",
+  "Rollo's Junkyard",
+  "Rest Stop",
+  "Reza's Landing",
+  "Rhea",
+  "Rhetor (star)",
+  "Rhetor I",
+  "Rhetor V",
+  "Rico's Remains",
+  "Riker Memorial Spaceport",
+  "Rings of Aremis",
+  "Rings of Branaugh II",
+  "Rings of Ellis VII",
+  "Rings of Kiel V",
+  "Rings of Kyuk'ya I",
+  "Rings of Neptune",
+  "Rings of Saturn",
+  "Rings of Tayac II",
+  "Rings of Uranus",
+  "Rock Bottom",
+  "Rod's Fuel 'N Supplies",
+  "Rolo's Crater",
+  "Rough Landing",
+  "Ruin Station",
+  "Ruptura OLP",
+  "Ruptura PAF-I",
+  "Ruptura PAF-II",
+  "Ruptura PAF-III",
+  "Rustville",
+  "RyiXy'an",
+  "Rytif",
+  "Ryōl",
+  // === S LOCATIONS ===
+  "S.ap'uāng",
+  "Sacren's Plot",
+  "Saisei",
+  "Sakura Sun Goldenrod Workcenter",
+  "Sakura Sun Magnolia Workcenter",
+  "Samson & Son's Salvage Center",
+  "Saturn",
+  "Scarper's Turn",
+  "Schwester",
+  "Scuttle",
+  "Se'kith",
+  "Second Sister",
+  "Security Post Criska",
+  "Security Post Dipur",
+  "Security Post Kareah",
+  "Security Post Lespin",
+  "Security Post Moluto",
+  "Security Post Opal",
+  "Security Post Prashad",
+  "Security Post Thaquray",
+  "Security Post Wan",
+  "Seer's Canyon",
+  "Selene",
+  "Serling",
+  "Sesen",
+  "Severus",
+  "Shadowfall",
+  "Shady Glen Farms",
+  "Shanghai",
+  "Shanks",
+  "Shasta Hollow",
+  "Shepherd",
+  "Shepherd's Rest",
+  "Sherman",
+  "Shoel",
+  "Shubin Mining Facility SAL-2",
+  "Shubin Mining Facility SAL-5",
+  "Shubin Mining Facility SCD-1",
+  "Shubin Mining Facility SM0-10",
+  "Shubin Mining Facility SM0-13",
+  "Shubin Mining Facility SM0-18",
+  "Shubin Mining Facility SM0-22",
+  "Shubin Mining Facility SMCa-6",
+  "Shubin Mining Facility SMCa-8",
+  "Shubin Processing Facility SPAL-12",
+  "Shubin Processing Facility SPAL-16",
+  "Shubin Processing Facility SPAL-21",
+  "Shubin Processing Facility SPAL-3",
+  "Shubin Processing Facility SPAL-7",
+  "Shubin Processing Facility SPAL-9",
+  "Shubin Processing Facility SPMC-1",
+  "Shubin Processing Facility SPMC-10",
+  "Shubin Processing Facility SPMC-14",
+  "Shubin Processing Facility SPMC-3",
+  "Shubin Processing Facility SPMC-5",
+  "Sightseeing and Travel Guide",
+  "Sino",
+  "Slowburn Depot",
+  "Smokestack",
+  "Sol (star)",
+  "Sol - Croshaw",
+  "Sol - Davien",
+  "Space Clinics",
+  "Space Whale",
+  "Spider",
+  "Stag's Rut",
+  "Stalford",
+  "Stanton (star)",
+  "Stanton - Magnus",
+  "Stanton - Pyro",
+  "Stanton - Terra",
+  "Stanton Gateway",
+  "Starlight Service Station",
+  "Stone's Throw",
+  "Stonetree",
+  "Stratus at Cloudview Center",
+  "Sunset Mesa",
+  "Supply Gap",
+  "Synthworld",
+  // === T LOCATIONS ===
+  "T.āl (star)",
+  "T.āl - Ail'ka",
+  "Talarine Divide Aid Shelter",
+  "Tamdon Plains Aid Shelter",
+  "Tamsa (black hole)",
+  "Tamsa I",
+  "Tamsa II",
+  "Tanga (star)",
+  "Tanga Belt Alpha",
+  "Tanga I",
+  "Tanga II",
+  "Tangaroa",
+  "Tanys",
+  "Taranis (star)",
+  "Taranis 2a debris",
+  "Taranis Belt Alpha",
+  "Taranis Belt Beta",
+  "Taranis I",
+  "Taranis II",
+  "Taranis III",
+  "Taranis IV",
+  "Tat'Ko",
+  "Tayac (star)",
+  "Tayac - Baker",
+  "Tayac - Goss",
+  "Tayac - Terra",
+  "Tayac Belt Alpha",
+  "Tayac I",
+  "Tayac II",
+  "TDD Kesner",
+  "Teasa Spaceport",
+  "Technotic",
+  "Teddy's Playhouse",
+  "Terminus",
+  "Terra",
+  "Terra - Stanton",
+  "Terra Gateway",
+  "Terra Mills HydroFarm",
+  "Terra Mills Processing Center",
+  "Terra Mills Storage Alpha",
+  "Terra Mills Storage Beta",
+  "Terra Nova",
+  "Test Facility Octagon",
+  "Tethle'a",
+  "Tethys",
+  "Th.us'ūng (star)",
+  "Th.us'ūng - Baker",
+  "Th.us'ūng Belt Alpha",
+  "Th.us'ūng I",
+  "The Ark (station)",
+  "The Barrens",
+  "The Coil",
+  "The Dregs",
+  "The Factory Line",
+  "The Garden",
+  "The Golden Riviera",
+  "The Grove",
+  "The Hollows",
+  "The Icebreaker",
+  "The Necropolis",
+  "The Orphanage",
+  "The Pit",
+  "The Shades",
+  "The Sky Scraper",
+  "The Snake Pit",
+  "The Yard",
+  "Thimblerig",
+  "Third Sister",
+  "Tiber (star)",
+  "Tiber Belt Alpha",
+  "Tiber I", 
+  "Titan",
+  "Titania",
+  "Titus",
+  "Tobin Expo Center",
+  "Tohil (star)",
+  "Tohil - La'uo",
+  "Tohil - Nyx",
+  "Tohil - Oya",
+  "Tohil Belt Alpha",
+  "Tohil I",
+  "Tohil II",
+  "Tohil III",
+  "Tohil IV",
+  "Toja",
+  "Tomb",
+  "TPF",
+  "Tram",
+  "Tram & Myers Mining",
+  "Tremonte",
+  "Trilo",
+  "Trise (star)",
+  "Trise - Eealus",
+  "Trise - La'uo",
+  "Trise I",
+  "Tyrol - Charon",
+  "Tyrol - Goss",
+  "Tyrol - Helios",
+  "Tyrol A",
+  "Tyrol B",
+  "Tyrol Belt Alpha",
+  "Tyrol I",
+  "Tyrol II",
+  "Tyrol III",
+  "Tyrol IV",
+  "Tyrol V",
+  "Tyrol VI",
+  "Tyrol VII",
+  // === U LOCATIONS ===
+  "Umbriel",
+  "Unnamed abandoned outpost (Cellin)",
+  "Unnamed abandoned outpost (Daymar)",
+  "Unnamed abandoned outpost (Yela)",
+  "Uranus",
+  "Uriel",
+  "Utopia",
+  // === V LOCATIONS ===
+  "Vagabond (star)",
+  "Vanduul Attack",
+  "Vanguard (star)",
+  "Vann",
+  "Vatra",
+  "Vector (star)",
+  "Vega (star)",
+  "Vega 2A",
+  "Vega 2B",
+  "Vega Belt Alpha",
+  "Vega I",
+  "Vega IV",
+  "Vendetta (star)",
+  "Venus",
+  "Veritas (star)",
+  "Vermilion (star)",
+  "Vesper (star)",
+  "Viking (star)",
+  "Viking - Caliban",
+  "Viking - Orion",
+  "Vili",
+  "Virgil (star)",
+  "Virgil - Kellog",
+  "Virgil - Nyx",
+  "Virgil - Oberon",
+  "Virgil - Tiber",
+  "Virgil - Vega",
+  "Virgil III",
+  "Virgo (star)",
+  "Vision Center",
+  "Vivere OLP",
+  "Vivere PAF-I",
+  "Vivere PAF-II",
+  "Vivere PAF-III",
+  "Volt (star)",
+  "Voodoo (star)",
+  "Vosca",
+  "Voyager Bar",
+  "Vulture (star)",
+  "Vulture - Orion",
+  "Vuur",
+  // === W LOCATIONS ===
+  "Wailing Rock",
+  "Wala",
+  "Walleye",
+  "Wally's",
+  "Washout",
+  "Watcher's Depot",
+  "Weeping Cove",
+  "Wheeler's",
+  "Whistlers Crypt",
+  "Wikelo Emporium",
+  "Wikelo Emporium Dasi Station",
+  "Wikelo Emporium Kinga Station",
+  "Wikelo Emporium Selo Station",
+  "Wiley Flats",
+  "Windfall",
+  "Wolf Point Aid Shelter",
+  "World's End",
+  // === X LOCATIONS ===
+  "Xenia",
+  "Xi",
+  "Xis",
+  "Xyeping",
+  "Xōl'uu",
+  // === Y LOCATIONS ===
+  "Y.ōm'e",
+  "Yadar Valley",
+  "Yang's Place",
+  "Yar",
+  "Ye'ten",
+  "Ye'ton",
+  "Yela",
+  "Yengchuai",
+  "Yethlūl S.yen'o",
+  "Yethlūl Y.ath'o",
+  "Yogi Station",
+  "Yulin (star)",
+  "Yulin - Banshee",
+  "Yulin - Leir",
+  "Yulin Cluster Alpha",
+  "Yulin Flotilla",
+  "Yulin I",
+  "Yulin II",
+  "Yulin III",
+  "Yulin IV",
+  "Yulin V",
+  "Yulin VI",
+  "Yā'mon (star)",
+  "Yā'mon - Ail'ka",
+  "Yā'mon - Baker",
+  "Yā'ti",
+  "Yām'ping",
+  "Yā'mon Belt Alpha",
+  // === Z LOCATIONS ===
+  "Zephyr (settlement)",
+
+  // === SPECIAL CHARACTER LOCATIONS ===
+  "Ē'aluth (star)",
+  "Ē'aluth Belt Alpha",
+  "Ē'aluth I",
+  "Ē'aluth II",
+  "Ē'aluth IV",
+  "Ē'aluth V"
+  ];
+  </script>
 </head>
 <body>
   <div class="main-container">
@@ -1212,7 +2540,7 @@
         <div style="background: linear-gradient(145deg, #ffffff 0%, #f8f8f8 100%); border-radius: 16px; padding: 24px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); border: 1px solid rgba(157, 117, 35, 0.12);">
           <h2 style="color:#9d7523;margin-top:0;">Transport Request</h2>
           <p style="color:#333;margin-bottom:18px;">Use this form to request a transport setup from another organisation. Fill in the details below and click Submit Request.</p>
-          <form id="transportRequestForm">
+          <form id="transportRequestForm" method="post" action="/cgi-bin/save_request.py">
             <div style="display:flex;gap:12px;flex-wrap:wrap;">
               <div style="flex:1;min-width:220px;">
                 <label>Organization:</label>
@@ -1782,101 +3110,47 @@ function resizeAnnouncementsContent() {
 window.addEventListener('resize', resizeAnnouncementsContent);
 
     function submitTransportRequest() {
-      let orgName = document.getElementById('tr_orgName')?.value?.trim();
-      const orgOther = document.getElementById('tr_orgNameOther')?.value?.trim();
-      if (orgOther) orgName = orgOther;
-
-      let requester = document.getElementById('tr_requester')?.value?.trim();
-      const requesterOther = document.getElementById('tr_requesterOther')?.value?.trim();
-      if (requesterOther) requester = requesterOther;
-      const securityNeeded = document.getElementById('tr_securityNeeded')?.value;
-      const pickup = document.getElementById('tr_pickup')?.value?.trim();
-      const destination = document.getElementById('tr_destination')?.value?.trim();
-      const cargoDetails = document.getElementById('tr_cargoDetails')?.value?.trim();
-      const requiredSCU = document.getElementById('tr_requiredSCU')?.value;
-      const priority = document.getElementById('tr_priority')?.value;
-
       const statusDiv = document.getElementById('tr_status');
-
       if (!validateTransportRequest()) {
         return;
       }
-      function pad(num, size) { return String(num).padStart(size, '0'); }
-      const orgMap = {
-        'Brute Haul': '01',
-        'Space Rats': '02',
-        'The Benjineering Project': '03'
-      };
-      const orgCode = orgMap[orgName] || '99';
-
-      let requesterIndex = 999;
-      const requesterSelect = document.getElementById('tr_requester');
-      if (requesterSelect) {
-        const options = Array.from(requesterSelect.querySelectorAll('option'))
-          .filter(o => o.value && o.value !== '' );
-        const foundIdx = options.findIndex(o => o.value.trim() === requester);
-        requesterIndex = foundIdx >= 0 ? (foundIdx + 1) : 999;
+      // Gather form data
+      const form = document.getElementById('transportRequestForm');
+      const formData = new FormData(form);
+      // Add custom fields if needed
+      if (document.getElementById('tr_orgNameOther')?.value) {
+        formData.set('tr_orgName', document.getElementById('tr_orgNameOther').value);
       }
-
-      const now = new Date();
-      const mm = pad(now.getUTCMonth() + 1, 2);
-      const dd = pad(now.getUTCDate(), 2);
-      const yy = pad(now.getUTCFullYear() % 100, 2);
-      const hh = pad(now.getUTCHours(), 2);
-      const min = pad(now.getUTCMinutes(), 2);
-      const sec = pad(now.getUTCSeconds(), 2);
-      const timestampPart = `${mm}${dd}${yy}${hh}${min}${sec}`;
-      const prioritySuffixMap = {
-        'Emergency': '-99',
-        'High': '-80',
-        'Medium': '-50',
-        'Low': '-10'
-      };
-      const suffix = priority ? (prioritySuffixMap[priority] || '') : '';
-      const requestNumber = `${orgCode}-${pad(requesterIndex,3)}-${timestampPart}${suffix}`;
-
-      const req = {
-        id: 'TR-' + Date.now(),
-        requestNumber,
-        timestamp: new Date().toISOString(),
-        orgName,
-        requester,
-        securityNeeded: securityNeeded || 'No',
-        start: pickup,
-        end: destination,
-        cargoDetails,
-        requiredSCU: requiredSCU ? Number(requiredSCU) : 0,
-        priority: priority
-      };
-
-      try {
-        const existing = JSON.parse(localStorage.getItem('transportRequests') || '[]');
-        existing.unshift(req);
-        localStorage.setItem('transportRequests', JSON.stringify(existing));
+      if (document.getElementById('tr_requesterOther')?.value) {
+        formData.set('tr_requester', document.getElementById('tr_requesterOther').value);
+      }
+      // Send to CGI endpoint
+      fetch('/cgi-bin/save_request.py', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.text())
+      .then(data => {
         if (statusDiv) {
           statusDiv.style.display = 'inline-block';
           statusDiv.style.color = '#2a7a2a';
-          statusDiv.textContent = 'Request submitted ✓  [' + requestNumber + ']';
+          statusDiv.textContent = 'Request submitted ✓';
         }
         setTimeout(() => {
           clearTransportRequestForm();
         }, 900);
-        try {
-          sendTransportRequestToDiscord();
-        } catch (err) {
-          console.warn('Failed to automatically send transport request to backend:', err);
-        }
         setTimeout(() => {
           if (statusDiv) statusDiv.style.display = 'none';
         }, 3000);
-      } catch (e) {
+      })
+      .catch(e => {
         if (statusDiv) {
           statusDiv.style.display = 'inline-block';
           statusDiv.style.color = '#a33';
           statusDiv.textContent = 'Error saving request';
         }
         console.error('Failed to save transport request', e);
-      }
+      });
     }
 
     function clearTransportRequestForm() {
@@ -2513,6 +3787,13 @@ window.addEventListener('resize', resizeAnnouncementsContent);
       capInputLocal = document.createElement('input');
       capInputLocal.type = 'text'; capInputLocal.id = capInputIdLocal; capInputLocal.placeholder = 'Click to select captain...'; capInputLocal.autocomplete='off';
       capListLocal = document.createElement('div'); capListLocal.className = 'dropdown-list'; capListLocal.id = capListIdLocal;
+      
+      // Restore captain value from saved summary if it exists
+      const summaryId = 'assigned_summary_' + req.id + '_' + shipKey;
+      const summary = document.getElementById(summaryId);
+      if (summary && summary.dataset.captainValue) {
+        capInputLocal.value = summary.dataset.captainValue;
+      }
     }
     const capLabelEl = document.createElement('div'); capLabelEl.textContent = 'Captain:'; capLabelEl.style.fontWeight = '700'; capLabelEl.style.marginTop = '8px';
     panel.appendChild(capLabelEl);
@@ -2525,6 +3806,13 @@ window.addEventListener('resize', resizeAnnouncementsContent);
     if (!crewInput) {
       crewInput = document.createElement('input');
       crewInput.type = 'number'; crewInput.min='0'; crewInput.max='20'; crewInput.step='1'; crewInput.value='0'; crewInput.id = 'assign_crew_amount_' + req.id + '_' + shipKey;
+      
+      // Restore crew count from saved summary if it exists
+      const summaryId = 'assigned_summary_' + req.id + '_' + shipKey;
+      const summary = document.getElementById(summaryId);
+      if (summary && summary.dataset.crewCount) {
+        crewInput.value = summary.dataset.crewCount;
+      }
     }
     crewInput.style.width = '120px'; crewInput.style.marginTop = '6px';
     panel.appendChild(crewInput);
@@ -2560,6 +3848,10 @@ window.addEventListener('resize', resizeAnnouncementsContent);
 
     cancelBtnModal.onclick = function() { modal.remove(); };
     saveBtn.onclick = function() {
+      // Capture captain and crew values BEFORE moving DOM elements
+      const capNow = (capInputLocal && capInputLocal.value) ? capInputLocal.value.trim() : '';
+      const crewNow = (crewInput && crewInput.value) ? parseInt(crewInput.value, 10) : 0;
+      
       const holder = document.createElement('div');
       holder.id = holderId;
       holder.style.display = 'none';
@@ -2606,9 +3898,12 @@ window.addEventListener('resize', resizeAnnouncementsContent);
         summary.appendChild(right);
       }
 
-      const capNow = (document.getElementById(capInputIdLocal) ? document.getElementById(capInputIdLocal).value : '') || '';
-      const crewNow = (document.getElementById('assign_crew_amount_' + req.id + '_' + shipKey) ? (parseInt(document.getElementById('assign_crew_amount_' + req.id + '_' + shipKey).value,10)||0) : 0);
       const metaEl = document.getElementById(summaryId + '_meta');
+      
+      // Store captain value in data attribute for persistence
+      summary.dataset.captainValue = capNow;
+      summary.dataset.crewCount = crewNow;
+      
       if (metaEl) metaEl.textContent = (capNow ? ('Captain: ' + capNow) : 'No captain') + (crewNow ? ('  •  Crew: ' + crewNow) : '');
 
       perShipContainer.appendChild(summary);
@@ -2619,19 +3914,33 @@ window.addEventListener('resize', resizeAnnouncementsContent);
   }
 
   function renderPerShipAssignments() {
-    perShipContainer.innerHTML = '';
-    const existingHolders = Array.from(document.querySelectorAll('[id^="assign_inputs_holder_' + req.id + '_"]'));
-    if (existingHolders.length === 0) {
+    // Query for all existing summaries and holders BEFORE clearing
+    const summaries = Array.from(document.querySelectorAll('[id^="assigned_summary_' + req.id + '_"]'));
+    const holders = Array.from(document.querySelectorAll('[id^="assign_inputs_holder_' + req.id + '_"]'));
+    
+    if (holders.length === 0) {
       perShipContainer.innerHTML = '<div style="font-size:0.9em;color:#666;margin-top:6px;">No ships assigned yet — select a ship to open the assignment popup.</div>';
       return;
     }
-    existingHolders.forEach(holder => {
-      const parts = holder.id.split('_' + req.id + '_');
-      const shipKey = parts[1];
-      const shipLabel = shipKey.replace(/^SEC_/, '').replace(/_/g,' ');
-      const summaryId = 'assigned_summary_' + req.id + '_' + shipKey;
-      const summary = document.getElementById(summaryId);
-      if (summary) perShipContainer.appendChild(summary);
+    
+    // Clear only the children, don't use innerHTML to preserve DOM references
+    while (perShipContainer.firstChild) {
+      perShipContainer.removeChild(perShipContainer.firstChild);
+    }
+    
+    // Re-add summaries with their data
+    summaries.forEach(summary => {
+      const metaEl = summary.querySelector('[id$="_meta"]');
+      if (metaEl && summary.dataset.captainValue !== undefined) {
+        const capNow = summary.dataset.captainValue || '';
+        const crewNow = summary.dataset.crewCount || 0;
+        metaEl.textContent = (capNow ? ('Captain: ' + capNow) : 'No captain') + (crewNow ? ('  •  Crew: ' + crewNow) : '');
+      }
+      perShipContainer.appendChild(summary);
+    });
+    
+    // Re-add holders
+    holders.forEach(holder => {
       perShipContainer.appendChild(holder);
     });
   }
