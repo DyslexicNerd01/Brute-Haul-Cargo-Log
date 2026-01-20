@@ -2,3 +2,5 @@ Use the link below to enter the website to submit transport requests and upload 
 
 https://dyslexicnerd01.github.io/Brute-Haul-Cargo-Log
 
+
+THIS FORM HAS BEEN DECOMISSIONED AND NO LONGER FULLY FUNCTIONS WITH DISCORD INTERGRATIONS!
